@@ -1,54 +1,65 @@
 {
-  "name": "wepamultimedia/core",
-  "description": "",
-  "keywords": ["Laravel"],
-  "authors": [
-    {
-      "name": "Carlos Puche",
-      "email": "cpuche@wepa.es"
-    }
-  ],
-  "homepage": "https://github.com/wepamultimedia/core",
-  "require": {
-    "php": "^8.0.2",
-    "laravel/framework": "^9.19",
-    "inertiajs/inertia-laravel": "^0.5.2",
-    "laravel/jetstream": "^2.10",
-    "laravel/sanctum": "^3.0",
-    "tightenco/ziggy": "^1.0"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^9.0",
-    "orchestra/testbench": "^6.0",
-    "phpstan/phpstan": "^0.12"
-  },
-  "license": "MIT",
-  "autoload": {
-    "psr-4": {
-      "Wepa\\Core\\": "src/",
-      "Wepa\\Core\\Database\\": "database/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Wepa\\Core\\Tests\\": "tests/"
-    }
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Wepa\\Core\\Providers\\CoreServiceProvider"
-      ]
-    }
-  },
-  "scripts": {
-    "post-package-install" : [
-      "php artisan vendor:publish --tag=core"
+    "name"         : "wepamultimedia/core",
+    "description"  : "",
+    "keywords"     : [
+        "Laravel"
     ],
-    "pre-package-uninstall" : [
-
+    "authors"      : [
+        {
+            "name"  : "Carlos Puche",
+            "email" : "cpuche@wepa.es"
+        }
     ],
-    "test": "vendor/bin/phpunit -c ./phpunit.xml --colors=always",
-    "analysis": "vendor/bin/phpstan analyse"
-  }
+    "homepage"     : "https://github.com/wepamultimedia/core",
+    "require"      : {
+        "php"                             : "^8.0.2",
+        "laravel/framework"               : "^9.19",
+        "inertiajs/inertia-laravel"       : "^0.5.2",
+        "laravel/jetstream"               : "^2.10",
+        "laravel/sanctum"                 : "^3.0",
+        "tightenco/ziggy"                 : "^1.0",
+        "spatie/laravel-permission"       : "^5.5",
+        "astrotomic/laravel-translatable" : "^11.10"
+    },
+    "require-dev"  : {
+        "phpunit/phpunit"             : "^9.0",
+        "orchestra/testbench"         : "^6.0",
+        "phpstan/phpstan"             : "^0.12",
+        "barryvdh/laravel-ide-helper" : "^2.12",
+        "spatie/laravel-ignition"     : "^1.0"
+    },
+    "license"      : "MIT",
+    "autoload"     : {
+        "psr-4" : {
+            "Wepa\\Core\\"           : "src/",
+            "Wepa\\Core\\Database\\" : "database/"
+        }
+    },
+    "autoload-dev" : {
+        "psr-4" : {
+            "Wepa\\Core\\Tests\\"    : "tests/",
+            "Wepa\\Core\\"           : "src/",
+            "Wepa\\Core\\Database\\" : "database/"
+        }
+    },
+    "extra"        : {
+        "laravel" : {
+            "providers" : [
+                "Wepa\\Core\\Providers\\CoreServiceProvider"
+            ]
+        }
+    },
+    "scripts"      : {
+        "post-root-package-install" : [
+            "php artisan vendor:publish --tag=core --force",
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-package-install"      : [
+            "npm install"
+        ],
+        "pre-package-uninstall"     : [
+        ],
+        "test"                      : "vendor/bin/phpunit -c ./phpunit.xml --colors=always",
+        "analysis"                  : "vendor/bin/phpstan analyse"
+    }
 }

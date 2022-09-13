@@ -3,5 +3,16 @@
  * Core package config file
  */
 return [
-    // Place your package's config settings here.
+	'canLogin'    => true,
+	'canRegister' => true,
+	'locales'     => [
+		[
+			'code' => 'es',
+			'name' => 'Español',
+		],
+		[
+			'code' => 'en',
+			'name' => 'English',
+		],
+	],
 ];
