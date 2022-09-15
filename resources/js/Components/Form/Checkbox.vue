@@ -9,7 +9,7 @@
                       border border-gray-300
                       rounded-sm
                       bg-white
-                      checked:bg-primary-0 checked:border-primary-0
+                      checked:bg-skin-primary-0 checked:border-skin-primary-0
                       focus:outline-none
                       transition duration-200
                       mt-1

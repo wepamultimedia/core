@@ -21,7 +21,7 @@ const logout = () => {
 <template>
     <div class="bg-[#F3F4F6] dark:bg-gray-800 min-h-screen grid">
         <Sidebar :title="title"
-                 bg-class="bg-gradient-to-r to-primary-400 from-primary-600"
+                 bg-class="bg-gradient-to-r to-skin-primary-400 from-skin-primary-600"
                  dark
                  icon-class="fill-light"
                  text-class="text-light dark:text-light">

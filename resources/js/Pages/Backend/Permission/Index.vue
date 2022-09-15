@@ -43,7 +43,7 @@
                             <div class="mx-4 my-2">
                                 <input v-model="searchInput"
                                        :placeholder="__('search')"
-                                       class="w-full sm:w-1/2 dark:bg-inherit border-gray-300 dark:border-gray-600 dark:text-light focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                                       class="w-full sm:w-1/2 dark:bg-inherit border-gray-300 dark:border-gray-600 dark:text-light focus:border-skin-primary-300 focus:ring focus:ring-skin-primary-200 focus:ring-opacity-50 rounded-md shadow-sm"
                                        type="text">
                             </div>
                         </td>

@@ -76,7 +76,7 @@ const toggle = (event) => {
                 <!-- dot -->
                 <div class="bg-white translate-x-1 w-4 h-4 rounded-full transition duration-1000"
                      :class="[
-                         {'translate-x-[20px]': modelValue && !lg, 'bg-primary-0 ': modelValue},
+                         {'translate-x-[20px]': modelValue && !lg, 'bg-skin-primary-0 ': modelValue},
                          {'w-[1.5rem] h-[1.5rem]': lg, 'translate-x-[32px]': modelValue && lg}]"></div>
             </div>
         </div>

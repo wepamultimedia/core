@@ -7,11 +7,11 @@
                      class="mr-1 mb-1 px-4 py-3 text-sm leading-4 text-gray-400 border border-gray-200 dark:border-gray-500 rounded"
                      v-html="link.label"/>
                 <Link v-else
-                      :class="{ 'bg-primary-0 text-white': link.active }"
+                      :class="{ 'bg-skin-primary-0 text-white': link.active }"
                       :href="link.url"
                       :preserve-scroll="true"
                       :preserve-state="true"
-                      class="mr-1 mb-1 px-4 py-3 text-sm dark:text-light leading-4 border border-gray-200 dark:border-gray-500 rounded focus:border-primary-500 focus:dark:border-gray-600 focus:text-primary-500 focus:dark:text-light"
+                      class="mr-1 mb-1 px-4 py-3 text-sm dark:text-light leading-4 border border-gray-200 dark:border-gray-500 rounded focus:border-skin-primary-500 focus:dark:border-gray-600 focus:text-skin-primary-500 focus:dark:text-light"
                       v-html="link.label"/>
             </template>
         </div>
