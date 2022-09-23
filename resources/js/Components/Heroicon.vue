@@ -27,10 +27,10 @@ const src = computed(() => {
 
 const defaultClass = computed(() => {
     if (!outline.value) {
-        return `fill-dark`;
+        return `fill-skin-base`;
     }
 
-    return `stroke-dark`;
+    return `stroke-skin-base`;
 });
 </script>
 <template>

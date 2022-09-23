@@ -6,13 +6,11 @@ namespace Wepa\Core\Http\Controllers\Backend;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Response;
 use Wepa\Core\Http\Controllers\Mixed\InertiaController;
 use Wepa\Core\Http\Requests\Backend\UserCreateRequest;
 use Wepa\Core\Http\Requests\Backend\UserEditRequest;
-use Wepa\Core\Http\Requests\RegisterRequest;
 use Wepa\Core\Models\Backend\Role;
 
 
@@ -42,8 +40,8 @@ class UserController extends InertiaController
 		$roles = Role::all();
 		$selectedRoles = $user->getRoleNames()->all();
 		
-		return $this->render('Vendor/Core/Backend/User/Edit',
-			'admin.user',
+		return $this->render('@core/Backend/User/Edit',
+			'backend/user',
 			compact(['user', 'roles', 'selectedRoles']));
 	}
 	
@@ -60,9 +58,9 @@ class UserController extends InertiaController
 		})
 			->with('roles')
 			->orderBy('name')
-			->paginate(10);
+			->paginate(3);
 		
-		return $this->render('Vendor/Core/Backend/User/Index', 'admin.user', [
+		return $this->render('@core/Backend/User/Index', 'backend/user', [
 			'users' => $users,
 		]);
 	}
@@ -92,7 +90,7 @@ class UserController extends InertiaController
 	{
 		$roles = Role::all();
 		
-		return $this->render('Vendor/Core/Backend/User/Create', 'admin.user', ['roles' => $roles]);
+		return $this->render('@core/Backend/User/Create', 'backend/user', ['roles' => $roles]);
 	}
 	
 	/**

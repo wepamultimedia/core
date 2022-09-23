@@ -9,13 +9,10 @@ defineProps({
         type: String,
         default: "bg-gray-400"
     },
-    textClass: {
-        type: String,
-        default: "text-gray-800"
-    },
+    textClass: String,
     iconClass: {
         type: String,
-        default: "fill-gray-800"
+        default: "fill-skin-base"
     },
     dark: {
         type: Boolean,
@@ -63,8 +60,8 @@ onMounted((app) => {
                 <button :class="{'-rotate-90' : !showDesktop}"
                         class="h-6 w-6 ease-in-out duration-500 hidden md:block"
                         @click="showDesktop = !showDesktop">
-                    <icon :class="[{'stroke-light': showMobile}, iconClass]"
-                          class="w-6 stroke-dark dark:stroke-light"
+                    <icon :class="[iconClass]"
+                          class="w-6 stroke-skin-base dark:stroke-skin-base-dark"
                           icon="menu"
                           outline/>
                 </button>
@@ -73,8 +70,8 @@ onMounted((app) => {
                         :class="{'-rotate-90' : showMobile}"
                         class="h-6 w-6 ease-in-out duration-500 md:hidden"
                         @click="showMobile = !showMobile">
-                    <icon :class="[{'stroke-light': showMobile}, iconClass]"
-                          class="w-6 stroke-dark dark:stroke-light"
+                    <icon :class="[iconClass]"
+                          class="w-6 stroke-skin-base dark:stroke-skin-base-dark"
                           icon="menu"
                           outline/>
                 </button>
@@ -88,13 +85,13 @@ onMounted((app) => {
             <div :class="[{'md:max-w-[56px]':minimize, 'md:max-w-[256px]':!minimize, 'opacity-100 -left-0' : showMobile, '-left-full': !showMobile}, bgClass]"
                  class="fixed
                         z-20
-                        top-0
+                        inset-0
                         w-full
                         ease-in-out
                         duration-300
                         opacity-0
                         rounded-r-lg
-                        md:shadow
+                        md:shadow-lg
                         md:-left-0
                         md:rounded-t-lg
                         md:rounded-b-none
@@ -110,8 +107,8 @@ onMounted((app) => {
                     <button :class="{'-rotate-90' : showMobile}"
                             class="h-6 w-6 ease-in-out duration-500"
                             @click="showMobile = !showMobile">
-                        <icon :class="[{'stroke-light': showMobile}, iconClass]"
-                              class="stroke-light dark:stroke-light w-6 h-6"
+                        <icon :class="[{'stroke-skin-light': showMobile}, iconClass]"
+                              class="stroke-skin-base dark:stroke-skin-base-dark w-6 h-6"
                               icon="menu"
                               outline></icon>
                     </button>
@@ -121,10 +118,11 @@ onMounted((app) => {
                     <!--Menu items-->
                     <template v-for="item in menu">
                         <div :class="{dark:dark}">
-                            <SidebarItems :button-class="textClass"
-                                          :icon-class="iconClass"
+                            <SidebarItems :icon-class="iconClass"
                                           :item="item"
-                                          :minimize="minimize"/>
+                                          :minimize="minimize"
+                                          :text-class="textClass"
+                                          dot-class="bg-skin-base dark:bg-skin-base-dark"/>
                         </div>
                     </template>
                 </div>

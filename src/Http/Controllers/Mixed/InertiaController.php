@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Lang;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -28,18 +29,55 @@ class InertiaController extends Controller
 	                       array  $props = [],
 	                       array  $share = []): Response
 	{
-		
 		$defatultShare = [
-			'locale'       => app()->getLocale(),
-			'locales'      => config('core.locales'),
+			'locale'      => app()->getLocale(),
+			'locales'     => config('core.locales'),
 			'translation' => $this->translation($files),
-			'appName'      => config('app.name'),
+			'appName'     => config('app.name'),
 		];
-		
 		
 		$this->share(array_merge($defatultShare, $share));
 		
 		return Inertia::render($view, $props);
+	}
+	
+	public function translation($files = null): array
+	{
+		$locale = app()->getLocale();
+		$translations = [];
+		
+		if($files) {
+			if(is_array($files)) {
+				foreach($files as $file) {
+					$translation = Lang::get($this->packageName . '::' . $file);
+					if(is_array($translation)) {
+						$translations = array_merge($translations, $translation);
+					}
+				}
+			} else {
+				$translation = Lang::get($this->packageName . '::' . $files);
+				if(is_array($translation)) {
+					$translations = array_merge($translations, $translation);
+				}
+			}
+		}
+		
+		return array_merge($translations, $this->defaultTranslation($locale));
+	}
+	
+	/**
+	 * @param $locale
+	 *
+	 * @return array
+	 */
+	private function defaultTranslation($locale): array
+	{
+		$translation = Lang::get($this->packageName . '::default');
+		if(is_array($translation)){
+			return $translation;
+		}
+		
+		return [];
 	}
 	
 	/**
@@ -51,26 +89,6 @@ class InertiaController extends Controller
 	public function share(array $share): void
 	{
 		Inertia::share($share);
-	}
-	
-	public function translation($files = null): array
-	{
-		$locale = app()->getLocale();
-		$translations = [];
-		
-		if($files) {
-			if(is_array($files)) {
-				foreach($files as $file) {
-					$translation = $this->fileLang($locale, $file);
-					$translations = array_merge($translations, $translation);
-				}
-			} else {
-				$translation = $this->fileLang($locale, $files);
-				$translations = array_merge($translations, $translation);
-			}
-		}
-		
-		return array_merge($translations, $this->defaultTranslation($locale));
 	}
 	
 	/**
@@ -91,29 +109,6 @@ class InertiaController extends Controller
 						return Arr::dot($translations);
 					}
 				});
-		}
-		
-		return $translations;
-	}
-	
-	/**
-	 * @param $locale
-	 *
-	 * @return array
-	 */
-	private function defaultTranslation($locale): array
-	{
-		$translations = [];
-		
-		$path = resource_path("lang/vendor/core/$locale.php");
-		
-		if(File::exists($path)) {
-			return Cache::rememberForever("translations_$locale", function() use ($locale, $path) {
-				$translations = File::getRequire($path);
-				if(is_array($translations)) {
-					return Arr::dot($translations);
-				}
-			});
 		}
 		
 		return $translations;

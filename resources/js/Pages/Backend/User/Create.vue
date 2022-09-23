@@ -26,13 +26,13 @@ const submit = () => {
     <MainLayout :bc="[{label: __('users'), route: 'admin.users.index'}, {label: __('create')}]"
                 icon="users"
                 title="Users">
-        <form class="mb-14"
+        <form class="mb-14 text-skin-base dark:text-skin-base-dark"
               @submit.prevent="submit">
             <!--Title-->
             <div class="flex justify-between my-0 items-center h-14 rounded-lg overflow-hidden mt-4">
-                <span class="dark:text-light font-medium text-xl">{{ __("create_title") }}</span>
+                <span class=" font-medium text-xl">{{ __("create_title") }}</span>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 dark:text-light">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <div class="col-span-1">
                     <p class="text-sm">{{ __("create_summary") }}</p>
                 </div>
@@ -41,7 +41,6 @@ const submit = () => {
                             border
                             dark:border-gray-600
                             bg-white dark:bg-gray-600
-                            text-gray-700 dark:text-gray-300
                             rounded-lg
                             shadow">
                     <div class="grid grid-cols-6 p-6">
@@ -72,23 +71,8 @@ const submit = () => {
                                    type="password"/>
                         </div>
                     </div>
-                    <div class="flex items-center justify-end px-4 py-3 bg-gray-50 dark:bg-gray-500 text-right">
-                        <button class="inline-flex
-                                       items-center
-                                       px-4 py-2
-                                       bg-gray-800
-                                       border border-transparent
-                                       rounded-md
-                                       font-semibold
-                                       text-xs text-white uppercase tracking-widest
-                                       hover:bg-gray-700
-                                       active:bg-gray-900
-                                       focus:outline-none
-                                       focus:border-gray-900
-                                       focus:ring
-                                       focus:ring-gray-300
-                                       disabled:opacity-25
-                                       transition"
+                    <div class="p-3 bg-gray-50 dark:bg-gray-500 text-right">
+                        <button class="btn btn-primary"
                                 type="submit">
                             {{ __("save") }}
                         </button>
@@ -108,7 +92,7 @@ const submit = () => {
                             rounded-lg
                             shadow">
                     <div class="p-6">
-                        <h2 class="text-xl block mb-6 font-medium text-sm text-gray-700 dark:text-light">
+                        <h2 class="text-xl block mb-6 font-medium text-sm">
                             <span>{{ __("roles") }}</span>
                         </h2>
                         <Checkbox v-model="form.selectedRoles"
@@ -119,23 +103,8 @@ const submit = () => {
                                   name="selectedRoles"
                                   value="name"/>
                     </div>
-                    <div class="flex items-center justify-end px-4 py-3 bg-gray-50 dark:bg-gray-500 text-right">
-                        <button class="inline-flex
-                                       items-center
-                                       px-4 py-2
-                                       bg-gray-800
-                                       border border-transparent
-                                       rounded-md
-                                       font-semibold
-                                       text-xs text-white uppercase tracking-widest
-                                       hover:bg-gray-700
-                                       active:bg-gray-900
-                                       focus:outline-none
-                                       focus:border-gray-900
-                                       focus:ring
-                                       focus:ring-gray-300
-                                       disabled:opacity-25
-                                       transition"
+                    <div class="p-3 bg-gray-50 dark:bg-gray-500 text-right">
+                        <button class="btn btn-primary"
                                 type="submit">
                             {{ __("save") }}
                         </button>

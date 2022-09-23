@@ -2,9 +2,9 @@
 import MainLayout from "@layouts/Core/Backend/MainLayout.vue";
 import { reactive, toRefs } from "vue";
 import { Inertia } from "@inertiajs/inertia";
-import { Link } from "@inertiajs/inertia-vue3";
 import Checkbox from "@components/Form/Checkbox.vue";
 import Input from "@components/Form/Input.vue";
+import Modal from "@components/Modal.vue"
 
 const props = defineProps({
     roles: Array,
@@ -27,13 +27,14 @@ const form = reactive({
 const submit = () => {
     Inertia.put(route("admin.users.update", {id: user.value.id}), form);
 };
+
 </script>
 <template>
     <MainLayout :bc="[{label: __('users'), route: 'admin.users.index'}, {label: __('update')}]"
                 icon="users"
                 title="Users">
         <!--Title-->
-        <div class="flex justify-between my-0 items-center h-14 rounded-lg overflow-hidden mt-4">
+        <div class="flex justify-between my-0 items-center h-14 mt-4">
             <span class="dark:text-light font-medium text-xl">{{ __("edit_title") }}</span>
         </div>
         <form @submit.prevent="submit">
@@ -63,23 +64,8 @@ const submit = () => {
                                    name="email"/>
                         </div>
                     </div>
-                    <div class="flex items-center justify-end px-4 py-3 bg-gray-50 dark:bg-gray-500 text-right">
-                        <button class="inline-flex
-                                       items-center
-                                       px-4 py-2
-                                       bg-gray-800
-                                       border border-transparent
-                                       rounded-md
-                                       font-semibold
-                                       text-xs text-white uppercase tracking-widest
-                                       hover:bg-gray-700
-                                       active:bg-gray-900
-                                       focus:outline-none
-                                       focus:border-gray-900
-                                       focus:ring
-                                       focus:ring-gray-300
-                                       disabled:opacity-25
-                                       transition"
+                    <div class="p-3 bg-gray-50 dark:bg-gray-500 text-right">
+                        <button class="btn btn-primary"
                                 type="submit">
                             {{ __("save") }}
                         </button>
@@ -110,23 +96,8 @@ const submit = () => {
                                   name="selectedRoles"
                                   value="name"/>
                     </div>
-                    <div class="flex items-center justify-end px-4 py-3 bg-gray-50 dark:bg-gray-500 text-right">
-                        <button class="inline-flex
-                                       items-center
-                                       px-4 py-2
-                                       bg-gray-800
-                                       border border-transparent
-                                       rounded-md
-                                       font-semibold
-                                       text-xs text-white uppercase tracking-widest
-                                       hover:bg-gray-700
-                                       active:bg-gray-900
-                                       focus:outline-none
-                                       focus:border-gray-900
-                                       focus:ring
-                                       focus:ring-gray-300
-                                       disabled:opacity-25
-                                       transition"
+                    <div class="p-3 bg-gray-50 dark:bg-gray-500 text-right">
+                        <button class="btn btn-primary"
                                 type="submit">
                             {{ __("save") }}
                         </button>
@@ -134,11 +105,18 @@ const submit = () => {
                 </div>
             </div>
             <div class="text-right my-14">
-                <Link :href="route('admin.users.destroy', {id: user.id})"
-                      as="button"
-                      class="px-4 py-2 bg-red-500 rounded-md text-white">
-                    {{ __("delete_user") }}
-                </Link>
+                <Modal :href="route('admin.users.destroy', {id:user.id})"
+                       :message="__('delete_message')"
+                       danger
+                       method="delete"
+                       :title="__('delete_user')">
+                    <template #button="{open}">
+                        <button type="button" class="px-4 py-2 bg-red-500 rounded-md text-white"
+                                @click="open">
+                            {{ __('delete_user') }}
+                        </button>
+                    </template>
+                </Modal>
             </div>
         </form>
     </MainLayout>

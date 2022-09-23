@@ -42,7 +42,7 @@ const open = ref(false);
 <template>
     <div class="relative">
         <div :class="buttonClass"
-             class="relative flex items-center focus:outline-none select-none text-dark dark:text-light"
+             class="relative flex items-center focus:outline-none select-none text-skin-base"
              @click="open = !open"
              @mouseover="onHover ? open = true : ''">
             <slot :open="open"
@@ -79,10 +79,10 @@ const open = ref(false);
                         border
                         rounded
                         text-sm
-                        bg-light
-                        dark:bg-gray-700
-                        dark:border-gray-600
-                        dark:text-light"
+                        text-skin-base
+                        bg-skin-light
+                        dark:bg-skin-dark
+                        dark:border-gray-600"
                  @click="open=false"
                  @mouseleave="onHover ? open = false : ''">
                 <slot></slot>

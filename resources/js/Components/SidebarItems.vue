@@ -8,6 +8,8 @@ const props = defineProps({
         default: null
     },
     buttonClass: String,
+    dotClass: String,
+    textClass: String,
     iconClass: String,
     onHover: Boolean,
     minimize: {
@@ -46,14 +48,14 @@ const isActive = (item) => {
 <template v-if="item">
     <div :class="{'bg-white bg-opacity-10 rounded-lg': show}"
          class="p-2 mb-2 transition-all duration-200 ease-in-out">
-        <button :class="[buttonClass]"
-                class="relative flex items-center w-full text-dark dark:text-light"
+        <button :class="[buttonClass, textClass]"
+                class="relative flex items-center w-full"
                 @click="open = !open">
             <div class="flex items-center">
                 <icon v-if="item.icon"
                       :class="iconClass"
                       :icon="item.icon"
-                      class="mr-2 fill-dark dark:fill-light w-5 h-5 min-w-max"/>
+                      class="mr-2 fill-skin-base w-5 h-5 min-w-max"/>
                 <span v-if="item.submenu"
                       :class="{'opacity-0': minimize}"
                       class="min-w-max">
@@ -87,19 +89,18 @@ const isActive = (item) => {
                  class="mt-4
                         relative
                         min-w-[200px] max-w-[300px]
-                        text-sm
-                        text-light
-                        dark:text-dark">
+                        text-sm">
                 <template v-for="subitem in item.submenu">
                     <div class="relative">
                         <span v-if="isActive(subitem)"
-                              class="absolute w-2 h-2 bg-dark dark:bg-light left-2 top-3 rounded-full"></span>
-                        <Link :class="[{'font-bold': isActive(subitem)}, buttonClass]"
+                              :class="[dotClass]"
+                              class="absolute w-2 h-2 bg-skin-base left-2 top-3 rounded-full"></span>
+                        <Link :class="[{'font-bold': isActive(subitem)}, buttonClass, textClass]"
                               :href="route(subitem.route)"
                               :preserve-scroll="true"
                               :preserve-state="true"
                               as="button"
-                              class="text-dark dark:text-light w-full text-left py-2 pl-8"
+                              class="w-full text-left py-2 pl-8"
                               type="button">{{ subitem.label }}
                         </Link>
                     </div>

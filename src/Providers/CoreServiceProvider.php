@@ -47,6 +47,7 @@ class CoreServiceProvider extends ServiceProvider
 		 * Uncomment the third function call to make the translations publishable using the 'translations' tag.
 		 */
 		 $this->loadTranslationsFrom(__DIR__.'/../../resources/lang', 'core');
+		 
 		// $this->loadJsonTranslationsFrom(__DIR__.'/../../resources/lang', 'core');
 		$this->publishes([
 			__DIR__ . '/../../resources/lang' => resource_path('lang/vendor/core'),
@@ -70,10 +71,11 @@ class CoreServiceProvider extends ServiceProvider
 		
 		/** JS */
 		$this->publishes([
-			__DIR__ . '/../../resources/js/Pages' => resource_path('js/Pages/Vendor/Core'),
-			__DIR__ . '/../../resources/js/Layouts' => resource_path('js/Layouts/Vendor/Core'),
-			__DIR__ . '/../../resources/js/Components' => resource_path('js/Vendor/Core/Components'),
-			__DIR__ . '/../../resources/js/Mixins' => resource_path('js/Vendor/Core/Mixins'),
+			__DIR__ . '/../../resources/js' => resource_path('js/Vendor/Core'),
+//			__DIR__ . '/../../resources/js/Pages' => resource_path('js/Pages/Vendor/Core'),
+//			__DIR__ . '/../../resources/js/Layouts' => resource_path('js/Layouts/Vendor/Core'),
+//			__DIR__ . '/../../resources/js/Components' => resource_path('js/Vendor/Core/Components'),
+//			__DIR__ . '/../../resources/js/Mixins' => resource_path('js/Vendor/Core/Mixins'),
 		], ['core', 'core-js']);
 		
 		/**

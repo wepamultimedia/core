@@ -52,6 +52,7 @@
     "scripts"      : {
         "post-root-package-install" : [
             "php artisan vendor:publish --tag=core --force",
+            "npm install vuex@next",
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-package-install"      : [

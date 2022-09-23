@@ -23,7 +23,7 @@
                    type="checkbox"
                    @change="$emit('update:modelValue', modelValue)">
             <label :for="option[value]"
-                   class="form-check-label inline-block text-gray-800 dark:text-light">
+                   class="form-check-label inline-block text-skin-base dark:text-skin-base-dark">
                 {{ option[label] }}
             </label>
         </div>

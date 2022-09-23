@@ -19,7 +19,7 @@ class PermissionController extends InertiaController
 	public string $packageName = 'core';
 	
 	/**
-	 * @param Role $role
+	 * @param Permission $permission
 	 *
 	 * @return Response
 	 */
@@ -27,8 +27,8 @@ class PermissionController extends InertiaController
 	{
 		$translations = $permission->getTranslationsArray();
 		
-		return $this->render('Vendor/Core/Backend/Permission/Edit',
-			'admin.permission',
+		return $this->render('@core/Backend/Permission/Edit',
+			'backend/permission',
 			compact(['translations', 'permission']));
 	}
 	
@@ -45,7 +45,7 @@ class PermissionController extends InertiaController
 			->orderBy('name')
 			->paginate();
 		
-		return $this->render('Vendor/Core/Backend/Permission/Index', 'admin.permission', compact(['permissions']));
+		return $this->render('@core/Backend/Permission/Index', 'backend/permission', compact(['permissions']));
 	}
 	
 	/**
@@ -65,7 +65,7 @@ class PermissionController extends InertiaController
 	 */
 	public function create(): Response
 	{
-		return $this->render('Vendor/Core/Backend/Permission/Create', 'admin.permission');
+		return $this->render('@core/Backend/Permission/Create', 'backend/permission');
 	}
 	
 	/**

@@ -34,13 +34,7 @@
                     <slot :close="close"
                           name="footer">
                         <!-- This button is used to close the dialog -->
-                        <button :class="{
-                                    'hover:bg-gray-800': !danger && !info && !success,
-                                    'hover:bg-red-800':danger,
-                                    'hover:bg-blue-800':info,
-                                    'hover:bg-green-800':success,
-                                }"
-                                class="px-5 py-2 cursor-pointer rounded-md hover:text-light"
+                        <button class="btn btn-neutral"
                                 @click="close">
                             {{ closeButtonText }}
                         </button>
@@ -53,12 +47,12 @@
                                         'bg-green-600 hover:bg-green-800':success,
                                     }"
                                   :href="href"
-                                  @click="close"
+                                  :method="method"
                                   :preserve-scroll="preserveScroll"
                                   :preserve-state="preserveState"
-                                  :method="method"
                                   as="button"
-                                  class="px-5 py-2 ml-2 text-white cursor-pointer rounded-md">
+                                  class="px-5 py-2 ml-2 text-white cursor-pointer rounded-md"
+                                  @click="close">
                                 {{ okButtonText }}
                             </Link>
                         </slot>
