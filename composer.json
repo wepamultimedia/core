@@ -51,9 +51,11 @@
     },
     "scripts"      : {
         "post-root-package-install" : [
-            "php artisan vendor:publish --tag=core --force",
+            "npm install -D tailwindcss postcss autoprefixer",
             "npm install vuex@next",
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+            "npm install vuex@next",
+            "php artisan vendor:publish --tag=core",
+            "php artisan vendor:publish --tag=core-overwrite --force"
         ],
         "post-package-install"      : [
             "npm install"

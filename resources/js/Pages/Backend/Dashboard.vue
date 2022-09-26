@@ -1,9 +1,10 @@
+<script>
+import MainLayout from "@core/Layouts/Backend/MainLayout.vue";
+export default {
+    layout: (h, page) => h(MainLayout, { title: 'dashboard' }, () => page)
+};
+</script>
 <script setup>
-import MainLayout from "@layouts/Core/Backend/MainLayout.vue";
 </script>
 <template>
-    <MainLayout title="Dashboard"
-                :bc="[{label: 'home'}]"
-               icon="template">
-    </MainLayout>
 </template>

@@ -5,6 +5,7 @@
 return [
 	'canLogin'    => true,
 	'canRegister' => true,
+	'theme'       => 'Rococo',
 	'locales'     => [
 		[
 			'code' => 'es',

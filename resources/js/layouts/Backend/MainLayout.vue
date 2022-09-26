@@ -31,7 +31,11 @@ const logout = () => {
                         <icon v-if="icon"
                               :icon="icon"
                               class="fill-skin-base dark:fill-skin-base-dark"/>
-                        <h3 class="font-medium text-lg text-skin-base dark:text-skin-base-dark">{{ title }}</h3>
+                        <h3 class="font-medium text-lg text-skin-base dark:text-skin-base-dark">
+                            <slot :icon="icon"
+                                  name="title">{{ __(title) }}
+                            </slot>
+                        </h3>
                     </div>
                     <div class="flex">
                         <DarkModeToggle class="md:mr-4"></DarkModeToggle>
@@ -68,13 +72,22 @@ const logout = () => {
             <!--Content-->
             <div class="mx-4 md:ml-0 md:mr-4">
                 <div class="text-md bg-skin-inverted dark:bg-skin-inverted-dark shadow text-skin-base dark:text-skin-base-dark rounded-lg py-2 px-4 mb-4">
-                    <Link :href="route('admin.dashboard')">Dashboard</Link>
+                    <Link :href="route('admin.dashboard')">{{ __("dashboard") }}</Link>
                     <template v-if="bc.length"> /
                         <template v-for="(item, index) in bc">
                             <Link v-if="item.route"
-                                  :href="route(item.route)"><span :class="{'font-bold': index === Object.keys(bc).length-1}">{{ item.label }}</span>
+                                  :href="route(item.route)">
+                                <span :class="{'font-bold': index === Object.keys(bc).length-1}">{{
+                                        __(item.label)
+                                    }}
+                                </span>
                             </Link>
-                            <span v-else> <span :class="{'font-bold': index === Object.keys(bc).length-1}">{{ item.label }}</span></span>
+                            <span v-else>
+                                <span :class="{'font-bold': index === Object.keys(bc).length-1}">{{
+                                        __(item.label)
+                                    }}
+                                </span>
+                            </span>
                             <span v-if="index < Object.keys(bc).length-1"> / </span>
                         </template>
                     </template>

@@ -1,28 +1,19 @@
 <script setup>
 import { computed, onMounted, ref, toRef } from "vue";
+import { mapActions, useStore } from "vuex";
 import { Link } from "@inertiajs/inertia-vue3";
 
 const props = defineProps({
     item: {
-        type: Object,
-        default: null
-    },
-    buttonClass: String,
-    dotClass: String,
-    textClass: String,
-    iconClass: String,
-    onHover: Boolean,
-    minimize: {
-        type: Boolean,
-        default: false
-    },
-    shadow: Boolean,
-    contentClass: String
+        type: Object, default: null
+    }, buttonClass: String, dotClass: String, textClass: String, iconClass: String, onHover: Boolean, minimize: {
+        type: Boolean, default: false
+    }, shadow: Boolean, contentClass: String
 });
-
+const store = useStore();
 const item = toRef(props, "item");
 
-onMounted(() => {
+const checkActive = () => {
     if (!item.value.submenu) {
         if (route().current(item.value.active)) {
             open.value = true;
@@ -34,6 +25,20 @@ onMounted(() => {
             }
         });
     }
+};
+
+const {currentRoute} = store.getters;
+const refreshRoute = () => {
+    // store.dispatch('refreshCurrentRoute', );
+    // console.log(window.location.pathname);
+}
+
+/*watch(currentRoute, value => {
+    console.log(value);
+});*/
+
+onMounted(() => {
+    checkActive();
 });
 
 const open = ref(false);
@@ -67,6 +72,7 @@ const isActive = (item) => {
                       :preserve-scroll="true"
                       :preserve-state="true"
                       as="button"
+                      @click="refreshRoute()"
                       class="w-full"
                       type="button">
                     {{ item.label }}
@@ -100,6 +106,7 @@ const isActive = (item) => {
                               :preserve-scroll="true"
                               :preserve-state="true"
                               as="button"
+                              @click="refreshRoute()"
                               class="w-full text-left py-2 pl-8"
                               type="button">{{ subitem.label }}
                         </Link>

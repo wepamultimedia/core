@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, onUpdated, ref, watch } from "vue";
 import SidebarItems from "@components/SidebarItems.vue";
 import { usePage } from "@inertiajs/inertia-vue3";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
@@ -119,6 +119,7 @@ onMounted((app) => {
                     <template v-for="item in menu">
                         <div :class="{dark:dark}">
                             <SidebarItems :icon-class="iconClass"
+                                          :key="route().current()"
                                           :item="item"
                                           :minimize="minimize"
                                           :text-class="textClass"

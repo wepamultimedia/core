@@ -60,7 +60,7 @@ class UserController extends InertiaController
 			->orderBy('name')
 			->paginate(3);
 		
-		return $this->render('@core/Backend/User/Index', 'backend/user', [
+		return $this->render('Backend/User/Indexs', 'backend/user', [
 			'users' => $users,
 		]);
 	}
