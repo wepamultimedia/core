@@ -26,18 +26,17 @@ class InertiaController extends Controller
 	 * @return Response
 	 */
 	public function render(string $view,
-	                       mixed  $files = [],
+	                       mixed  $tranlation = [],
 	                       array  $props = [],
 	                       array  $share = []): Response
 	{
 		
 		$this->buildViewPath($view);
 		$this->checkViewExist($view);
-		
 		$defatultShare = [
 			'locale'      => app()->getLocale(),
 			'locales'     => config('core.locales'),
-			'translation' => $this->translation($files),
+			'translation' => $this->translation($tranlation),
 			'appName'     => config('app.name'),
 		];
 		
@@ -54,7 +53,7 @@ class InertiaController extends Controller
 	private function buildViewPath(string &$view): void
 	{
 		if(Str::startsWith($view, '/')) {
-			$view = Str::substrReplace($view, '', 0, 0);
+			$view = Str::substrReplace($view, '', 0, 1);
 		} else {
 			$this->addPackageNameToViewPath($view);
 			$this->addThemeNameToViewPath($view);
@@ -69,7 +68,7 @@ class InertiaController extends Controller
 	private function addPackageNameToViewPath(string &$view): void
 	{
 		if(!Str::contains($view, '@' . $this->packageName)) {
-			$view = '@' . $this->packageName . '/' . $view;
+			$view = '@' . strtolower($this->packageName) . '/' . $view;
 		}
 	}
 	
@@ -83,7 +82,7 @@ class InertiaController extends Controller
 		$theme = config('core.theme');
 		if($theme and $theme !== '') {
 			if(!Str::contains($view, '#' . $theme)) {
-				$view = '#' . $theme . '/' . $view;
+				$view = '#' . strtolower($theme) . '/' . $view;
 			}
 		}
 	}
@@ -94,20 +93,33 @@ class InertiaController extends Controller
 	 */
 	private function checkViewExist(string &$view)
 	{
-		// Check if theme view file exist
-		$theme = config('core.theme');
-		$path = Str::replace(['#' . $theme . '/', '@' . $this->packageName . '/'], '', $view);
-		if(!File::exists(resource_path('js/Themes/' . $theme . '/Pages/' . $this->packageName . '/' . $path . '.vue'))) {
-			if(!File::exists(resource_path('js/Vendor/' . ucfirst($this->packageName) . '/Pages/' . $path . '.vue'))) {
-				if(!File::exists(resource_path('js/Pages/' . $path . '.vue'))) {
-					abort(501, 'The view file does not exist');
+		if(preg_match('/^[a-zA-Z]/', $view)) {
+			if(File::exists(resource_path('js/Pages/' . $view . '.vue'))){
+				return;
+			}
+		} else {
+			$theme = config('core.theme');
+			$path = Str::replace(['#' . strtolower($theme) . '/', '@' . $this->packageName . '/'], '', $view);
+
+			// Check if theme view file exist
+			if(preg_match('/^\#/', $view)) {
+				if(File::exists(resource_path('views/themes/' . $theme . '/' . $this->packageName . '/' . $path . '.vue'))) {
+					return;
 				}
-			} else {
-				$this->addPackageNameToViewPath($path);
 			}
 			
-			$view = $path;
+			// Check if package view file exist
+			if(File::exists(resource_path('views/' . strtolower($this->packageName) . '/' . $path . '.vue'))) {
+				if(!preg_match('/^\@/', $view)) {
+					$this->addPackageNameToViewPath($path);
+					$view = $path;
+				}
+				
+				return;
+			}
 		}
+		
+		abort(501, 'The view file { "' . $view . '" } does not exist');
 	}
 	
 	/**
@@ -131,7 +143,7 @@ class InertiaController extends Controller
 			} else {
 				$translation = Lang::get($this->packageName . '::' . $files);
 				if(is_array($translation)) {
-					$translations = array_merge($translations, $translation);
+					$translations = $translation;
 				}
 			}
 		}

@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --color-primary-100       : #c8c8c9;
+        --color-primary-200       : #A2AAAC;
+        --color-primary-300       : #767F84;
+        --color-primary-400       : #49545B;
+        --color-primary-500       : #1C2833;
+        --color-primary-600       : #171F28;
+        --color-primary-700       : #11171D;
+        --color-primary-800       : #0B0E13;
+        --color-primary-900       : #050608;
+
+        --color-base              : #1C2833;
+        --color-base-dark         : #F8F9F9;
+        --color-muted             : #84918B;
+        --color-muted-dark        : #84918B;
+        --color-inverted          : #F8F9F9;
+        --color-inverted-dark     : #1C2833;
+        --color-fill              : var(--color-primary-100);
+        --color-fill-dark         : var(--color-primary-500);
+
+        --color-light             : #F8F9F9;
+        --color-dark              : #1C2833;
+
+        --color-accent            : var(--color-primary-600);
+        --color-accent-dark       : var(--color-primary-100);
+        --color-accent-hover      : var(--color-primary-700);
+        --color-accent-hover-dark : white;
+        --color-background        : #CFD3D4;
+        --color-background-dark   : #11171D;
+
+        --color-success           : #239B56;
+        --color-info              : #3498DB;
+        --color-warning           : #F39C12;
+        --color-danger            : #C0392B;
+    }
+
+
+    .admin-custom {
+        --color-primary-100     : #bbbbbb;
+        --color-primary-200     : #DAA9B1;
+        --color-primary-300     : #C3849E;
+        --color-primary-400     : #A96391;
+        --color-primary-500     : #8B4584;
+        --color-primary-600     : #743175;
+        --color-primary-700     : #55205B;
+        --color-primary-800     : #35123E;
+        --color-primary-900     : #17071E;
+
+        --color-base            : #1C2833;
+        --color-base-dark       : #F8F9F9;
+        --color-muted           : #84918B;
+        --color-muted-dark      : #84918B;
+        --color-inverted        : #F8F9F9;
+        --color-inverted-dark   : #1C2833;
+        --color-fill            : var(--color-primary-100);
+        --color-fill-dark       : var(--color-primary-500);
+
+        --color-accent          : var(--color-primary-100);
+        --color-accent-hover    : var(--color-primary-200);
+        --color-background      : #e7eaea;
+        --color-background-dark : #11171D;
+    }
+
+    body, button {
+        @apply text-skin-base dark:text-skin-base-dark
+    }
+
+    h1 {
+        @apply text-2xl
+    }
+
+    h2 {
+        @apply text-xl
+    }
+
+    h3 {
+        @apply text-lg
+    }
+
+}
+
+@layer components {
+    .btn {
+        @apply inline-flex tracking-wide uppercase text-xs px-4 py-2 rounded-md font-semibold border border-transparent focus:outline-none bg-gray-600 hover:bg-gray-700 active:bg-gray-900 focus:border-gray-700 focus:ring-gray-300 focus:ring disabled:opacity-25 transition flex items-center gap-2
+    }
+
+    .btn-success {
+        @apply text-white bg-green-600 hover:bg-green-700 active:bg-green-900 focus:border-green-700 focus:ring-green-300
+    }
+
+    .btn-info {
+        @apply text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-900 focus:border-blue-700 focus:ring-blue-300
+    }
+
+    .btn-warning {
+        @apply text-white bg-orange-600 hover:bg-orange-700 active:bg-orange-900 focus:border-orange-700 focus:ring-orange-300
+    }
+
+    .btn-danger {
+        @apply text-white bg-red-600 hover:bg-red-700 active:bg-red-900 focus:border-red-700 focus:ring-red-300
+    }
+
+    .btn-neutral {
+        @apply text-skin-base hover:text-white bg-transparent hover:bg-gray-400 hover:bg-opacity-50 hover:bg-opacity-50
+    }
+
+    .btn-primary {
+        @apply text-white bg-skin-primary-600 hover:bg-skin-primary-700 active:bg-skin-primary-900 focus:border-skin-primary-700 focus:ring-skin-primary-300
+    }
+}

@@ -16,6 +16,6 @@ class DashboardController extends InertiaController
 	 */
 	public function index(): Response
 	{
-		return $this->render('@core/Frontend/Dashboard', 'index');
+		return $this->render('/Dashboard', 'index');
 	}
 }

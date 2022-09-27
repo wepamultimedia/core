@@ -24,7 +24,7 @@ class CoreServiceProvider extends ServiceProvider
 		 */
 		$this->publishes([
 			__DIR__ . '/../../config/core.php' => config_path('core.php'),
-		], ['core', 'core-config', 'config']);
+		], ['core', 'core-config']);
 		
 		/**
 		 * Routes
@@ -57,22 +57,24 @@ class CoreServiceProvider extends ServiceProvider
 		//		$this->loadViewsFrom(__DIR__.'/../../resources/views', 'core');
 		 $this->publishes([
 			__DIR__ . '/../../resources/views' => resource_path('views/core'),
-		 ], 'views');
+		 ], ['core', 'core-views']);
 		
 		/** Overwrites */
 		$this->publishes([
 			__DIR__ . '/../../overwrite/resources/js/app.js' => resource_path('js/app.js'),
-			__DIR__ . '/../../overwrite/tailwind.config.js' => app_path('tailwind.config.js'),
-			__DIR__ . '/../../overwrite/.env.example' => app_path('.env'),
+			__DIR__ . '/../../overwrite/resources/css/app.css' => resource_path('css/app.css'),
+			__DIR__ . '/../../overwrite/tailwind.config.js' => base_path('tailwind.config.js'),
+			__DIR__ . '/../../overwrite/vite.config.js' => base_path('vite.config.js'),
+			__DIR__ . '/../../overwrite/app/Providers/AuthServiceProvider.ow' => app_path('Providers/AuthServiceProvider.php'),
+			__DIR__ . '/../../overwrite/app/Middleware/Authenticate.ow' => app_path('Middleware/Authenticate.php'),
+			__DIR__ . '/../../overwrite/config/jetstream.ow' => base_path('config/jetstream.php'),
+			__DIR__ . '/../../overwrite/config/fortify.ow' => base_path('config/fortify.php'),
+			__DIR__ . '/../../overwrite/config/permission.ow' => base_path('config/permission.php'),
 		], ['core', 'core-overwrite']);
 		
 		/** JS */
 		$this->publishes([
 			__DIR__ . '/../../resources/js'    => resource_path('js/core'),
-			//			__DIR__ . '/../../resources/js/Pages' => resource_path('js/Pages/Vendor/Core'),
-			//			__DIR__ . '/../../resources/js/Layouts' => resource_path('js/Layouts/Vendor/Core'),
-			//			__DIR__ . '/../../resources/js/Components' => resource_path('js/Vendor/Core/Components'),
-			//			__DIR__ . '/../../resources/js/Mixins' => resource_path('js/Vendor/Core/Mixins'),
 		], ['core', 'core-js']);
 		
 		/**

@@ -40,7 +40,7 @@ class UserController extends InertiaController
 		$roles = Role::all();
 		$selectedRoles = $user->getRoleNames()->all();
 		
-		return $this->render('@core/Backend/User/Edit',
+		return $this->render('backend/user/Edit',
 			'backend/user',
 			compact(['user', 'roles', 'selectedRoles']));
 	}
@@ -60,7 +60,7 @@ class UserController extends InertiaController
 			->orderBy('name')
 			->paginate(3);
 		
-		return $this->render('Backend/User/Indexs', 'backend/user', [
+		return $this->render('backend/user/Index', 'backend/user', [
 			'users' => $users,
 		]);
 	}
@@ -90,7 +90,7 @@ class UserController extends InertiaController
 	{
 		$roles = Role::all();
 		
-		return $this->render('@core/Backend/User/Create', 'backend/user', ['roles' => $roles]);
+		return $this->render('backend/user/Create', 'backend/user', ['roles' => $roles]);
 	}
 	
 	/**

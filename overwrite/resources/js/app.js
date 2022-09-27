@@ -6,10 +6,10 @@ import { createInertiaApp } from "@inertiajs/inertia-vue3";
 import { InertiaProgress } from "@inertiajs/progress";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
-import { translations } from "@core/Mixins/translations";
-import Heroicon from "@components/Heroicon.vue";
+import { translations } from "@core/mixins/translations";
+import Heroicon from "@core/components/Heroicon.vue";
 import InlineSvg from "vue-inline-svg";
-import store from "@core/Store/index";
+import store from "@core/store/index";
 
 const appName = window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
 
@@ -22,18 +22,14 @@ createInertiaApp({
         const getPagePath = /@[a-zA-Z]+\/(.*)/;
 
         if (ifPackageNameDefined.test(name)) {
-            let packageName = name.match(getPackageName)[1];
-            packageName = packageName.charAt(0).toUpperCase() + packageName.slice(1);
+            const packageName = name.match(getPackageName)[1];
             const page = name.match(getPagePath)[1];
 
             if (ifThemeNameDefined.test(name)) {
-                let themeName = name.match(getThemeName)[1];
-                themeName = themeName.charAt(0).toUpperCase() + themeName.slice(1);
-
-                return resolvePageComponent(`./Themes/${themeName}/Pages/${packageName}/${page}.vue`, import.meta.glob([`./Themes/**/*.vue`]));
+                const themeName = name.match(getThemeName)[1];
+                return resolvePageComponent(`../views/themes/${themeName}/${packageName}/${page}.vue`, import.meta.glob([`../views/themes/**/*.vue`]));
             }
-
-            return resolvePageComponent(`./Vendor/${packageName}/Pages/${page}.vue`, import.meta.glob([`./Vendor/**/Pages/**/*.vue`]));
+            return resolvePageComponent(`../views/${packageName}/${page}.vue`, import.meta.glob([`../views/**/*.vue`]));
         }
 
         return resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob("./Pages/**/*.vue"));

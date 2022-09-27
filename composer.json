@@ -50,15 +50,15 @@
         }
     },
     "scripts"      : {
-        "post-root-package-install" : [
+        "post-package-install" : [
             "npm install -D tailwindcss postcss autoprefixer",
             "npm install vuex@next",
-            "npm install vuex@next",
             "php artisan vendor:publish --tag=core",
-            "php artisan vendor:publish --tag=core-overwrite --force"
-        ],
-        "post-package-install"      : [
+            "php artisan vendor:publish --tag=core-overwrite --force",
             "npm install"
+        ],
+        "post-package-update": [
+            "php artisan vendor:publish --tag=core"
         ],
         "pre-package-uninstall"     : [
         ],

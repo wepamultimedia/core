@@ -12,13 +12,19 @@
 
 use Illuminate\Support\Facades\Route;
 use Wepa\Core\Http\Controllers\Backend\DashboardController;
+use Wepa\Core\Http\Controllers\Backend\LoginController;
 use Wepa\Core\Http\Controllers\Backend\PermissionController;
 use Wepa\Core\Http\Controllers\Backend\RoleController;
 use Wepa\Core\Http\Controllers\Backend\TranslationController;
 use Wepa\Core\Http\Controllers\Backend\UserController;
 
 
-Route::prefix('admin')->middleware(['web', 'auth:sanctum', 'core.backend'])->group(function(){
+Route::prefix('admin')->middleware('web')->group(function() {
+	Route::get('login', [LoginController::class, 'create'])->name('admin.login');
+	Route::post('login', [LoginController::class, 'store'])->name('admin.login');
+});
+
+Route::prefix('admin')->middleware(['web', 'auth:sanctum', 'core.backend'])->group(function() {
 	Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
 	
 	Route::resource('users', UserController::class)->names('admin.users');

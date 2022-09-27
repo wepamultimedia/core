@@ -23,7 +23,8 @@ class LoginController extends InertiaController implements LoginInterface
 	 */
 	public function create(): Response
 	{
-		return $this->render('@core/Auth/Login', 'auth', [
+		return $this->render('@core/mixed/auth/Login', 'auth', [
+			'admin'            => true,
 			'canResetPassword' => true,
 		]);
 	}
