@@ -5,7 +5,7 @@
 return [
 	'canLogin'    => true,
 	'canRegister' => true,
-	'theme'       => '', // resources/views/themes/{theme}
+	'theme'       => 'rococo', // resources/views/themes/{theme}
 	'locales'     => [
 		[
 			'code' => 'es',
@@ -14,6 +14,10 @@ return [
 		[
 			'code' => 'en',
 			'name' => 'English',
+		],
+		[
+			'code' => 'fr',
+			'name' => 'Française',
 		],
 	],
 ];

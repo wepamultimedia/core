@@ -8,7 +8,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Inertia\Response;
-use Spatie\Permission\Models\Role as SpatieRole;
 use Wepa\Core\Http\Controllers\Mixed\InertiaController;
 use Wepa\Core\Http\Requests\Backend\RoleFormRequest;
 use Wepa\Core\Models\Backend\Permission;
@@ -22,6 +21,18 @@ class RoleController extends InertiaController
 	/**
 	 * @param Role $role
 	 *
+	 * @return Redirector|Application|RedirectResponse
+	 */
+	public function destroy(Role $role): Redirector|Application|RedirectResponse
+	{
+		$role->delete();
+		
+		return redirect(route('admin.roles.index'));
+	}
+	
+	/**
+	 * @param Role $role
+	 *
 	 * @return Response
 	 */
 	public function edit(Role $role): Response
@@ -30,9 +41,14 @@ class RoleController extends InertiaController
 		$selectedPermissions = $role->getPermissionNames()->all();
 		$translations = $role->getTranslationsArray();
 		
-		return $this->render('@core/backend/role/Edit',
+		return $this->render('backend/role/Edit',
 			'backend/role',
-			compact(['role', 'permissions', 'selectedPermissions', 'translations']));
+			compact([
+				'role',
+				'permissions',
+				'selectedPermissions',
+				'translations',
+			]));
 	}
 	
 	/**
@@ -48,7 +64,7 @@ class RoleController extends InertiaController
 			->orderBy('name')
 			->paginate();
 		
-		return $this->render('@core/backend/role/Index', 'backend/role', compact(['roles']));
+		return $this->render('backend/role/Index', 'backend/role', compact(['roles']));
 	}
 	
 	/**
@@ -87,18 +103,6 @@ class RoleController extends InertiaController
 	{
 		$role->update($request->all());
 		$role->syncPermissions($request->selectedPermissions);
-		
-		return redirect(route('admin.roles.index'));
-	}
-	
-	/**
-	 * @param Role $role
-	 *
-	 * @return Redirector|Application|RedirectResponse
-	 */
-	public function destroy(Role $role): Redirector|Application|RedirectResponse
-	{
-		$role->delete();
 		
 		return redirect(route('admin.roles.index'));
 	}

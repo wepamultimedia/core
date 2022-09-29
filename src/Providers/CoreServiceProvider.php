@@ -66,6 +66,7 @@ class CoreServiceProvider extends ServiceProvider
 			__DIR__ . '/../../overwrite/tailwind.config.js' => base_path('tailwind.config.js'),
 			__DIR__ . '/../../overwrite/vite.config.js' => base_path('vite.config.js'),
 			__DIR__ . '/../../overwrite/app/Providers/AuthServiceProvider.ow' => app_path('Providers/AuthServiceProvider.php'),
+			__DIR__ . '/../../overwrite/app/Providers/AppServiceProvider.ow' => app_path('Providers/AppServiceProvider.php'),
 			__DIR__ . '/../../overwrite/app/Middleware/Authenticate.ow' => app_path('Middleware/Authenticate.php'),
 			__DIR__ . '/../../overwrite/config/jetstream.ow' => base_path('config/jetstream.php'),
 			__DIR__ . '/../../overwrite/config/fortify.ow' => base_path('config/fortify.php'),
