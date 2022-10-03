@@ -33,6 +33,7 @@ class InertiaController extends Controller
 		
 		$this->buildViewPath($view);
 		$this->checkViewExist($view);
+		
 		$defatultShare = [
 			'locale'      => app()->getLocale(),
 			'locales'     => config('core.locales'),
@@ -175,28 +176,5 @@ class InertiaController extends Controller
 	public function share(array $share): void
 	{
 		Inertia::share($share);
-	}
-	
-	/**
-	 * @param string $locale
-	 * @param string $fileName
-	 *
-	 * @return array
-	 */
-	private function fileLang(string $locale, string $fileName): array
-	{
-		$translations = [];
-		
-		if(File::exists($filePath = resource_path("/lang/vendor/{$this->packageName}/$locale/$fileName.php"))) {
-			return Cache::rememberForever("translations_{$locale}_{$this->packageName}_{$fileName}",
-				function() use ($fileName, $locale, $filePath) {
-					$translations = File::getRequire($filePath);
-					if(is_array($translations)) {
-						return Arr::dot($translations);
-					}
-				});
-		}
-		
-		return $translations;
 	}
 }

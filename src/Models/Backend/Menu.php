@@ -64,15 +64,19 @@ class Menu extends Model implements TranslatableContract
 	{
 		foreach($items as $item) {
 			$data = ['route' => $item['route']];
+			
 			if(Arr::exists($item, 'icon')) {
 				$data = array_merge($data, ['icon' => $item['icon']]);
 			}
+			
 			if(Arr::exists($item, 'active')) {
 				$data = array_merge($data, ['active' => $item['active']]);
 			}
+			
 			if(Arr::exists($item, 'can')) {
 				$data = array_merge($data, ['can' => $item['can']]);
 			}
+			
 			if(Arr::exists($item, 'label')) {
 				if(Str::contains($item['label'], '|')) {
 					$translations = explode('|', $item['label']);
@@ -86,7 +90,7 @@ class Menu extends Model implements TranslatableContract
 			}
 			
 			/* @var $menu Menu */
-			$menu = Menu::create($data);
+			$menu = self::create($data);
 			
 			if($parentId) {
 				$menu->parent_id = $parentId;
