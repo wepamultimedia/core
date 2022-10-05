@@ -4,11 +4,8 @@ namespace Wepa\Core\Http\Controllers\Mixed;
 
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -32,9 +29,9 @@ class InertiaController extends Controller
 	{
 		
 		$this->buildViewPath($view);
-		$this->checkViewExist($view);
 		
 		$defatultShare = [
+			'theme'       => config('core.theme'),
 			'locale'      => app()->getLocale(),
 			'locales'     => config('core.locales'),
 			'translation' => $this->translation($tranlation),
@@ -53,37 +50,9 @@ class InertiaController extends Controller
 	 */
 	private function buildViewPath(string &$view): void
 	{
-		if(Str::startsWith($view, '/')) {
-			$view = Str::substrReplace($view, '', 0, 1);
-		} else {
-			$this->addPackageNameToViewPath($view);
-			$this->addThemeNameToViewPath($view);
-		}
-	}
-	
-	/**
-	 * @param string $view
-	 *
-	 * @return void
-	 */
-	private function addPackageNameToViewPath(string &$view): void
-	{
-		if(!Str::contains($view, '@' . $this->packageName)) {
-			$view = '@' . strtolower($this->packageName) . '/' . $view;
-		}
-	}
-	
-	/**
-	 * @param string $view
-	 *
-	 * @return void
-	 */
-	private function addThemeNameToViewPath(string &$view): void
-	{
-		$theme = config('core.theme');
-		if($theme and $theme !== '') {
-			if(!Str::contains($view, '#' . $theme)) {
-				$view = '#' . strtolower($theme) . '/' . $view;
+		if(!$this->addThemeNameToViewPath($view)) {
+			if(!$this->checkViewExist($view)) {
+				abort(501, 'The view file { "' . $view . '" } does not exist');
 			}
 		}
 	}
@@ -91,36 +60,34 @@ class InertiaController extends Controller
 	/**
 	 * @param string $view
 	 *
+	 * @return bool
 	 */
-	private function checkViewExist(string &$view)
+	private function addThemeNameToViewPath(string &$view): bool
 	{
-		if(preg_match('/^[a-zA-Z]/', $view)) {
-			if(File::exists(resource_path('js/Pages/' . $view . '.vue'))){
-				return;
-			}
-		} else {
-			$theme = config('core.theme');
-			$path = Str::replace(['#' . strtolower($theme) . '/', '@' . $this->packageName . '/'], '', $view);
-
-			// Check if theme view file exist
-			if(preg_match('/^\#/', $view)) {
-				if(File::exists(resource_path('views/themes/' . $theme . '/' . $this->packageName . '/' . $path . '.vue'))) {
-					return;
-				}
-			}
-			
-			// Check if package view file exist
-			if(File::exists(resource_path('views/' . strtolower($this->packageName) . '/' . $path . '.vue'))) {
-				if(!preg_match('/^\@/', $view)) {
-					$this->addPackageNameToViewPath($path);
-					$view = $path;
-				}
+		if($theme = config('core.theme') and $theme !== '') {
+			$themeView = 'Themes/' . ucfirst($theme) . '/' . $view;
+			if($this->checkViewExist($themeView)) {
+				$view = $themeView;
 				
-				return;
+				return true;
 			}
 		}
 		
-		abort(501, 'The view file { "' . $view . '" } does not exist');
+		return false;
+	}
+	
+	/**
+	 * @param string $view
+	 *
+	 * @return bool
+	 */
+	private function checkViewExist(string $view): bool
+	{
+		if(File::exists(resource_path('js/Pages/' . $view . '.vue'))) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**

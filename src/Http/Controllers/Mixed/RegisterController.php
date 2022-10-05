@@ -28,6 +28,6 @@ class RegisterController extends InertiaController
 		if (! Features::enabled(Features::registration())) {
 			abort(404);
 		}
-		return $this->render('Vendor/Core/Mixed/Auth/Register', 'auth');
+		return $this->render('Core/Mixed/Auth/Register', 'auth');
 	}
 }

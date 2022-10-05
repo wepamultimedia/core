@@ -21,6 +21,6 @@ class ForgotPasswordController extends InertiaController
 	public function create(): Response
 	{
 		$status = session()->get('status');
-		return $this->render('Vendor/Core/Mixed/Auth/ForgotPassword', 'auth', compact(['status']));
+		return $this->render('Core/Mixed/Auth/ForgotPassword', 'auth', compact(['status']));
 	}
 }

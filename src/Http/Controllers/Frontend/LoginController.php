@@ -22,7 +22,7 @@ class LoginController extends InertiaController implements LoginInterface
 	 */
 	public function create(): Response
 	{
-		return $this->render('@core/mixed/auth/Login', 'auth', [
+		return $this->render('Core/Mixed/Auth/Login', 'auth', [
 			'canResetPassword' => true,
 		]);
 	}
@@ -35,7 +35,7 @@ class LoginController extends InertiaController implements LoginInterface
 	public function store(LoginRequest $request): RedirectResponse
 	{
 		if($this->login($request)) {
-			return redirect()->intended('dashboard');
+			return redirect()->intended(route('dashboard'));
 		}
 		
 		return back()->withErrors([

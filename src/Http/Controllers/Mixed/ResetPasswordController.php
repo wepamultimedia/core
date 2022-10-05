@@ -17,6 +17,6 @@ class ResetPasswordController extends InertiaController
 	 */
 	public function create($email, $token): Response
 	{
-		return $this->render('Vendor/Core/Mixed/Auth/ResetPassword', 'auth', ['token' => $token, 'email' => $email]);
+		return $this->render('Core/Mixed/Auth/ResetPassword', 'auth', ['token' => $token, 'email' => $email]);
 	}
 }

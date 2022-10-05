@@ -4,9 +4,12 @@ namespace Wepa\Core\Providers;
 
 
 use Illuminate\Routing\Router;
+use Wepa\Core\Console\Commands\InstallCommand;
 use Wepa\Core\Console\Commands\SymlinkCommand;
+use Wepa\Core\Console\Commands\UninstallCommand;
 use Wepa\Core\Database\seeders\CoreSeeder;
 use Wepa\Core\Http\Middleware\Backend;
+use Wepa\Core\Http\Middleware\Frontend;
 
 
 class CoreServiceProvider extends ServiceProvider
@@ -52,11 +55,7 @@ class CoreServiceProvider extends ServiceProvider
 		// $this->loadJsonTranslationsFrom(__DIR__.'/../../resources/lang', 'core');
 		$this->publishes([
 			__DIR__ . '/../../resources/lang' => resource_path('lang/vendor/core'),
-		],
-			[
-				'core',
-				'core-lang',
-			]);
+		], ['core', 'core-lang']);
 		
 		/**
 		 * Views
@@ -65,13 +64,9 @@ class CoreServiceProvider extends ServiceProvider
 		 * Uncomment the second section to make the view publishable using the 'view' tags.
 		 */
 		//		$this->loadViewsFrom(__DIR__.'/../../resources/views', 'core');
-		$this->publishes([
-			__DIR__ . '/../../resources/views' => resource_path('views/core'),
-		],
-			[
-				'core',
-				'core-views',
-			]);
+		// $this->publishes([
+		// 	__DIR__ . '/../../resources/views' => resource_path('views/core'),
+		// ], ['core','core-views']);
 		
 		/** Overwrites */
 		$this->publishes([
@@ -81,24 +76,17 @@ class CoreServiceProvider extends ServiceProvider
 			__DIR__ . '/../../overwrite/vite.config.js'                       => base_path('vite.config.js'),
 			__DIR__ . '/../../overwrite/app/Providers/AuthServiceProvider.ow' => app_path('Providers/AuthServiceProvider.php'),
 			__DIR__ . '/../../overwrite/app/Providers/AppServiceProvider.ow'  => app_path('Providers/AppServiceProvider.php'),
-			__DIR__ . '/../../overwrite/app/Middleware/Authenticate.ow'       => app_path('Middleware/Authenticate.php'),
+			__DIR__ . '/../../overwrite/app/Middleware/Authenticate.ow'       => app_path('Http/Middleware/Authenticate.php'),
 			__DIR__ . '/../../overwrite/config/jetstream.ow'                  => base_path('config/jetstream.php'),
 			__DIR__ . '/../../overwrite/config/fortify.ow'                    => base_path('config/fortify.php'),
 			__DIR__ . '/../../overwrite/config/permission.ow'                 => base_path('config/permission.php'),
-		],
-			[
-				'core',
-				'core-overwrite',
-			]);
+		], ['core', 'core-overwrite']);
 		
 		/** JS */
 		$this->publishes([
-			__DIR__ . '/../../resources/js' => resource_path('js/core'),
-		],
-			[
-				'core',
-				'core-js',
-			]);
+			__DIR__ . '/../../resources/js' => resource_path('js/Core'),
+			__DIR__ . '/../../resources/js/Pages' => resource_path('js/Pages/Core'),
+		], ['core', 'core-js']);
 		
 		/**
 		 * Commands
@@ -119,11 +107,7 @@ class CoreServiceProvider extends ServiceProvider
 		 */
 		$this->publishes([
 			__DIR__ . '/../../public' => public_path('core'),
-		],
-			[
-				'core',
-				'core-public',
-			]);
+		], ['core', 'core-public',]);
 		
 		/**
 		 * Migrations
@@ -161,7 +145,9 @@ class CoreServiceProvider extends ServiceProvider
 		/** @var Router $router */
 		$router = $this->app['router'];
 		$this->commands([
-			SymlinkCommand::class
+			SymlinkCommand::class,
+			InstallCommand::class,
+			UninstallCommand::class,
 		]);
 		
 		$router->aliasMiddleware('core.backend', Backend::class);

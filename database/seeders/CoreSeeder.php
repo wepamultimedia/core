@@ -16,14 +16,9 @@ class CoreSeeder extends Seeder
      */
     public function run()
     {
-	    User::create([
-		    'name'     => 'System Admin',
-		    'email'    => env('USER_ADMIN', 'admin@admin.com'),
-		    'password' => bcrypt(env('USER_ADMIN_PASSWORD', 'password')),
-	    ]);
-		
         $this->call([
-	        MenuSedder::class,
+	        AdminUserSedder::class,
+	        AdminMenuSedder::class,
 	        RoleSeeder::class
         ]);
     }

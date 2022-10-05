@@ -6,9 +6,9 @@ import * as path from "path";
 export default defineConfig({
     resolve:{
         alias:{
-            '@core' : path.resolve(__dirname, './resources/js/core'),
-            '@views' : path.resolve(__dirname, './resources/views'),
-            '@js' : path.resolve(__dirname, './resources/js'),
+            '@pages' : path.resolve(__dirname, './resources/js/Pages'),
+            '@core' : path.resolve(__dirname, './resources/js/Core'),
+            '@core/store' : path.resolve(__dirname, './resources/js/Core/Store'),
         },
     },
     plugins: [
