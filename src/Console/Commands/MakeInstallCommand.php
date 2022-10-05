@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 use ZipArchive;
 
 
-class InstallCommand extends Command
+class MakeInstallCommand extends Command
 {
 	/**
 	 * The console command description.
@@ -20,7 +20,7 @@ class InstallCommand extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'core:install';
+	protected $signature = 'core:makeInstall';
 	
 	/**
 	 * Create a new command instance.
@@ -39,15 +39,15 @@ class InstallCommand extends Command
 	 */
 	public function handle()
 	{
-		$this->backupFiles();
-		$this->info('Backup: ' . base_path('core_install_backup.zip'));
-		$this->deleteFiles();
-		$this->extractFiles();
-	}
-	
-	public function files()
-	{
-		return [
+		$filePath = __DIR__ . '/../../../install.zip';
+
+		if(file_exists($filePath)){
+			unlink($filePath);
+		}
+		
+		$zip = new ZipArchive();
+		
+		$filesToBackup = [
 			resource_path('js/app.js'),
 			resource_path('css/app.css'),
 			base_path('tailwind.config.js'),
@@ -59,40 +59,15 @@ class InstallCommand extends Command
 			base_path('config/fortify.php'),
 			base_path('config/permission.php'),
 		];
-	}
-	
-	public function deleteFiles()
-	{
-		foreach($this->files() as $file) {
-			unlink($file);
-		}
-	}
-	
-	public function backupFiles()
-	{
-		$zip = new ZipArchive();
-		$filePath = base_path('core_install_backup.zip');
 		
-		if(!file_exists($filePath)) {
-			if($zip->open($filePath, ZipArchive::CREATE) === true) {
-				foreach($this->files() as $file) {
-					$relativeNameInFile = str_replace(base_path() . DIRECTORY_SEPARATOR, '', $file);
-					$this->info('-- ' . $relativeNameInFile);
-					$zip->addFile($file, $relativeNameInFile);
-				}
+		if($zip->open($filePath, ZipArchive::CREATE) === true) {
+			foreach($filesToBackup as $file) {
+				$relativeNameInFile = str_replace(base_path() . DIRECTORY_SEPARATOR, '', $file);
+				$this->info('-- ' . $relativeNameInFile);
+				$zip->addFile($file, $relativeNameInFile);
 			}
-			
-			$zip->close();
 		}
-	}
-	
-	public function extractFiles()
-	{
-		$zip = new ZipArchive();
-		$filePath = __DIR__ . '/../../../install.zip';
-		if($zip->open($filePath) === true) {
-			$zip->extractTo(base_path());
-		}
+		
 		$zip->close();
 	}
 }

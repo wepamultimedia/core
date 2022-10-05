@@ -20,7 +20,7 @@ class UninstallCommand extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'core:install';
+	protected $signature = 'core:uninstall';
 	
 	/**
 	 * Create a new command instance.
