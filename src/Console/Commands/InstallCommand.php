@@ -76,9 +76,11 @@ class InstallCommand extends Command
 		if(!file_exists($filePath)) {
 			if($zip->open($filePath, ZipArchive::CREATE) === true) {
 				foreach($this->files() as $file) {
-					$relativeNameInFile = str_replace(base_path() . DIRECTORY_SEPARATOR, '', $file);
-					$this->info('-- ' . $relativeNameInFile);
-					$zip->addFile($file, $relativeNameInFile);
+					if(file_exists($file)) {
+						$relativeNameInFile = str_replace(base_path() . DIRECTORY_SEPARATOR, '', $file);
+						$this->info('-- ' . $relativeNameInFile);
+						$zip->addFile($file, $relativeNameInFile);
+					}
 				}
 			}
 			
