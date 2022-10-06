@@ -1,0 +1,58 @@
+<?php
+
+
+use App\Models\User;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Wepa\Core\Models\Backend\Permission;
+use Wepa\Core\Models\Backend\Role;
+
+
+return new class extends Migration {
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		$tableNames = config('permission.table_names');
+		
+		Schema::create($tableNames['roles'] . '_translations', function(Blueprint $table) {
+			$table->id();
+			$table->foreignId('role_id');
+			$table->string('locale')->index();
+			$table->string('description');
+			
+			$table->unique(['locale', 'role_id']);
+			$table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+		});
+		
+		Schema::create($tableNames['permissions'] . '_translations', function(Blueprint $table) {
+			$table->id();
+			$table->foreignId('permission_id');
+			$table->string('locale')->index();
+			$table->string('description');
+			
+			$table->unique(['locale', 'permission_id']);
+			$table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
+		});
+	}
+	
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		$tableNames = config('permission.table_names');
+		Schema::table($tableNames['roles'], function(Blueprint $table) {
+			$table->dropColumn('description');
+		});
+		Schema::table($tableNames['permissions'], function(Blueprint $table) {
+			$table->dropColumn('description');
+		});
+	}
+};
