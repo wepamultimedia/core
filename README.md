@@ -15,8 +15,11 @@ php artisan core:install
 
 ```
 npm install vuex@next
+npm install @vueuse/core
 npm install vue-inline-svg@next
 npm install vue-screen@next
+
+npm i vuex@next @vueuse/core vue-inline-svg@next vue-screen@next
 ```
 
 ### Vendor Publish

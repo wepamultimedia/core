@@ -137,8 +137,7 @@ onMounted((app) => {
         </div>
     </div>
 </template>
-<style lang="scss"
-       scoped>
+<style scoped>
 .logo-white {
     background-image: url("/images/logo-white.svg");
     @apply bg-contain bg-left-bottom bg-no-repeat h-10
