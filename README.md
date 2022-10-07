@@ -59,3 +59,27 @@ You can customize the views on the route
 ```
 php artisan core:uninstall
 ```
+
+## Deploy
+```
+APP_NAME=
+APP_ENV=production
+APP_KEY=*******
+APP_DEBUG=true
+APP_URL=https://domain
+ASSET_URL="${APP_URL}"
+DB_HOST=db-wepa-team-do-user-12603780-0.b.db.ondigitalocean.com
+DB_PORT=25060
+DB_DATABASE=db_name
+DB_USERNAME=us_name
+DB_PASSWORD=********************
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=dae5014ececf41
+MAIL_PASSWORD=ae9d06a26f72f0
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=cpuche@wepa.es
+MAIL_FROM_NAME=${APP_NAME}
+
+```
