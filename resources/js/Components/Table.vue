@@ -1,8 +1,8 @@
 <script setup>
 import { defineProps, onMounted, ref, toRefs, watch } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
-import Modal from "@core/components/Modal.vue";
-import Pagination from "@core/components/Pagination.vue";
+import Modal from "@core/Components/Modal.vue";
+import Pagination from "@core/Components/Pagination.vue";
 import _ from "lodash";
 import { Inertia } from "@inertiajs/inertia";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";

@@ -10,7 +10,7 @@ export default {
 <script setup>
 import { Link } from "@inertiajs/inertia-vue3";
 import { defineProps } from "vue";
-import Table from "@core/components/Table.vue";
+import Table from "@core/Components/Table.vue";
 
 defineProps(["roles"]);
 </script>

@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps, computed, onMounted, ref, watch } from "vue";
-import SidebarItems from "@core/components/SidebarItems.vue";
+import SidebarItems from "@core/Components/SidebarItems.vue";
 import { usePage } from "@inertiajs/inertia-vue3";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 

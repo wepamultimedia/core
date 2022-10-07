@@ -1,9 +1,9 @@
 <script setup>
 import { defineProps } from "vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
-import Sidebar from "@core/components/Sidebar.vue";
-import Dropdown from "@core/components/Dropdown.vue";
-import DarkModeToggle from "@core/components/DarkModeToggle.vue";
+import Sidebar from "@core/Components/Sidebar.vue";
+import Dropdown from "@core/Components/Dropdown.vue";
+import DarkModeToggle from "@core/Components/DarkModeToggle.vue";
 import { Inertia } from "@inertiajs/inertia";
 
 const props = defineProps({
