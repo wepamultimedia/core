@@ -12,7 +12,7 @@ import { reactive, toRefs, defineProps } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import Checkbox from "@core/Components/Form/Checkbox.vue";
 import Input from "@core/Components/Form/Input.vue";
-import Modal from "@core/components/Modal.vue";
+import Modal from "@core/Components/Modal.vue";
 
 const props = defineProps({
     roles: Array, selectedRoles: Array, user: Object, errors: Object

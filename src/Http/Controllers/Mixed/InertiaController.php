@@ -12,7 +12,7 @@ use Inertia\Response;
 
 class InertiaController extends Controller
 {
-	public string $packageName;
+	public string $packageName = '';
 	
 	/**
 	 * @param string $view
@@ -27,7 +27,6 @@ class InertiaController extends Controller
 	                       array  $props = [],
 	                       array  $share = []): Response
 	{
-		
 		$this->buildViewPath($view);
 		
 		$defatultShare = [
@@ -99,17 +98,19 @@ class InertiaController extends Controller
 	{
 		$locale = app()->getLocale();
 		$translations = [];
+		$prefix = $this->packageName !== '' ? $this->packageName . '::' : '';
 		
 		if($files) {
 			if(is_array($files)) {
 				foreach($files as $file) {
-					$translation = Lang::get($this->packageName . '::' . $file);
+					$translation = Lang::get($prefix . $file);
 					if(is_array($translation)) {
-						$translations = array_merge($translations, $translation);
+						$translations = array_merge($translations,
+							$translation);
 					}
 				}
 			} else {
-				$translation = Lang::get($this->packageName . '::' . $files);
+				$translation = Lang::get($prefix . $files);
 				if(is_array($translation)) {
 					$translations = $translation;
 				}
@@ -126,12 +127,17 @@ class InertiaController extends Controller
 	 */
 	private function defaultTranslation($locale): array
 	{
-		$translation = Lang::get($this->packageName . '::default');
-		if(is_array($translation)) {
-			return $translation;
+		$translation = is_array($translation = Lang::get('default'))
+			? $translation : [];
+		
+		$packageTranslation = [];
+		
+		if($this->packageName !== '') {
+			$packageTranslation = is_array($packageTranslation = Lang::get($this->packageName . '::default'))
+				? $packageTranslation : [];
 		}
 		
-		return [];
+		return array_merge($translation, $packageTranslation);
 	}
 	
 	/**

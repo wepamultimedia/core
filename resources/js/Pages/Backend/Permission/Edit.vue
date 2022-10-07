@@ -13,7 +13,7 @@ export default {
 import { reactive, toRefs, defineProps } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import Input from "@core/Components/Form/Input.vue";
-import Modal from "@core/components/Modal.vue";
+import Modal from "@core/Components/Modal.vue";
 
 const props = defineProps({
     translations: Object, permission: Object, errors: Object

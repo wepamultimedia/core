@@ -51,11 +51,11 @@ class CoreServiceProvider extends ServiceProvider
 		 * Uncomment the second function call to load the JSON translations.
 		 * Uncomment the third function call to make the translations publishable using the 'translations' tag.
 		 */
-		$this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'core');
-		
 		// $this->loadJsonTranslationsFrom(__DIR__.'/../../resources/lang', 'core');
+		$this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'core');
 		$this->publishes([
 			__DIR__ . '/../../resources/lang' => resource_path('lang/vendor/core'),
+			__DIR__ . '/../../laravel/resources/lang' => resource_path('lang'),
 		], ['core', 'core-lang']);
 		
 		/**
