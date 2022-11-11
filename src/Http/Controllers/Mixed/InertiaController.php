@@ -111,6 +111,7 @@ class InertiaController extends Controller
 				}
 			} else {
 				$translation = Lang::get($prefix . $files);
+
 				if(is_array($translation)) {
 					$translations = $translation;
 				}
