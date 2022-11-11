@@ -1,13 +1,16 @@
-<script setup>
+<script>
 import MainLayout from "@pages/Core/Layouts/Backend/MainLayout.vue";
 
+export default {
+    layout: (h, page) => h(MainLayout, {
+        title: "Translations",
+        icon: "flag",
+        bc: [{label: "translation"}]
+    }, () => page)
+};
+</script>
+<script setup>
 </script>
 <template>
-    <MainLayout title="Translations">
-        <template #bradcrumb>
-            <div class="bg-gray-100 dark:bg-gray-900 dark:text-dark rounded-lg py-2 px-4 mb-4">Dashboard / Translations</div>
-        </template>
-        <h1>Translation</h1>
-    </MainLayout>
 </template>
 <style scoped></style>

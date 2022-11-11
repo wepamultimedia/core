@@ -33,53 +33,60 @@ class InstallCommand extends Command
 	}
 	
 	/**
-	 * Execute the console command.
-	 *
-	 * @return mixed
+	 * @return void
 	 */
-	public function handle()
+	public function deleteFiles(): void
 	{
-		$this->backupFiles();
-		$this->info('Backup: ' . base_path('core_install_backup.zip'));
-		$this->deleteFiles();
-		$this->extractFiles();
-	}
-	
-	public function files()
-	{
-		return [
-			resource_path('js/app.js'),
-			resource_path('css/app.css'),
-			base_path('tailwind.config.js'),
-			base_path('vite.config.js'),
-			app_path('Models/User.php'),
-			app_path('Providers/AuthServiceProvider.php'),
-			app_path('Providers/AppServiceProvider.php'),
-			app_path('Http/Middleware/Authenticate.php'),
-			base_path('config/database.php'),
-			base_path('config/jetstream.php'),
-			base_path('config/fortify.php'),
-			base_path('config/permission.php'),
-		];
-	}
-	
-	public function deleteFiles()
-	{
-		foreach($this->files() as $file) {
-			unlink($file);
+		foreach(MakeInstallCommand::files() as $file) {
+			if(file_exists($file)) {
+				unlink($file);
+			}
 		}
 	}
 	
-	public function backupFiles()
+	/**
+	 * @return void
+	 */
+	public function extractFiles(): void
+	{
+		$zip = new ZipArchive();
+		$filePath = __DIR__ . '/../../../install.zip';
+		if($zip->open($filePath) === true) {
+			$zip->extractTo(base_path());
+		}
+		$zip->close();
+	}
+	
+	/**
+	 * Execute the console command.
+	 *
+	 * @return void
+	 */
+	public function handle(): void
+	{
+		$this->backupFiles();
+		$this->info('Backup: ' . base_path('core_install_backup.zip'));
+//		$this->deleteFiles();
+		$this->extractFiles();
+	}
+	
+	/**
+	 * @return void
+	 */
+	public function backupFiles(): void
 	{
 		$zip = new ZipArchive();
 		$filePath = base_path('core_install_backup.zip');
 		
 		if(!file_exists($filePath)) {
 			if($zip->open($filePath, ZipArchive::CREATE) === true) {
-				foreach($this->files() as $file) {
+				foreach(MakeInstallCommand::files() as $file) {
 					if(file_exists($file)) {
-						$relativeNameInFile = str_replace(base_path() . DIRECTORY_SEPARATOR, '', $file);
+						copy($file, $file . '.backup');
+						$relativeNameInFile = str_replace(base_path()
+							. DIRECTORY_SEPARATOR,
+							'',
+							$file);
 						$this->info('-- ' . $relativeNameInFile);
 						$zip->addFile($file, $relativeNameInFile);
 					}
@@ -88,15 +95,5 @@ class InstallCommand extends Command
 			
 			$zip->close();
 		}
-	}
-	
-	public function extractFiles()
-	{
-		$zip = new ZipArchive();
-		$filePath = __DIR__ . '/../../../install.zip';
-		if($zip->open($filePath) === true) {
-			$zip->extractTo(base_path());
-		}
-		$zip->close();
 	}
 }

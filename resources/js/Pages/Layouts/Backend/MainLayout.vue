@@ -1,10 +1,10 @@
 <script setup>
 import { defineProps } from "vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
+import { Inertia } from "@inertiajs/inertia";
 import Sidebar from "@core/Components/Sidebar.vue";
 import Dropdown from "@core/Components/Dropdown.vue";
 import DarkModeToggle from "@core/Components/DarkModeToggle.vue";
-import { Inertia } from "@inertiajs/inertia";
 
 const props = defineProps({
     title: String, icon: String, bc: {
@@ -72,12 +72,20 @@ const logout = () => {
                         <template v-for="(item, index) in bc">
                             <Link v-if="item.route"
                                   :href="route(item.route)">
-                                <span :class="{'font-bold': index === Object.keys(bc).length-1}">{{ __(item.label) }}</span>
+                                <span :class="{'font-bold': index === Object.keys(bc).length-1}">{{
+                                        __(item.label)
+                                    }}
+                                </span>
                             </Link>
                             <span v-else>
-                                <span :class="{'font-bold': index === Object.keys(bc).length-1}">{{ __(item.label) }}</span>
+                                <span :class="{'font-bold': index === Object.keys(bc).length-1}">{{
+                                        __(item.label)
+                                    }}
+                                </span>
                             </span>
-                            <span v-if="index < Object.keys(bc).length-1" class="px-1">/</span>
+                            <span v-if="index < Object.keys(bc).length-1"
+                                  class="px-1">/
+                            </span>
                         </template>
                     </template>
                 </div>

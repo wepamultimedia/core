@@ -19,7 +19,7 @@ class SymlinkCommand extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'core:symlink {os=windows}';
+	protected $signature = 'core:create_links';
 	
 	/**
 	 * Create a new command instance.
@@ -40,40 +40,29 @@ class SymlinkCommand extends Command
 	{
 		$developerName = 'wepamultimedia';
 		$packageName = ucfirst('core');
-		$os = $this->argument('os');
 		
-		if($os === 'windows') {
-			$sourcePagesPath = base_path("vendor\\$developerName\\$packageName\\resources\\js\\Pages");
-			$targetPagesPath = resource_path("js\\Pages\\$packageName");
+		$sourcePagesPath = base_path("vendor\\$developerName\\$packageName\\resources\\js\\Pages");
+		$targetPagesPath = resource_path("js\\Pages\\$packageName");
+		
+		$sourcePublicPath = base_path("vendor\\$developerName\\$packageName\\public");
+		$targetPublicPath = base_path('public\\' . strtolower($packageName));
+		
+		$sourceJsPath = base_path("vendor\\$developerName\\$packageName\\resources\\js");
+		$targetJsPath = resource_path("js\\$packageName");
 
-			$sourceJsPath = base_path("vendor\\$developerName\\$packageName\\resources\\js");
-			$targetJsPath = resource_path("js\\$packageName");
+		$sourceTestUnitPath = base_path("vendor\\$developerName\\$packageName\\tests\\Unit");
+		$targetTestUnitPath = base_path("tests\\Unit\\$packageName");
 
-			$sourceTestUnitPath = base_path("vendor\\$developerName\\$packageName\\tests\\Unit");
-			$targetTestUnitPath = base_path("tests\\Unit\\$packageName");
+		$sourceTestFeaturePath = base_path("vendor\\$developerName\\$packageName\\tests\\Feature");
+		$targetTestFeaturePath = base_path("tests\\Feature\\$packageName");
 
-			$sourceTestFeaturePath = base_path("vendor\\$developerName\\$packageName\\tests\\Feature");
-			$targetTestFeaturePath = base_path("tests\\Feature\\$packageName");
-
-			$commands = [
-				"mklink /D $targetPagesPath $sourcePagesPath",
-				"mklink /D $targetJsPath $sourceJsPath",
-				"mklink /D $targetTestUnitPath $sourceTestUnitPath",
-				"mklink /D $targetTestFeaturePath $sourceTestFeaturePath",
-			];
-
-		} else {
-			$sourceViewPath = base_path("vendor/$developerName/$packageName/resources/views");
-			$targetViewPath = resource_path("views/$packageName");
-
-			$sourceJsPath = base_path("vendor/$developerName/$packageName/resources/js");
-			$targetJsPath = resource_path("js/$packageName");
-
-			$commands = [
-				"ln -s $targetViewPath $sourceViewPath",
-				"ln -s $targetJsPath $sourceJsPath",
-			];
-		}
+		$commands = [
+			"mklink /D $targetPagesPath $sourcePagesPath",
+			"mklink /D $targetPublicPath $sourcePublicPath",
+			"mklink /D $targetJsPath $sourceJsPath",
+			"mklink /D $targetTestUnitPath $sourceTestUnitPath",
+			"mklink /D $targetTestFeaturePath $sourceTestFeaturePath",
+		];
 
 		foreach($commands as $command) {
 			$this->info($command);

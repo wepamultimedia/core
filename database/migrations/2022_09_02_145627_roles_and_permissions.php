@@ -17,24 +17,22 @@ return new class extends Migration {
 	 */
 	public function up()
 	{
-		$tableNames = config('permission.table_names');
-		
-		Schema::create($tableNames['roles'] . '_translations', function(Blueprint $table) {
+		Schema::create( 'roles_translations', function(Blueprint $table) {
 			$table->id();
 			$table->foreignId('role_id');
 			$table->string('locale')->index();
 			$table->string('description');
-			
+
 			$table->unique(['locale', 'role_id']);
 			$table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
 		});
-		
-		Schema::create($tableNames['permissions'] . '_translations', function(Blueprint $table) {
+
+		Schema::create('permissions_translations', function(Blueprint $table) {
 			$table->id();
 			$table->foreignId('permission_id');
 			$table->string('locale')->index();
 			$table->string('description');
-			
+
 			$table->unique(['locale', 'permission_id']);
 			$table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
 		});

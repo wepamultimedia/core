@@ -29,11 +29,7 @@ class CoreServiceProvider extends ServiceProvider
 		 */
 		$this->publishes([
 			__DIR__ . '/../../config/core.php' => config_path('core.php'),
-		],
-			[
-				'core',
-				'core-config',
-			]);
+		], ['core', 'core-config']);
 		
 		/**
 		 * Routes
@@ -54,9 +50,9 @@ class CoreServiceProvider extends ServiceProvider
 		// $this->loadJsonTranslationsFrom(__DIR__.'/../../resources/lang', 'core');
 		$this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'core');
 		$this->publishes([
-			__DIR__ . '/../../resources/lang' => resource_path('lang/vendor/core'),
+			__DIR__ . '/../../resources/lang'         => resource_path('lang/vendor/core'),
 			__DIR__ . '/../../laravel/resources/lang' => resource_path('lang'),
-		], ['core', 'core-lang']);
+		], ['core-lang']);
 		
 		/**
 		 * Views
@@ -71,21 +67,9 @@ class CoreServiceProvider extends ServiceProvider
 		
 		/** JS */
 		$this->publishes([
-			__DIR__ . '/../../resources/js' => resource_path('js/Core'),
+			__DIR__ . '/../../resources/js'       => resource_path('js/Core'),
 			__DIR__ . '/../../resources/js/Pages' => resource_path('js/Pages/Core'),
 		], ['core', 'core-js']);
-		
-		/**
-		 * Commands
-		 *
-		 * Uncomment this section to load the commands.
-		 * A basic command file has already been generated in 'src\Console\Commands\MyPackageCommand.php'.
-		 */
-		// if ($this->app->runningInConsole()) {
-		//     $this->commands([
-		//         \Wepa\Core\Console\Commands\CoreCommand::class,
-		//     ]);
-		// }
 		
 		/**
 		 * Public assets
@@ -94,7 +78,7 @@ class CoreServiceProvider extends ServiceProvider
 		 */
 		$this->publishes([
 			__DIR__ . '/../../public' => public_path('core'),
-		], ['core', 'core-public',]);
+		], ['core-public',]);
 		
 		/**
 		 * Migrations
@@ -103,9 +87,9 @@ class CoreServiceProvider extends ServiceProvider
 		 * Uncomment the second function call to make the migrations publishable using the 'migrations' tags.
 		 */
 		$this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
-		// $this->publishes([
-		//     __DIR__.'/../../database/migrations/' => database_path('migrations')
-		// ], 'migrations');
+		 $this->publishes([
+		     __DIR__.'/../../database/migrations/' => database_path('migrations')
+		 ], 'core-migrations');
 		
 		$this->loadSeeders([
 			CoreSeeder::class,

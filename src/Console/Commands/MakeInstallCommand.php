@@ -33,14 +33,11 @@ class MakeInstallCommand extends Command
 	}
 	
 	/**
-	 * Execute the console command.
-	 *
-	 * @return mixed
+	 * @return array
 	 */
-	public function handle()
+	public static function files(): array
 	{
-		$filePath = __DIR__ . '/../../../install.zip';
-		$files = [
+		return [
 			resource_path('js/app.js'),
 			resource_path('css/app.css'),
 			base_path('tailwind.config.js'),
@@ -54,6 +51,17 @@ class MakeInstallCommand extends Command
 			base_path('config/fortify.php'),
 			base_path('config/permission.php'),
 		];
+	}
+	
+	/**
+	 * Execute the console command.
+	 *
+	 * @return mixed
+	 */
+	public function handle()
+	{
+		$filePath = __DIR__ . '/../../../install.zip';
+		$files = self::files();
 		
 		foreach($files as $file) {
 			$relativeNameInFile = str_replace(base_path() . DIRECTORY_SEPARATOR,

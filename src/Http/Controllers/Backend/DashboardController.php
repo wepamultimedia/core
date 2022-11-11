@@ -5,7 +5,6 @@ namespace Wepa\Core\Http\Controllers\Backend;
 
 use Inertia\Response;
 use Wepa\Core\Http\Controllers\Mixed\InertiaController;
-use Wepa\Core\Models\Backend\Menu;
 
 
 class DashboardController extends InertiaController

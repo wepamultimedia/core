@@ -4,6 +4,11 @@ Este paquete contiene las funciones base del sistema, como autenticación, tradu
 
 This package contains the basic functions of the system, such as authentication, translations, file manager, etc.
 
+
+### Important this package only can install over laravel inertia new instalation with
+
+```* laravel new {project_name} --jet```
+
 ## Installation (Required)
 
 ### Install
@@ -23,9 +28,6 @@ npm i vuex@next @vueuse/core vue-inline-svg@next vue-screen@next
 ```
 
 ### Vendor Publish
-* Important this package only can install over laravel inertia new instalation with
-
-```* laravel new {project_name} --jet```
 ```
 // The web site report issues 
 php artisan vendor:publish --tag=core
@@ -45,11 +47,11 @@ Puede personalizar las vistas en la ruta
 
 You can customize the views on the route
 
-`resources/js/Pages/Vendor/Core`
+`resources/js/Pages/Core`
 
 ##### otros archivos js | another js files
 
-`resources/js/Vendor/Core`
+`resources/js/Core`
 
 ### Views
 
@@ -67,7 +69,6 @@ APP_ENV=production
 APP_KEY=*******
 APP_DEBUG=true
 APP_URL=https://domain
-ASSET_URL="${APP_URL}"
 DB_HOST=db-wepa-team-do-user-12603780-0.b.db.ondigitalocean.com
 DB_PORT=25060
 DB_DATABASE=db_name

@@ -1,11 +1,11 @@
 <script setup>
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
-import JetAuthenticationCard from "@/Jetstream/AuthenticationCard.vue";
-import JetButton from "@/Jetstream/Button.vue";
-import JetInput from "@/Jetstream/Input.vue";
-import JetCheckbox from "@/Jetstream/Checkbox.vue";
-import JetLabel from "@/Jetstream/Label.vue";
-import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
+import AuthenticationCard from "@/Components/AuthenticationCard.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+import Checkbox from "@/Components/Checkbox.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
     admin: Boolean,
@@ -30,41 +30,42 @@ const submit = () => {
 </script>
 <template>
     <Head :title="__('login')"/>
-    <JetAuthenticationCard>
+    <AuthenticationCard>
         <template #logo>
             <img :alt="$page.props.appName"
                  class="h-14"
                  src="/images/logo.svg">
         </template>
-        <JetValidationErrors class="mb-4"/>
         <div v-if="status"
              class="mb-4 font-medium text-sm text-green-600">
             {{ status }}
         </div>
         <form @submit.prevent="submit">
             <div>
-                <JetLabel :value="__('email')"
+                <InputLabel :value="__('email')"
                           for="email"/>
-                <JetInput id="email"
+                <TextInput id="email"
                           v-model="form.email"
                           autofocus
                           class="mt-1 block w-full"
                           required
                           type="email"/>
+                <InputError class="mt-2" :message="form.errors.email" />
             </div>
             <div class="mt-4">
-                <JetLabel :value="__('password')"
+                <InputLabel :value="__('password')"
                           for="password"/>
-                <JetInput id="password"
+                <TextInput id="password"
                           v-model="form.password"
                           autocomplete="current-password"
                           class="mt-1 block w-full"
                           required
                           type="password"/>
+                <InputError class="mt-2" :message="form.errors.password" />
             </div>
             <div class="block mt-4">
                 <label class="flex items-center">
-                    <JetCheckbox v-model:checked="form.remember"
+                    <Checkbox v-model:checked="form.remember"
                                  name="remember"/>
                     <span class="ml-2 text-sm text-gray-600">{{ __("remember_me") }}</span>
                 </label>
@@ -75,12 +76,12 @@ const submit = () => {
                       class="underline text-sm text-gray-600 hover:text-gray-900">
                     {{ __("forgot_password") }}
                 </Link>
-                <JetButton :class="{ 'opacity-25': form.processing }"
+                <PrimaryButton :class="{ 'opacity-25': form.processing }"
                            :disabled="form.processing"
                            class="ml-4">
                     {{ __("login") }}
-                </JetButton>
+                </PrimaryButton>
             </div>
         </form>
-    </JetAuthenticationCard>
+    </AuthenticationCard>
 </template>
