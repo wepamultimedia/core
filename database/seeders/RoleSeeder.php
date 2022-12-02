@@ -4,8 +4,8 @@ namespace Wepa\Core\Database\seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Wepa\Core\Models\Backend\Permission;
-use Wepa\Core\Models\Backend\Role;
+use Wepa\Core\Models\Permission;
+use Wepa\Core\Models\Role;
 
 
 class RoleSeeder extends Seeder

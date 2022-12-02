@@ -13,4 +13,6 @@ return [
 	'dashboard'      => 'Escritorio',
 	'edit'           => 'Editar',
 	'actions'        => 'Acciones',
+	'profile'        => 'Perfil de usuario',
+	'logout'         => 'Cerrar sesión',
 ];

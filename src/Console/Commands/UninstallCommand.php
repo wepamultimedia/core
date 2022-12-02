@@ -14,7 +14,7 @@ class UninstallCommand extends Command
 	 *
 	 * @var string
 	 */
-	protected $description = 'Create a symbolic link to publish view and component folders for the development environment only.';
+	protected $description = 'Uninstall core package';
 	/**
 	 * The name and signature of the console command.
 	 *

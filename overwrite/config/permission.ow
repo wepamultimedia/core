@@ -13,7 +13,7 @@ return [
          * `Spatie\Permission\Contracts\Permission` contract.
          */
 
-        'permission' => Wepa\Core\Models\Backend\Permission::class,
+        'permission' => Wepa\Core\Models\Permission::class,
 //        'permission' => Spatie\Permission\Models\Permission::class,
 
         /*
@@ -25,7 +25,7 @@ return [
          * `Spatie\Permission\Contracts\Role` contract.
          */
 
-        'role' => Wepa\Core\Models\Backend\Role::class,
+        'role' => Wepa\Core\Models\Role::class,
 //        'role' => Spatie\Permission\Models\Role::class,
 
     ],

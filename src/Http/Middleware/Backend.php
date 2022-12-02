@@ -6,7 +6,7 @@ namespace Wepa\Core\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Wepa\Core\Models\Backend\Menu;
+use Wepa\Core\Models\Menu;
 
 
 class Backend
@@ -22,7 +22,7 @@ class Backend
 	public function handle(Request $request, Closure $next)
 	{
 		Inertia::share([
-			'menu' => Menu::menu(),
+			'menu' => Menu::getItems('backend'),
 		]);
 		
 		return $next($request);

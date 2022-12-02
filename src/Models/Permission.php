@@ -1,6 +1,6 @@
 <?php
 
-namespace Wepa\Core\Models\Backend;
+namespace Wepa\Core\Models;
 
 
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 /**
- * Wepa\Core\Models\Backend\Permission
+ * Wepa\Core\Models\Permission
  *
  * @property int $id
  * @property string $name
@@ -20,8 +20,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
  * @property-read int|null $roles_count
- * @property-read \Wepa\Core\Models\Backend\PermissionTranslation|null $translation
- * @property-read \Illuminate\Database\Eloquent\Collection|\Wepa\Core\Models\Backend\PermissionTranslation[] $translations
+ * @property-read \Wepa\Core\Models\PermissionTranslation|null $translation
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Wepa\Core\Models\PermissionTranslation[] $translations
  * @property-read int|null $translations_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property-read int|null $users_count

@@ -1,6 +1,6 @@
 <?php
 
-namespace Wepa\Core\Models\Backend;
+namespace Wepa\Core\Models;
 
 
 use Illuminate\Database\Eloquent\Model;

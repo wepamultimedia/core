@@ -2,12 +2,11 @@
 
 namespace Wepa\Core\Database\seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
+use Wepa\Core\Models\Menu;
 
 
-
-class CoreSeeder extends Seeder
+class MenuSedder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,10 +15,6 @@ class CoreSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([
-	        AdminUserSedder::class,
-	        MenuSedder::class,
-	        RoleSeeder::class
-        ]);
+		Menu::loadPackageItems('core');
     }
 }

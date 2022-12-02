@@ -1,6 +1,6 @@
 <?php
 
-namespace Wepa\Core\Models\Backend;
+namespace Wepa\Core\Models;
 
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;

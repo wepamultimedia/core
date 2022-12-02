@@ -47,7 +47,6 @@ return [
 	'email_verification_summary_2' => 'Se ha enviado un nuevo enlace de verificación a la dirección de correo electrónico que proporcionaste en la configuración de tu perfil.',
 	'resend_verification_email' => 'Reenviar correo de verificación',
 	'edit_profile' => 'Editar perfil',
-	'logout' => 'Cerrar sesión',
 	'reset_password_email_summary_1' => 'Ha solicitado restablecer su contraseña, haga clic en el siguiente enlace',
 	'reset_password_email_summary_2' => 'Si no ha sido usted, no se preocupe omita el este mensaje y nada cambiara',
 	'reset_password_email_greeting' => 'Restablezca su contraseña',

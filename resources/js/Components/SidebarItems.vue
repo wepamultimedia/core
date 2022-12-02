@@ -90,6 +90,7 @@ const isActive = (item) => {
                         relative
                         min-w-[200px] max-w-[300px]
                         text-sm">
+
                 <template v-for="subitem in item.submenu">
                     <div class="relative">
                         <span v-if="isActive(subitem)"

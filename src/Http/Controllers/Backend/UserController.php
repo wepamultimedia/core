@@ -11,7 +11,7 @@ use Inertia\Response;
 use Wepa\Core\Http\Controllers\Mixed\InertiaController;
 use Wepa\Core\Http\Requests\Backend\UserCreateRequest;
 use Wepa\Core\Http\Requests\Backend\UserEditRequest;
-use Wepa\Core\Models\Backend\Role;
+use Wepa\Core\Models\Role;
 
 
 class UserController extends InertiaController

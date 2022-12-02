@@ -13,4 +13,6 @@ return [
 	'dashboard' => 'Dashboard',
 	'edit' => 'Edit',
 	'actions' => 'Actions',
+	'profile' => 'User profile',
+	'logout' => 'Logout',
 ];

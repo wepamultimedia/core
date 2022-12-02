@@ -10,8 +10,8 @@ use Inertia\Response;
 use Wepa\Core\Http\Controllers\Mixed\InertiaController;
 use Wepa\Core\Http\Requests\Backend\PermissionFormRequest;
 use Wepa\Core\Http\Requests\Backend\RoleFormRequest;
-use Wepa\Core\Models\Backend\Permission;
-use Wepa\Core\Models\Backend\Role;
+use Wepa\Core\Models\Permission;
+use Wepa\Core\Models\Role;
 
 
 class PermissionController extends InertiaController

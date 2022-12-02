@@ -47,7 +47,6 @@ return [
     'email_verification_summary_2' => 'A new verification link has been sent to the email address you provided in your profile settings.',
     'resend_verification_email' => 'Resend Verification Email',
     'edit_profile' => 'Edit Profile',
-    'logout' => 'Log Out',
 	'reset_password_email_summary_1' => 'You have requested to reset your password, click on the following link',
 	'reset_password_email_summary_2' => 'If it was not you, do not worry, just skip this message and nothing will change.',
 	'reset_password_email_greeting' => 'Reset your password',

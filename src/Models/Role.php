@@ -1,6 +1,6 @@
 <?php
 
-namespace Wepa\Core\Models\Backend;
+namespace Wepa\Core\Models;
 
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
@@ -10,7 +10,7 @@ use Wepa\Core\Http\Traits\TranslationsTrait;
 
 
 /**
- * Wepa\Core\Models\Backend\Role
+ * Wepa\Core\Models\Role
  *
  * @property int $id
  * @property string $name
@@ -19,8 +19,8 @@ use Wepa\Core\Http\Traits\TranslationsTrait;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
  * @property-read int|null $permissions_count
- * @property-read \Wepa\Core\Models\Backend\RoleTranslation|null $translation
- * @property-read \Illuminate\Database\Eloquent\Collection|\Wepa\Core\Models\Backend\RoleTranslation[] $translations
+ * @property-read \Wepa\Core\Models\RoleTranslation|null $translation
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Wepa\Core\Models\RoleTranslation[] $translations
  * @property-read int|null $translations_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property-read int|null $users_count
