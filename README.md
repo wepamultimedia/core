@@ -1,93 +1,86 @@
-# :package_description
+# Core
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
+Este paquete contiene las funciones base del sistema, como autenticación, traducciones, gestor de ficheros, etc.
 
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-<!--/delete-->
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+This package contains the basic functions of the system, such as authentication, translations, file manager, etc.
 
-## Support us
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
+### Important this package only can install over laravel inertia new instalation with
 
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
+```* laravel new {project_name} --9.19.* --jet```
 
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+## Installation (Required)
 
-## Installation
-
-You can install the package via composer:
-
-```bash
-composer require :vendor_slug/:package_slug
+### Install
+```
+php artisan core:install
 ```
 
-You can publish and run the migrations with:
+### NPM dependencies (Required)
 
-```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
-php artisan migrate
+```
+npm install vuex@next
+npm install @vueuse/core
+npm install vue-inline-svg@next
+npm install vue-screen@next
+
+npm i vuex@next @vueuse/core vue-inline-svg@next vue-screen@next
 ```
 
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-config"
+### Vendor Publish
+```
+// The web site report issues 
+php artisan vendor:publish --tag=core
 ```
 
-This is the contents of the published config file:
+##### Vendor tags:
 
-```php
-return [
-];
+`core, core-js, core-lang, core-config`
+
+[core]: incluye todos los tags | Include all tags
+
+## Using this package
+
+### JS
+
+Puede personalizar las vistas en la ruta
+
+You can customize the views on the route
+
+`resources/js/Pages/Core`
+
+##### otros archivos js | another js files
+
+`resources/js/Core`
+
+### Views
+
+`resources/views/Vendor/Core`
+
+## Uninstall
+```
+php artisan core:uninstall
 ```
 
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag=":package_slug-views"
+## Deploy
 ```
+APP_NAME=
+APP_ENV=production
+APP_KEY=*******
+APP_DEBUG=true
+APP_URL=https://domain
+DB_HOST=db-wepa-team-do-user-12603780-0.b.db.ondigitalocean.com
+DB_PORT=25060
+DB_DATABASE=db_name
+DB_USERNAME=us_name
+DB_PASSWORD=********************
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=dae5014ececf41
+MAIL_PASSWORD=ae9d06a26f72f0
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=cpuche@wepa.es
+MAIL_FROM_NAME=${APP_NAME}
 
-## Usage
-
-```php
-$variable = new VendorName\Skeleton();
-echo $variable->echoPhrase('Hello, VendorName!');
 ```
-
-## Testing
-
-```bash
-composer test
-```
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
-## Credits
-
-- [:author_name](https://github.com/:author_username)
-- [All Contributors](../../contributors)
-
-## License
-
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
