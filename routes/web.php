@@ -9,24 +9,16 @@
 |
 */
 
-
 use Illuminate\Support\Facades\Route;
 use Wepa\Core\Http\Controllers\Frontend\DashboardController;
 use Wepa\Core\Http\Controllers\Frontend\InertiaController;
-use Wepa\Core\Http\Controllers\Frontend\LoginController;
-use Wepa\Core\Http\Controllers\ForgotPasswordController;
-use Wepa\Core\Http\Controllers\RegisterController;
-use Wepa\Core\Http\Controllers\ResetPasswordController;
 
 require 'admin.php';
 
-Route::middleware(['web', 'auth:sanctum'])->group(function(){
-	Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::middleware(['web', 'auth:sanctum'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
-Route::middleware('web')->group(function() {
-	Route::get('{slug}', [InertiaController::class, 'slugRedirect']);
+Route::middleware('web')->group(function () {
+    Route::get('{slug}', [InertiaController::class, 'slugRedirect']);
 });
-
-
-

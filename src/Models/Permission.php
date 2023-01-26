@@ -2,11 +2,9 @@
 
 namespace Wepa\Core\Models;
 
-
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
 
 /**
  * Wepa\Core\Models\Permission
@@ -25,6 +23,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property-read int|null $translations_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property-read int|null $users_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Permission listsTranslations(string $translationField)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Permission newQuery()
@@ -45,12 +44,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereTranslationLike(string $translationField, $value, ?string $locale = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission withTranslation()
+ *
  * @mixin \Eloquent
  */
 class Permission extends \Spatie\Permission\Models\Permission implements TranslatableContract
 {
-	use HasFactory;
-	use Translatable;
-	
-	public $translatedAttributes = ['description'];
+    use HasFactory;
+    use Translatable;
+
+    public $translatedAttributes = ['description'];
 }

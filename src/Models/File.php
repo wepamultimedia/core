@@ -2,12 +2,10 @@
 
 namespace Wepa\Core\Models;
 
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Wepa\Core\Database\Factories\FileMangerFactory;
-
 
 /**
  * Wepa\Core\Models\File
@@ -15,7 +13,9 @@ use Wepa\Core\Database\Factories\FileMangerFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|File newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|File newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|File query()
+ *
  * @mixin \Eloquent
+ *
  * @property int $id
  * @property int $parent_id
  * @property int $type_id
@@ -25,6 +25,7 @@ use Wepa\Core\Database\Factories\FileMangerFactory;
  * @property string $alt_name
  * @property string $description
  * @property FileType $type
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|File whereAltName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|File whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|File whereId($value)
@@ -35,33 +36,33 @@ use Wepa\Core\Database\Factories\FileMangerFactory;
  */
 class File extends Model
 {
-	use HasFactory;
-	
-	
-	protected $fillable = [
-		'parent_id',
-		'type_id',
-		'name',
-		'url',
-		'file',
-		'alt_name',
-		'description',
-	];
-	protected $table = 'core_files';
-	
-	/**
-	 * @return HasOne
-	 */
-	public function type(): HasOne
-	{
-		return $this->hasOne(FileType::class, 'id', 'type_id');
-	}
-	
-	/**
-	 * @return FileMangerFactory
-	 */
-	protected static function newFactory(): FileMangerFactory
-	{
-		return new FileMangerFactory();
-	}
+    use HasFactory;
+
+    protected $fillable = [
+        'parent_id',
+        'type_id',
+        'name',
+        'url',
+        'file',
+        'alt_name',
+        'description',
+    ];
+
+    protected $table = 'core_files';
+
+    /**
+     * @return HasOne
+     */
+    public function type(): HasOne
+    {
+        return $this->hasOne(FileType::class, 'id', 'type_id');
+    }
+
+    /**
+     * @return FileMangerFactory
+     */
+    protected static function newFactory(): FileMangerFactory
+    {
+        return new FileMangerFactory();
+    }
 }

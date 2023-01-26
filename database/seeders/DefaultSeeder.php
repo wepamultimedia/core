@@ -4,8 +4,6 @@ namespace Wepa\Core\Database\seeders;
 
 use Illuminate\Database\Seeder;
 
-
-
 class DefaultSeeder extends Seeder
 {
     /**
@@ -15,11 +13,11 @@ class DefaultSeeder extends Seeder
      */
     public function run()
     {
-		$this->call([
-	        AdminUserSedder::class,
-	        MenuSedder::class,
-	        RoleSeeder::class,
-	        FileManagerSeeder::class
+        $this->call([
+            AdminUserSedder::class,
+            MenuSedder::class,
+            RoleSeeder::class,
+            FileManagerSeeder::class,
         ]);
     }
 }

@@ -5,7 +5,6 @@ namespace Wepa\Core\Database\seeders;
 use Illuminate\Database\Seeder;
 use Wepa\Core\Models\Menu;
 
-
 class MenuSedder extends Seeder
 {
     /**
@@ -15,6 +14,6 @@ class MenuSedder extends Seeder
      */
     public function run()
     {
-		Menu::loadPackageItems('core');
+        Menu::loadPackageItems('core');
     }
 }

@@ -5,7 +5,6 @@ namespace Wepa\Core\Database\seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-
 class AdminUserSedder extends Seeder
 {
     /**
@@ -15,10 +14,10 @@ class AdminUserSedder extends Seeder
      */
     public function run(): void
     {
-	    User::create([
-		    'name'     => 'System Admin',
-		    'email'    => env('USER_ADMIN', 'admin@admin.com'),
-		    'password' => bcrypt(env('USER_ADMIN_PASSWORD', 'password')),
-	    ]);
+        User::create([
+            'name' => 'System Admin',
+            'email' => env('USER_ADMIN', 'admin@admin.com'),
+            'password' => bcrypt(env('USER_ADMIN_PASSWORD', 'password')),
+        ]);
     }
 }

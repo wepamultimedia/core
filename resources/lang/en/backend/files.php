@@ -1,5 +1,5 @@
 <?php
 
 return [
-	'files' => 'Files',
+    'files' => 'Files',
 ];
