@@ -1,11 +1,12 @@
 <script setup>
 import { Head, useForm } from "@inertiajs/inertia-vue3";
-import AuthenticationCard from "@/Components/AuthenticationCard.vue";
+import AuthenticationCard from "@/Core/Components/AuthenticationCard.vue";
 import AuthenticationCardLogo from "@/Core/Components/AuthenticationCardLogo.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import TextInput from "@/Components/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import InputError from "@/Components/InputError.vue";
+import { useDark } from "@vueuse/core";
+import Input from "@core/Components/Form/Input.vue";
+
+const isDark = useDark();
 
 defineProps({
     status: String
@@ -21,11 +22,11 @@ const submit = () => {
 </script>
 <template>
     <Head :title="__('forgot_password')"/>
-    <AuthenticationCard>
+    <AuthenticationCard class="dark:bg-gray-900">
         <template #logo>
-            <AuthenticationCardLogo />
+            <AuthenticationCardLogo/>
         </template>
-        <div class="mb-4 text-sm text-gray-600 text-center">
+        <div class="mb-4 text-sm text-center">
             {{
                 __("forgot_password_summary")
             }}
@@ -36,20 +37,17 @@ const submit = () => {
         </div>
         <form @submit.prevent="submit">
             <div>
-                <InputLabel :value="__('email')"
-                          for="email"/>
-                <TextInput id="email"
-                          v-model="form.email"
-                          autofocus
-                          class="mt-1 block w-full"
-                          required
-                          type="email"/>
-                <InputError :message="form.errors.email"
-                            class="mt-2"/>
+                <Input v-model="form.email"
+                       :errors="form.errors"
+                       :label="__('email')"
+                       autofocus
+                       name="email"
+                       required
+                       type="email"/>
             </div>
             <div class="flex items-center justify-end mt-4">
                 <PrimaryButton :class="{ 'opacity-25': form.processing }"
-                           :disabled="form.processing">
+                               :disabled="form.processing">
                     {{ __("email_password_reset") }}
                 </PrimaryButton>
             </div>

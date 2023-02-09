@@ -8,7 +8,6 @@ use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Wepa\Core\Http\Traits\Backend\PositionModelTrait;
 
@@ -70,65 +69,6 @@ class Menu extends Model implements TranslatableContract
 	protected $table = 'core_menu';
 	
 	/**
-	 * @param string $app
-	 * @param null $items
-	 * @param null $parentId
-	 *
-	 * @return array
-	 */
-	public static function getItems(string $app,
-	                                array  $items = null,
-	                                int    $parentId = null): array
-	{
-		if(!$items) {
-			$items = Menu::orderBy('parent_id')
-				->orderBy('position')
-				->get()->toArray();
-		}
-		
-		$menu = [];
-		
-		/* @var self $item */
-		foreach($items as $item) {
-			if($item['parent_id'] === $parentId) {
-				if(Auth::user()->can($item['can'])) {
-					$itemMenu = [
-						'label'  => $item['label'],
-						'route'  => $item['route'],
-						'active' => $item['active'],
-						'can'    => $item['can'],
-						'position' => $item['position']
-					];
-					
-					if($item['icon']) {
-						$itemMenu = array_merge($itemMenu,
-							['icon' => $item['icon']]);
-					}
-					
-					$subItems = self::getItems($app, $items, $item['id']);
-					
-					$itemMenu = count($subItems)
-						? array_merge($itemMenu, ['submenu' => $subItems])
-						: $itemMenu;
-					
-					$menu[] = $itemMenu;
-				}
-			}
-		}
-		return $menu;
-	}
-	
-	/**
-	 * @param string $package
-	 *
-	 * @return void
-	 */
-	public static function removePackageItems(string $package): void
-	{
-		self::where(['package' => $package])->delete();
-	}
-	
-	/**
 	 * @param string $package
 	 *
 	 * @return void
@@ -156,10 +96,10 @@ class Menu extends Model implements TranslatableContract
 	 *
 	 * @return void
 	 */
-	public function addItems(array  $items,
+	public function addItems(array $items,
 	                         string $package,
 	                         string $app,
-	                         int    $parentId = null): void
+	                         int $parentId = null): void
 	{
 		if($items) {
 			$formatedItems = $this->formatItems($items);
@@ -169,26 +109,34 @@ class Menu extends Model implements TranslatableContract
 					$item, ['package' => $package, 'app' => $app]
 				);
 				
-				unset($newItem['children']);
-
-				$newItem['position'] = self::nextPosition(['parent_id' => $parentId]);
-				
-				$menu = Menu::create($newItem);
-				if(Arr::exists($item, 'position')) {
-					$menu->updatePosition($item['position'],
-						['parent_id' => $parentId]);
-				}
-				
-				if($parentId) {
-					$menu->parent_id = $parentId;
-					$menu->save();
-				}
-				
-				if(Arr::exists($item, 'children')) {
-					$this->addItems($item['children'],
-						$package,
-						$app,
-						$menu->id);
+				if(!$menu = Menu::where('package', $package)
+					->where('app', $app)
+					->where('parent_id', $parentId)
+					->where('route', $newItem['route'])) {
+					
+					unset($newItem['children']);
+					$newItem['position'] = self::nextPosition(['parent_id' => $parentId]);
+					
+					$menu = Menu::create($newItem);
+					
+					if(Arr::exists($item, 'position')) {
+						$menu->updatePosition($item['position'],
+							['parent_id' => $parentId]);
+					}
+					
+					if($parentId) {
+						$menu->parent_id = $parentId;
+						$menu->save();
+					}
+					
+					if(Arr::exists($item, 'children')) {
+						$this->addItems($item['children'],
+							$package,
+							$app,
+							$menu->id);
+					}
+				} else {
+					$menu->update($newItem);
 				}
 			}
 		}
@@ -249,5 +197,15 @@ class Menu extends Model implements TranslatableContract
 		}
 		
 		return $formatedItems;
+	}
+	
+	/**
+	 * @param string $package
+	 *
+	 * @return void
+	 */
+	public static function removePackageItems(string $package): void
+	{
+		self::where(['package' => $package])->delete();
 	}
 }

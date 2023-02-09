@@ -1,13 +1,15 @@
 <script setup>
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
-import AuthenticationCard from "@/Components/AuthenticationCard.vue";
+import AuthenticationCard from "@/Core/Components/AuthenticationCard.vue";
 import AuthenticationCardLogo from "@/Core/Components/AuthenticationCardLogo.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import Checkbox from "@/Components/Checkbox.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputError from "@/Components/InputError.vue";
+import { useDark } from "@vueuse/core";
 
+const isDark = useDark();
 const form = useForm({
     name: "", email: "", password: "", password_confirmation: "", terms: false
 });
@@ -22,7 +24,7 @@ const submit = () => {
 </script>
 <template>
     <Head :title="__('register')"/>
-    <AuthenticationCard>
+    <AuthenticationCard class="dark:bg-gray-900">
         <template #logo>
             <AuthenticationCardLogo />
         </template>

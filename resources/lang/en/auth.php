@@ -39,7 +39,7 @@ return [
     'Please confirm access to your account by entering one of your emergency recovery codes.' => 'Please confirm access to your account by entering one of your emergency recovery codes.',
     'Two-factor Confirmation' => 'Two-factor Confirmation',
     'Code' => 'Code',
-    'Recovery Code' => 'Recovery Code',
+    'recovery_code' => 'Recovery Code',
     'Use a recovery code' => 'Use a recovery code',
     'Use an authentication code' => 'Use an authentication code',
     'email_verification' => 'Email Verification',
@@ -52,5 +52,7 @@ return [
 	'reset_password_email_greeting' => 'Reset your password',
 	'reset_password_email_saludation' => 'Regards',
     'users' => 'Users',
+    'enter-code-by-authenticator' => 'Please confirm access to your account by entering the authentication code provided by your authenticator application.',
+    'enter-recovery-code' => 'Please confirm access to your account by entering one of your emergency recovery codes.',
     
 ];

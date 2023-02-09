@@ -2,8 +2,10 @@
 
 namespace Wepa\Core\Database\seeders;
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-
+use Wepa\Core\Models\Seo;
+use Wepa\Core\Models\Site;
 
 
 class DefaultSeeder extends Seeder
@@ -19,7 +21,9 @@ class DefaultSeeder extends Seeder
 	        AdminUserSedder::class,
 	        MenuSedder::class,
 	        RoleSeeder::class,
-	        FileManagerSeeder::class
+	        FileManagerSeeder::class,
+			SeoSeeder::class,
+			SiteSeeder::class
         ]);
     }
 }

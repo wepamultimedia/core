@@ -79,7 +79,7 @@ const show = ref(false);
             </slot>
             <div :class="{'bg-red-200 dark:bg-red-400': danger, 'bg-blue-200 dark:bg-blue-400': info, 'bg-green-200 dark:bg-green-400': success}"
                  class="flex justify-end bg-gray-200 dark:bg-gray-700">
-                <div class="px-6 py-4">
+                <div class="px-6 py-4 flex gap-2">
                     <slot :close="close"
                           name="footer">
                         <!-- This button is used to close the dialog -->
@@ -91,16 +91,16 @@ const show = ref(false);
                         <slot name="ok-button">
                             <Link :class="{
                                         'bg-gray-600 hover:bg-gray-800': !danger && !info && !success,
-                                        'bg-red-600 hover:bg-red-800':danger,
-                                        'bg-blue-600 hover:bg-blue-800':info,
-                                        'bg-green-600 hover:bg-green-800':success,
+                                        'btn-danger':danger,
+                                        'btn-info':info,
+                                        'btn-success':success,
                                     }"
                                   :href="href"
                                   :method="method"
                                   :preserve-scroll="preserveScroll"
                                   :preserve-state="preserveState"
                                   as="button"
-                                  class="px-5 py-2 ml-2 text-white cursor-pointer rounded-md"
+                                  class="btn"
                                   @click="close">
                                 {{ okButtonText }}
                             </Link>

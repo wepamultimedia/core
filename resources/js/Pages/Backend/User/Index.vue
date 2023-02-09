@@ -1,9 +1,11 @@
 <script>
-import MainLayout from "@pages/Core/Layouts/Backend/MainLayout.vue";
+import MainLayout from "@pages/Core/Backend/Layouts/MainLayout/MainLayout.vue";
 
 export default {
     layout: (h, page) => h(MainLayout, {
-        title: "users", icon: "users", bc: [{label: "users"}]
+        title: "users",
+        icon: "users",
+        bc: [{label: "users"}]
     }, () => page)
 };
 </script>

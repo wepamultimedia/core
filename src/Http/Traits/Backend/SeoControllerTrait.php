@@ -56,12 +56,10 @@ trait SeoControllerTrait
 	                             array $params = []): HigherOrderBuilderProxy|int|null
 	{
 		request()->request->add(['seo_id' => $seoId]);
+		
 		$request = app()->make(SeoInjectFormRequest::class);
 		
-		$excludeFilter = [
-			'canonical',
-			'autocomplete',
-		];
+		$excludeFilter = ['canonical' => true];
 		
 		$params = collect($request->seo)
 			->filter(function($value, $key) use ($excludeFilter) {
@@ -75,6 +73,7 @@ trait SeoControllerTrait
 			->merge($request->seo['translations'])
 			->except(['translations'])
 			->toArray();
+		
 		
 		$seo = Seo::where('id', $seoId)->first();
 		$seo->update($params);
@@ -96,7 +95,6 @@ trait SeoControllerTrait
 		
 		$params = collect($request->seo)
 			->filter()
-			->merge(['autocomplete' => false])
 			->merge($params)
 			->merge($request->seo['translations'])
 			->except(['translations'])

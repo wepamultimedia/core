@@ -8,14 +8,14 @@ const props = defineProps({
         type: Boolean,
         default: true
     },
-    image: String,
+    buttonLabel: String,
+    image: Object,
     showInfo: {
         type: Boolean,
         default: false
     },
     reduce: Boolean,
     modelValue: String,
-    name: String,
     alt: String,
     title: String,
     description: String,
@@ -23,7 +23,7 @@ const props = defineProps({
     errors: Object
 });
 
-const emits = defineEmits(["update:modelValue", "update:title", "update:alt", "update:description"]);
+const emits = defineEmits(["update:modelValue", "update:image", "update:title", "update:alt", "update:description"]);
 
 
 const attrs = useAttrs();
@@ -35,9 +35,14 @@ const {
 
 watch(errors, value => {
     for (const [errorKey, errorValue] of Object.entries(value)) {
-        const re = new RegExp(attrs.name + "$");
-        if (re.test(errorKey)) {
-            error.value = errorValue;
+        const re = new RegExp("[.]" + attrs.name + "$");
+        const rex = new RegExp("^" + attrs.name + "$");
+        if (re.test(errorKey) || rex.test(errorKey)) {
+            if(typeof errorValue === "object"){
+                error.value = errorValue[0];
+            } else {
+                error.value = errorValue;
+            }
             return;
         } else {
             error.value = null;
@@ -51,6 +56,7 @@ const fileManager = reactive({
     insert: image => {
         fileManager.open = false;
         fileManager.selectedImage = image;
+        emits("update:image", image);
         emits("update:modelValue", image.url);
         emits("update:title", image.name);
         emits("update:alt", image.alt_name);
@@ -70,7 +76,8 @@ const fileManager = reactive({
     </figure>
     <button class="btn btn-default w-full justify-center"
             v-bind="$attrs"
-            @click.prevent="fileManager.open = true">{{ __("select_image") }}
+            @click.prevent="fileManager.open = true">
+        {{ buttonLabel ? buttonLabel : __("select_image") }}
     </button>
     <div v-if="error"
          class="text-red-300 text-sm mt-1">* {{ error }}

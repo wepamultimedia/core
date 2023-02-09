@@ -25,6 +25,7 @@ return [
 	'two_factor_title' => 'Autenticación de dos factor',
 	'two_factor_summary' => 'Añada seguridad adicional a su cuenta mediante la autenticación de dos factores.',
 	'two_factor_not_enabled' => 'No ha activado la autenticación de dos factores.',
+	'two_factor_enabled' => 'La autenticación de doble factor esta activada.',
 	'two_factor_legend' => 'Cuando la autenticación de dos factores está activada, se le pedirá un token seguro y aleatorio durante la autenticación. Puede recuperar este token desde la aplicación Google Authenticator de su teléfono.',
 	'confirm_password_title' => 'Confirmar contraseña',
 	'confirm_password_summary' => 'Por su seguridad, confirme su contraseña para continuar.',

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, toRef } from "vue";
+import { onMounted, onUnmounted, toRef, watch } from "vue";
 
 const props = defineProps({
     modelValue: Boolean,
@@ -24,14 +24,12 @@ const close = () => {
     props.onClose();
     emit("update:modelValue", false);
     emit("close");
-
 };
 const toggle = () => {
     if(modelValue.value){
         close();
     }
     emit("update:modelValue", !modelValue.value);
-
 };
 
 const closeOnEscape = (e) => {
@@ -40,7 +38,16 @@ const closeOnEscape = (e) => {
     }
 };
 
-onMounted(() => document.addEventListener('keydown', closeOnEscape));
+onMounted(() => {
+    watch(modelValue, value =>{
+        if(value === true){
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    })
+    document.addEventListener("keydown", closeOnEscape);
+});
 
 onUnmounted(() => {
     document.removeEventListener('keydown', closeOnEscape);

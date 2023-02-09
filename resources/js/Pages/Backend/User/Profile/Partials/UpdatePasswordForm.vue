@@ -2,9 +2,9 @@
 import { ref } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import FormSection from "@core/Components/Form/FormSection.vue";
-import InputError from "@/Components/InputError.vue";
 import ActionMessage from "@core/Components/ActionMessage.vue";
 import Input from "@core/Components/Form/Input.vue";
+import SaveFormButton from "@core/Components/Form/SaveFormButton.vue";
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
@@ -14,7 +14,6 @@ const form = useForm({
     password: "",
     password_confirmation: ""
 });
-
 const updatePassword = () => {
     form.put(route("user-password.update"), {
         errorBag: "updatePassword",
@@ -69,14 +68,7 @@ const updatePassword = () => {
             </div>
         </template>
         <template #actions>
-            <ActionMessage :on="form.recentlySuccessful"
-                           class="mr-3 text-white">
-                {{ __("saved") }}
-            </ActionMessage>
-            <button class="btn btn-success"
-                    type="submit">
-                {{ __("save") }}
-            </button>
+            <SaveFormButton :form="form" />
         </template>
     </FormSection>
 </template>

@@ -52,21 +52,21 @@ return [
 			],
 		],
 		[
-			'label'    => 'en:SEO|es:SEO',
+			'label'    => 'en:Website|es:Sitio web',
 			'icon'     => 'globe-alt',
 			'route'    => 'admin.seo.index',
-			'active'   => 'admin.seo*',
+			'active'   => '',
 			'can'      => 'admin.seo',
 			'position' => 3,
 			'children' => [
 				[
 					'label'  => 'en:Setup|es:Configuración',
-					'route'  => 'admin.seo.setup',
-					'active' => 'admin.seo*',
-					'can'    => 'admin.seo',
+					'route'  => 'admin.site.edit',
+					'active' => 'admin.site*',
+					'can'    => 'admin',
 				],
 				[
-					'label'  => 'en:Friendly routes|es:Rutas amigables',
+					'label'  => 'en:SEO|es:SEO',
 					'route'  => 'admin.seo.index',
 					'active' => 'admin.seo*',
 					'can'    => 'admin.seo',
@@ -86,16 +86,19 @@ return [
 		[
 			'code' => 'es',
 			'iso'  => 'es_ES',
+			'flag'  => 'ES',
 			'name' => 'Español',
 		],
 		[
 			'code' => 'en',
 			'iso'  => 'en_US',
+			'flag'  => 'US',
 			'name' => 'English',
 		],
 		[
 			'code' => 'fr',
 			'iso'  => 'fr_FR',
+			'flag'  => 'FR',
 			'name' => 'Française',
 		],
 	],

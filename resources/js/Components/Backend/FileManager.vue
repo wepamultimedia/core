@@ -4,9 +4,9 @@ import _ from "lodash";
 import Pagination from "@/Core/Components/Pagination.vue";
 import Flap from "@/Core/Components/Flap.vue";
 import Input from "@/Core/Components/Form/Input.vue";
+import ToggleButton from "@/Core/Components/Form/ToggleButton.vue";
 import { usePage } from "@inertiajs/inertia-vue3";
 import Textarea from "@core/Components/Form/Textarea.vue";
-import { useGrid } from "vue-screen";
 
 const props = defineProps({
     errors: String,
@@ -17,7 +17,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:modelValue", "change"]);
-const grid = useGrid("tailwind");
 
 const errors = ref();
 const files = ref();
@@ -32,13 +31,20 @@ const search = _.throttle(value => {
         getFiles(currentParentId.value);
     }
 }, 100);
-
-watch(searchInput, value => {
-    search(value);
-});
+const mimeTypes = ref();
+const loading = ref(false);
+const loadingSubmit = ref(false);
 
 // File
 const fileInput = ref();
+const isImage = () => {
+    if (fileInput.value?.files.length > 0) {
+        let fileType = fileInput.value?.files[0]?.type;
+        return (fileType?.indexOf("jpeg") !== -1 || fileType?.indexOf("jpg") !== -1 || fileType?.indexOf("png") !== -1);
+    }
+
+    return false;
+};
 const file = reactive({
     flap: false,
     flapMd: true,
@@ -51,41 +57,46 @@ const file = reactive({
     update: false,
     delete: false,
     confirmDeleteInput: "",
+    originalSize: false,
     form: {
         id: null,
         name: "",
         altName: "",
         description: "",
-        file: ""
+        file: "",
+        maxSize: 800
     },
     selected: null,
     createSubmit: () => {
-        const formData = new FormData();
-        formData.append("parent_id", currentParentId.value ? currentParentId.value : "");
-        formData.append("name", file.form.name);
-        formData.append("alt_name", file.form.altName);
-        formData.append("description", file.form.description);
-        formData.append("file", fileInput.value.files[0]);
-        loading.value = true;
-        axios.post(route("api.filenamager.file.store", {
-            parentId: currentParentId.value,
-            page: files.value.current_page
-        }), formData, {
-            withCredentials: true,
-            headers: {
-                "Authorization": "Bearer " + usePage().props.value.access_token,
-                "Content-Type": "multipart/form-data"
-            }
-        }).then(response => {
-            if (response.status === 200) {
-                refresh(response.data);
-                resetFileFlap();
-            }
-            loading.value = false;
-        }).catch(error => {
-            errors.value = error.response.data.errors;
-            loading.value = false;
-        });
+        if(!loading.value) {
+            const formData = new FormData();
+            formData.append("parent_id", currentParentId.value ? currentParentId.value : "");
+            formData.append("name", file.form.name);
+            formData.append("alt_name", file.form.altName);
+            formData.append("description", file.form.description);
+            formData.append("file", fileInput.value.files[0]);
+            formData.append("max_size", file.originalSize ? 0 : file.form.maxSize);
+            loading.value = true;
+            axios.post(route("api.filenamager.file.store", {
+                parentId: currentParentId.value,
+                page: files.value.current_page
+            }), formData, {
+                withCredentials: true,
+                headers: {
+                    "Authorization": "Bearer " + usePage().props.value.default.access_token,
+                    "Content-Type": "multipart/form-data"
+                }
+            }).then(response => {
+                if (response.status === 200) {
+                    refresh(response.data);
+                    resetFileFlap();
+                }
+                loading.value = false;
+            }).catch(error => {
+                errors.value = error.response.data.errors;
+                loading.value = false;
+            });
+        }
     },
     updateSubmit: () => {
         loading.value = true;
@@ -101,7 +112,7 @@ const file = reactive({
         }, {
             withCredentials: true,
             headers: {
-                "Authorization": "Bearer " + usePage().props.value.access_token
+                "Authorization": "Bearer " + usePage().props.value.default.access_token
             }
         }).then(response => {
             if (response.status === 200) {
@@ -116,10 +127,10 @@ const file = reactive({
     },
     deleteSubmit: () => {
         loading.value = true;
-        axios.delete(route("api.filenamager.file.destroy", {file: file.form.id}), {}, {
+        axios.delete(route("api.filenamager.file.destroy", {file: file.form.id}), {
             withCredentials: true,
             headers: {
-                "Authorization": "Bearer " + usePage().props.value.access_token
+                "Authorization": "Bearer " + usePage().props.value.default.access_token
             }
         }).then(response => {
             if (response.status === 200) {
@@ -165,7 +176,10 @@ const resetFileFlap = () => {
     file.form.file = "";
     file.form.altName = "";
     file.form.description = "";
+    file.form.maxSize = 800;
+    file.originalSize = false;
     file.confirmDeleteInput = "";
+    fileInput.value = null;
 };
 
 // Folder
@@ -184,7 +198,7 @@ const folder = reactive({
         axios.post(route("api.filenamager.folder.store", {parentId: currentParentId.value}), folder.form, {
             withCredentials: true,
             headers: {
-                "Authorization": "Bearer " + usePage().props.value.access_token
+                "Authorization": "Bearer " + usePage().props.value.default.access_token
             }
         }).then(response => {
             if (response.status === 200) {
@@ -206,7 +220,7 @@ const folder = reactive({
         }), folder.form, {
             withCredentials: true,
             headers: {
-                "Authorization": "Bearer " + usePage().props.value.access_token
+                "Authorization": "Bearer " + usePage().props.value.default.access_token
             }
         }).then(response => {
             if (response.status === 200) {
@@ -225,10 +239,10 @@ const folder = reactive({
             file: folder.form.id,
             parentId: currentParentId.value,
             page: files.value.current_page
-        }), {}, {
+        }), {
             withCredentials: true,
             headers: {
-                "Authorization": "Bearer " + usePage().props.value.access_token
+                "Authorization": "Bearer " + usePage().props.value.default.access_token
             }
         }).then(response => {
             if (response.status === 200) {
@@ -264,8 +278,7 @@ const resetFolderFlap = () => {
     folder.form.name = "";
     folder.confirmDeleteInput = "";
 };
-const loading = ref(false);
-const loadingSubmit = ref(false);
+
 
 // Files
 const showFile = file => {
@@ -288,13 +301,27 @@ const getFiles = (parentId = null, page = null, search = null) => {
     }), {
         withCredentials: true,
         headers: {
-            "Authorization": "Bearer " + usePage().props.value.access_token
+            "Authorization": "Bearer " + usePage().props.value.default.access_token
         }
     }).then(response => {
         if (response.status === 200) {
             currentParentId.value = parentId;
             refresh(response.data);
         }
+        loading.value = false;
+    }).catch(error => {
+        errors.value = error.response.data.errors;
+        loading.value = false;
+    });
+};
+const getMimeTypes = () => {
+    axios.get(route("api.filenamager.mime_types"), {
+        withCredentials: true,
+        headers: {
+            "Authorization": "Bearer " + usePage().props.value.default.access_token
+        }
+    }).then(response => {
+        mimeTypes.value = response.data;
         loading.value = false;
     }).catch(error => {
         errors.value = error.response.data.errors;
@@ -320,12 +347,17 @@ const onClick = (callbackClick, callbackDbClick) => {
         clicks.click = 0;
         callbackDbClick();
     }
-}
+};
 const message = message => {
     console.log(message);
-}
+};
+
+watch(searchInput, value => {
+    search(value);
+});
 
 getFiles();
+getMimeTypes();
 </script>
 <template>
     <!-- toolbar -->
@@ -377,17 +409,23 @@ getFiles();
     <!-- / breadcrumb -->
     <!-- content -->
     <div v-if="loading"
-         class="flex items-center gap-2"
-         :class="contentClasses">
-        <svg class="w-5 h-5 text-white animate-spin" fill="none"
+         :class="contentClasses"
+         class="flex items-center gap-2">
+        <svg class="w-5 h-5 text-white animate-spin"
+             fill="none"
              viewBox="0 0 24 24"
              xmlns="http://www.w3.org/2000/svg">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <circle class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"></circle>
             <path class="opacity-75"
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   fill="currentColor"></path>
         </svg>
-        {{ __('loading') }}...
+        {{ __("loading") }}...
     </div>
     <div v-else
          :class="contentClasses">
@@ -401,20 +439,20 @@ getFiles();
                  :key="file.id"
                  class="cursor-pointer">
                 <div v-if="file.type.icon === 'image'">
-                <div class="rounded-lg overflow-hidden"
-                     @click="onClick(() => updateFile(file), () => selectFile(file))">
-                    <img :alt="file.alt_name"
-                         :src="file.url"
-                         class="object-cover aspect-square">
-                </div>
-                <p class="text-sm font-bold mt-2 text-center">{{ file.name }}</p>
+                    <div class="rounded-lg overflow-hidden"
+                         @click="onClick(() => updateFile(file), () => selectFile(file))">
+                        <img :alt="file.alt_name"
+                             :src="file.url"
+                             class="object-cover aspect-square">
+                    </div>
+                    <p class="text-sm font-bold mt-2 text-center">{{ file.name }}.{{ file.type.extension }}</p>
                 </div>
                 <div v-else
                      class="w-full"
                      @click="file.type.icon === 'folder' ? onClick(() => updateFolder(file), () => getFiles(file.id)) : updateFile(file)">
-                    <inline-svg :src="'/vendor/core/icons/solid/' + file.type.icon + '.svg'"
-                                class="fill-gray-600 dark:fill-gray-400 w-full h-auto"></inline-svg>
-                    <p class="text-sm font-bold mt-2 text-center">{{ file.name }}</p>
+                    <inline-svg :src="'/vendor/core/icons/file-types/' + file.type.icon + '.svg'"
+                                class="w-full h-auto"></inline-svg>
+                    <p class="text-sm font-bold mt-2 text-center">{{ file.name }}.{{ file.type.extension }}</p>
                 </div>
             </div>
         </div>
@@ -506,38 +544,69 @@ getFiles();
                    :legend="__('image_name_legend')"
                    name="name"
                    required/>
-            <div>
-                <Textarea v-model="file.form.altName"
+            <div v-if="isImage()">
+                <Textarea
+                          v-model="file.form.altName"
                           :errors="errors"
                           :label="__('alt_name')"
                           :legend="__('image_alt_name_legend')"
                           name="alt_name"
                           required></Textarea>
             </div>
-            <div>
-                <Textarea v-model="file.form.description"
+            <div v-if="isImage()">
+                <Textarea
+                          v-model="file.form.description"
                           :errors="errors"
                           :label="__('description')"
                           :legend="__('image_description_legend')"
                           name="description"></Textarea>
             </div>
-            <input v-if="file.form.name !== '' && file.form.altName !== ''"
-                   id="file"
+            <input id="file"
                    ref="fileInput"
-                   class="file:mr-4 file:py-2 file:px-6 mb-4
+                   :accept="mimeTypes"
+                   class="file:mr-4 file:py-2 file:px-4 mb-4
                           file:rounded file:border-0
                           file:text-sm file:font-medium
                           file:bg-gray-200 file:text-gray-700
                           hover:file:cursor-pointer hover:file:bg-gray-300
                           hover:file:text-gray-700
-                          block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                          block w-full
+                          text-sm text-gray-900
+                          border border-gray-300
+                          rounded-lg
+                          cursor-pointer
+                          bg-gray-50 dark:text-gray-400
+                          focus:outline-none
+                          dark:bg-gray-700
+                          dark:border-gray-600
+                          dark:placeholder-gray-400"
                    name="file"
                    type="file"
                    @change="file.form.file = $event.target.files[0].name"/>
+            <div v-if="isImage()">
+                <div class="mb-4">
+                    <ToggleButton v-model="file.originalSize"
+                                  :label="__('original_size')"></ToggleButton>
+                </div>
+                <Input v-model="file.form.maxSize"
+                       :disabled="file.originalSize"
+                       :errors="errors"
+                       :label="__('max_size')"
+                       :legend="__('max_size_legend')"
+                       name="max_size"
+                       required
+                       type="number"/>
+            </div>
             <button v-if="file.form.file !== ''"
-                    class="btn btn-success justify-center"
+                    class="btn btn-success justify-center flex items-center"
                     type="button"
-                    @click.prevent="file.createSubmit()">{{ __("upload") }}
+                    @click.prevent="file.createSubmit()">
+                <span v-if="!loading">{{ __("upload") }}</span>
+                <span v-if="loading">
+                    <svg fill="none" class="animate-spin w-5 h-5 " stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"></path>
+                    </svg>
+                </span>
             </button>
             <button class="btn btn-secondary justify-center"
                     @click.prevent="resetFileFlap()">{{ __("close") }}
@@ -553,15 +622,15 @@ getFiles();
                      @click="file.flapSizeToggle()">
             </div>
             <inline-svg v-else
-                        :src="'/vendor/core/icons/solid/' + file.selected.type.icon + '.svg'"
-                        class="fill-gray-600 dark:fill-gray-400 w-full h-auto"></inline-svg>
+                        :src="'/vendor/core/icons/file-types/' + file.selected.type.icon + '.svg'"
+                        class="w-1/2 h-auto mx-auto"></inline-svg>
             <Input v-model="file.form.name"
                    :errors="errors"
                    :label="__('name')"
                    :legend="__('image_name_legend')"
                    name="name"
                    required/>
-            <div>
+            <div v-if="file.selected.type.extension === 'jpg' || file.selected.type.extension === 'jpeg' || file.selected.type.extension === 'png'">
                 <Textarea v-model="file.form.altName"
                           :errors="errors"
                           :label="__('alt_name')"
@@ -569,7 +638,7 @@ getFiles();
                           name="alt_name"
                           required></Textarea>
             </div>
-            <div>
+            <div v-if="file.selected.type.extension === 'jpg' || file.selected.type.extension === 'jpeg' || file.selected.type.extension === 'png'">
                 <Textarea v-model="file.form.description"
                           :errors="errors"
                           :label="__('description')"

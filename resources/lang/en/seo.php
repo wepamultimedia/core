@@ -1,12 +1,13 @@
 <?php
 return [
 	'image_required' => 'The SEO image is required.',
+	'slug_invalid_format' => 'The slug must have a valid format, e.g. ( this-is-my-url-slug ).',
 	'unique_keyword' => 'The keyword is already used on this website.',
 	'unique_slug' => 'This slug is already being used on this website.',
 	'slug_required' => 'The slug field is required in ":locale" language.',
 	'title_required' => 'The SEO title field is required in ":locale" language.',
 	'description_required' => 'The SEO description field is required in ":locale" language.',
-	'seo' => 'Search Engine Optimization (SEO)',
+	'seo' => 'SEO',
 	'slug' => 'Slug',
 	'keyword' => 'Keyword',
 	'seo_title' => 'SEO Title',
@@ -55,4 +56,9 @@ return [
 	'select_image' => 'Select image',
 	'no_index' => 'No index page',
 	'no_follow' => 'No follow links',
+	'edit_title' => 'Edit SEO route',
+	'edit_summary' => 'Change the seo configuration always bearing in mind that it may affect the search engine results.',
+	'create_title' => 'Create SEO route',
+	'create_summary' => 'Fill in the required fields to create a search engine optimized path.',
+	'delete_seo_route' => 'Delete SEO route',
 ];

@@ -41,29 +41,30 @@ class BaseSymlinkCommand extends Command
 	protected function definePaths()
 	{
 		$packageName = ucfirst($this->package);
+		$vendorPackageName = strtolower($this->package);
 		
 		$this->paths['pages'] = [
-			'source' => base_path("vendor\\$this->developer\\$packageName\\resources\\js\\Pages"),
+			'source' => base_path("vendor\\$this->developer\\$vendorPackageName\\resources\\js\\Pages"),
 			'target' => resource_path("js\\Pages\\$packageName"),
 		];
 		
 		$this->paths['public'] = [
-			'source' => base_path("vendor\\$this->developer\\$packageName\\resources\\dist"),
+			'source' => base_path("vendor\\$this->developer\\$vendorPackageName\\resources\\dist"),
 			'target' => public_path('vendor\\' . strtolower($packageName)),
 		];
 		
 		$this->paths['js'] = [
-			'source' => base_path("vendor\\$this->developer\\$packageName\\resources\\js"),
+			'source' => base_path("vendor\\$this->developer\\$vendorPackageName\\resources\\js"),
 			'target' => resource_path("js\\$packageName"),
 		];
 		
 		$this->paths['unit'] = [
-			'source' => base_path("vendor\\$this->developer\\$packageName\\tests\\Unit"),
+			'source' => base_path("vendor\\$this->developer\\$vendorPackageName\\tests\\Unit"),
 			'target' => base_path("tests\\Unit\\$packageName"),
 		];
 		
 		$this->paths['feature'] = [
-			'source' => base_path("vendor\\$this->developer\\$packageName\\tests\\Feature"),
+			'source' => base_path("vendor\\$this->developer\\$vendorPackageName\\tests\\Feature"),
 			'target' => base_path("tests\\Feature\\$packageName"),
 		];
 	}

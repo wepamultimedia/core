@@ -3,8 +3,6 @@
 namespace Wepa\Core\Http\Controllers\Frontend;
 
 
-
-
 use Wepa\Core\Http\Traits\Frontend\SeoControllerTrait;
 
 

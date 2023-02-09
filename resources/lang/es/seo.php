@@ -1,12 +1,13 @@
 <?php
 return [
 	'image_required' => 'El campo imágen es requerido.',
+	'slug_invalid_format' => 'El slug debe tener un formato valido, ejemplo ( esta-es-mi-url-slug ).',
 	'unique_keyword' => 'La palabra clave ya esta siento utilizada en este sitio web.',
 	'unique_slug' => 'Este slug ya esta siendo utilizado en el sitio web.',
 	'slug_required' => 'El campo slug es requerido en el idioma ":locale".',
 	'title_required' => 'El campo titulo es requerido en el idioma ":locale".',
 	'description_required' => 'El campo descripción es requerido en el idioma ":locale".',
-	'seo' => 'Optimización en motores de busqueda (SEO)',
+	'seo' => 'SEO',
 	'slug' => 'Slug',
 	'keyword' => 'Palabra clave',
 	'seo_title' => 'Título SEO',
@@ -55,4 +56,9 @@ return [
 	'select_image' => 'Seleccionar imágen',
 	'no_index' => 'No indexar',
 	'no_follow' => 'No seguir los enlaces',
+	'edit_title' => 'Editar ruta SEO',
+	'edit_summary' => 'Cambie la configuración seo siempre teniendo en cuenta que puede afectar en el resultado en los buscadores.',
+	'create_title' => 'Crear ruta SEO',
+	'create_summary' => 'Rellene los campos obligatorios para crear una ruta optimizada para los buscadores.',
+	'delete_seo_route' => 'Eliminar ruta SEO',
 ];

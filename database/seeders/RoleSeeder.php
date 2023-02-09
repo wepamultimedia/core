@@ -57,10 +57,10 @@ class RoleSeeder extends Seeder
 		    [
 			    'name' => 'super.admin',
 			    'es'   => [
-				    'description' => 'Tareas del administrador',
+				    'description' => 'Super administrador',
 			    ],
 			    'en'   => [
-				    'description' => 'Administrator task',
+				    'description' => 'Super administrator',
 			    ],
 		    ],
 	    ];

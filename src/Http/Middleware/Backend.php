@@ -21,9 +21,9 @@ class Backend
 	 */
 	public function handle(Request $request, Closure $next)
 	{
-		Inertia::share([
-			'menu' => Menu::getItems('backend'),
-		]);
+//		Inertia::share([
+//			'menu' => Menu::getItems('backend'),
+//		]);
 		
 		return $next($request);
 	}

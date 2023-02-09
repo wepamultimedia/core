@@ -5,6 +5,7 @@ namespace Wepa\Core\Models;
 
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -20,6 +21,8 @@ use Wepa\Core\Http\Traits\TranslationsTrait;
  * @property string $slug
  * @property array $route_params
  * @property array $request_params
+ * @property array $package
+ * @property array $alias
  * @property string $canonical
  * @property string $robots
  * @property string $description
@@ -83,6 +86,7 @@ class Seo extends Model implements TranslatableContract
 		'twitter_image_title',
 		'twitter_image_alt',
 	];
+	protected array $attrsArray = [];
 	protected $casts = [
 		'route_params' => 'array',
 		'request_params' => 'array',
@@ -90,6 +94,8 @@ class Seo extends Model implements TranslatableContract
 	];
 	protected $fillable = [
 		'controller',
+		'package',
+		'alias',
 		'action',
 		'route_params',
 		'request_params',
@@ -100,13 +106,39 @@ class Seo extends Model implements TranslatableContract
 		'image',
 		'facebook_image',
 		'twitter_image',
-		'autocomplete',
 	];
 	protected $table = 'core_seo';
 	
+	/**
+	 * @return $this
+	 */
+	public function attrsToArray(array|string $attrs = []): static
+	{
+		if(is_array($attrs)) {
+			$this->attrsArray = array_merge($this->attrsArray, $attrs);
+		} else {
+			$this->attrsArray[] = $attrs;
+		}
+		
+		return $this;
+	}
+	
+	public function site() : Attribute
+	{
+		return Attribute::make(
+			get: fn () => Site::first()->only(['company', 'email', 'phone', 'mobile', 'address', 'latitude', 'longitude']),
+		);
+	}
+	
 	public function toArray()
 	{
-		return collect(parent::toArray())
+		$collection = collect(parent::toArray())
 			->merge(['translations' => $this->getTranslationsArray()]);
+		
+		foreach($this->attrsArray as $attr) {
+			$collection = $collection->merge([$attr => $this->{$attr}]);
+		}
+		
+		return $collection;
 	}
 }

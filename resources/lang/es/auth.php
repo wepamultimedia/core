@@ -52,4 +52,6 @@ return [
 	'reset_password_email_greeting' => 'Restablezca su contraseña',
 	'reset_password_email_saludation' => 'Atentamente',
 	'users' => 'Usuarios',
+	'enter-code-by-authenticator' => 'Confirme el acceso a su cuenta introduciendo el código de autenticación proporcionado por su aplicación de autenticación.',
+	'enter-recovery-code' => 'Confirme el acceso a su cuenta introduciendo uno de sus códigos de recuperación de emergencia.',
 ];

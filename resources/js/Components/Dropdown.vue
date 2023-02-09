@@ -6,13 +6,9 @@ defineProps({
         type: String,
         default: "Open"
     },
-    placement: {
-        type: String,
-        default: "right",
-        validator: (value) => [
-            "right", "left"
-        ].indexOf(value) !== -1
-    },
+    left: Boolean,
+    center: Boolean,
+    right: Boolean,
     buttonClass: String,
     onHover: Boolean,
     caret: {
@@ -23,28 +19,34 @@ defineProps({
     contentClass: String
 });
 
-const onEscape = (e) => {
+const onEscape = e => {
     if (e.key === "Esc" || e.key === "Escape") {
         open.value = false;
     }
 };
 
+const onClickBody = () => {
+    open.value = false;
+};
+
 onMounted(() => {
     document.addEventListener("keydown", onEscape);
+    document.body.addEventListener("click", onClickBody);
 });
 
 onBeforeUnmount(() => {
     document.removeEventListener("keydown", onEscape);
+    document.body.removeEventListener("keydown", onClickBody);
 });
 
 const open = ref(false);
 </script>
 <template>
-    <span class="relative">
+    <div class="relative text-center">
         <div :class="buttonClass"
-             class="relative flex items-center focus:outline-none select-none text-skin-base"
-             @click="open = !open"
-             @mouseover="onHover ? open = true : ''">
+             class="relative flex items-center justify-center"
+             @mouseover="onHover ? open = true : ''"
+             @click.stop="open = !open">
             <slot :open="open"
                   name="button">
                 <button class="px-4 py-2 flex items-center">
@@ -59,19 +61,14 @@ const open = ref(false);
         <button v-if="open"
                 class="fixed inset-0 h-full w-full cursor-default focus:outline-none"
                 tabindex="-1"
-                @click="open = false">
-        </button>
+                @click="open = false"></button>
         <!--dropdown menu-->
-        <transition enter-active-class="transition-all duration-200 ease-out"
-                    enter-class="opacity-0 scale-75"
-                    enter-to-class="opacity-100 scale-100"
-                    leave-active-class="transition-all duration-750 ease-in"
-                    leave-class="opacity-100 scale-100"
-                    leave-to-class="opacity-0 scale-75">
-            <span v-if="open"
+        <transition name="dropdown-content">
+            <div v-if="open"
                  :class="[{
-                    'right-0': placement === 'right',
-                    'left-0' : placement !== 'right',
+                    'right-0': right,
+                    'left-0' : left,
+                    'left-[50%] -translate-x-[50%]' : center,
                     'shadow-lg' : shadow
                  }, contentClass]"
                  class="absolute
@@ -87,8 +84,20 @@ const open = ref(false);
                  @click="open=false"
                  @mouseleave="onHover ? open = false : ''">
                 <slot></slot>
-            </span>
+            </div>
         </transition>
-    </span>
+    </div>
 </template>
-<style scoped></style>
+<style scoped>
+.dropdown-content-enter-from, .dropdown-content-leave-to {
+    @apply opacity-0
+}
+
+.dropdown-content-enter-to, .dropdown-content-leave-from {
+    @apply opacity-100
+}
+
+.dropdown-content-enter-active, .dropdown-content-leave-active {
+    @apply transition-all ease-in-out duration-500
+}
+</style>

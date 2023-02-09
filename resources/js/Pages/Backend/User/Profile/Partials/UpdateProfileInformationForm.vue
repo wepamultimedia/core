@@ -5,16 +5,14 @@ import { Link, useForm } from "@inertiajs/inertia-vue3";
 import FormSection from "@core/Components/Form/FormSection.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
-import ActionMessage from "@core/Components/ActionMessage.vue";
 import Input from "@core/Components/Form/Input.vue";
+import SaveFormButton from "@core/Components/Form/SaveFormButton.vue";
 
 const props = defineProps({
     user: Object
 });
 
 const form = useForm({
-    _method: "PUT",
     name: props.user.name,
     email: props.user.email,
     photo: null
@@ -29,7 +27,7 @@ const updateProfileInformation = () => {
         form.photo = photoInput.value.files[0];
     }
 
-    form.post(route("user-profile-information.update"), {
+    form.put(route("user-profile-information.update"), {
         errorBag: "updateProfileInformation",
         preserveScroll: true,
         onSuccess: () => clearPhotoFileInput()
@@ -151,14 +149,7 @@ const clearPhotoFileInput = () => {
             </div>
         </template>
         <template #actions>
-            <ActionMessage :on="form.recentlySuccessful"
-                           class="mr-3 text-white">
-                {{ __("saved") }}
-            </ActionMessage>
-            <button class="btn btn-success"
-                    type="submit">
-                {{ __("save") }}
-            </button>
+            <SaveFormButton :form="form" />
         </template>
     </FormSection>
 </template>

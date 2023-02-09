@@ -1,15 +1,18 @@
 <script setup>
 import { nextTick, ref } from "vue";
 import { Head, useForm } from "@inertiajs/inertia-vue3";
-import AuthenticationCard from "@/Components/AuthenticationCard.vue";
+import AuthenticationCard from "@/Core/Components/AuthenticationCard.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
-import InputLabel from "@/Components/InputLabel.vue";
+import { useDark } from "@vueuse/core";
+import Input from "@core/Components/Form/Input.vue";
+
+const isDark = useDark();
 
 const recovery = ref(false);
 
 const form = useForm({
-    code: "", recovery_code: ""
+    code: '',
+    recovery_code: '',
 });
 
 const recoveryCodeInput = ref(null);
@@ -21,63 +24,58 @@ const toggleRecovery = async () => {
     await nextTick();
 
     if (recovery.value) {
-        recoveryCodeInput.value.focus();
-        form.code = "";
+        form.code = '';
     } else {
-        codeInput.value.focus();
-        form.recovery_code = "";
+        form.recovery_code = '';
     }
 };
 
 const submit = () => {
-    form.post(route("two-factor.login"));
+    form.post(route('two-factor.login'));
 };
 </script>
 <template>
     <Head :title="__('Two-factor Confirmation')"/>
-    <AuthenticationCard>
+    <AuthenticationCard class="dark:bg-gray-900">
         <template #logo>
-            <img :alt="$page.props.appName"
+            <img :alt="$page.props.default.appName"
                  class="h-14"
                  src="/images/logo.svg">
         </template>
-        <div class="mb-4 text-sm text-gray-600">
+        <div class="my-4 text-sm text-center">
             <template v-if="! recovery">
-                Please confirm access to your account by entering the authentication code provided by your authenticator
-                application.
+                {{ __('enter-code-by-authenticator') }}
             </template>
+
             <template v-else>
-                Please confirm access to your account by entering one of your emergency recovery codes.
+                {{ __('enter-recovery-code') }}
             </template>
         </div>
-        <JetValidationErrors class="mb-4"/>
+
         <form @submit.prevent="submit">
             <div v-if="! recovery">
-                <InputLabel :value="__('Code')"
-                          for="code"/>
-                <TextInput id="code"
-                          ref="codeInput"
-                          v-model="form.code"
-                          autocomplete="one-time-code"
-                          autofocus
-                          class="mt-1 block w-full"
-                          inputmode="numeric"
-                          type="text"/>
+                <Input v-model="form.code"
+                       :errors="form.errors"
+                       :label="__('code')"
+                       autofocus
+                       name="code"
+                       autocomplete="one-time-code"
+                       required
+                       type="text"/>
             </div>
+
             <div v-else>
-                <InputLabel :value="__('Recovery Code')"
-                          for="recovery_code"/>
-                <TextInput id="recovery_code"
-                          ref="recoveryCodeInput"
-                          v-model="form.recovery_code"
-                          autocomplete="one-time-code"
-                          class="mt-1 block w-full"
-                          type="text"/>
+                <Input v-model="form.recovery_code"
+                       :errors="form.errors"
+                       :label="__('recovery_code')"
+                       autofocus
+                       name="recovery_code"
+                       required
+                       type="text"/>
             </div>
+
             <div class="flex items-center justify-end mt-4">
-                <button class="text-sm text-gray-600 hover:text-gray-900 underline cursor-pointer"
-                        type="button"
-                        @click.prevent="toggleRecovery">
+                <button type="button" class="text-sm text-gray-600 hover:text-gray-900 underline cursor-pointer" @click.prevent="toggleRecovery">
                     <template v-if="! recovery">
                         {{ __("Use a recovery code") }}
                     </template>

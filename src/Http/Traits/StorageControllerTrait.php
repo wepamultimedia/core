@@ -45,7 +45,7 @@ trait StorageControllerTrait
 	 */
 	protected function fileSystemDisk(): string
 	{
-		return env('FILESYSTEM_DISK', 'local');
+		return config('filesystems.default', 'local');
 	}
 	
 	/**
@@ -60,18 +60,25 @@ trait StorageControllerTrait
 	protected function storageImage(UploadedFile $file,
 	                                string       $path,
 	                                string       $name = null,
-	                                int          $maxSize = 800,
+	                                int          $maxSize = 0,
 	                                string       $options = 'public'): bool|array
 	{
 		$name = $name ?? time() . '.' . $file->extension();
 		
 		if($file->extension() === 'jpg' or $file->extension() === 'png' or $file->extension() === 'jpeg') {
-			$image = new InterventionImageHelper($file);
-			$image->resize($maxSize);
+			if($maxSize > 0) {
+				$image = new InterventionImageHelper($file);
+				$image->resize($maxSize);
+			} else {
+				$image = $file;
+			}
 			
 			if($storage = Storage::disk($this->fileSystemDisk())
-				->putFileAs($path, $image->toStorage(), $name, $options)) {
-				$image->destroy();
+				->putFileAs($path, $maxSize > 0 ? $image->toStorage() : $file, $name, $options)) {
+				
+				if($maxSize > 0) {
+					$image->destroy();
+				}
 				
 				$url = Storage::disk($this->fileSystemDisk())->url($storage);
 				$url = str_replace(['\\', '%5C'], '/', $url);

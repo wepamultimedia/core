@@ -2,8 +2,11 @@
 import { computed } from "vue";
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import AuthenticationCard from "@/Components/AuthenticationCard.vue";
+import AuthenticationCard from "@/Core/Components/AuthenticationCard.vue";
 import AuthenticationCardLogo from "@/Core/Components/AuthenticationCardLogo.vue";
+import { useDark } from "@vueuse/core";
+
+const isDark = useDark();
 
 const props = defineProps({
     status: String
@@ -19,7 +22,7 @@ const verificationLinkSent = computed(() => props.status === "verification-link-
 </script>
 <template>
     <Head :title="__('email_verification')"/>
-    <AuthenticationCard>
+    <AuthenticationCard class="dark:bg-gray-900">
         <template #logo>
             <AuthenticationCardLogo />
         </template>

@@ -50,8 +50,7 @@ const fileManager = reactive({
     }
 });
 const attrs = useAttrs();
-const pageProps = usePage().props.value;
-const selectedLocale = ref(pageProps.locale);
+const selectedLocale = ref(usePage().props.value.default.locale);
 const inputValue = ref();
 const error = ref();
 const emit = defineEmits(["update:modelValue", "update:locale"]);
@@ -122,10 +121,17 @@ const setInputValue = (value) => {
                 }
                 modelValue.value["translations"][selectedLocale.value][attrs["name"]] = value;
             } else if(modelValue.value.translations.hasOwnProperty(selectedLocale.value)){
+                modelValue.value["translations"][selectedLocale.value][attrs["name"]] = value;
                 if (modelValue.value["translations"][selectedLocale.value].hasOwnProperty(attrs["name"])) {
-                    delete modelValue.value["translations"][selectedLocale.value][attrs["name"]];
                     Object.keys(modelValue.value.translations).forEach(locale => {
-                        if (!Object.keys(modelValue.value.translations[locale]).length) {
+                        let any = false;
+                        Object.keys(modelValue.value.translations[locale]).forEach(property => {
+                            if(modelValue.value.translations[locale][property]){
+                                any = true;
+                                return true;
+                            }
+                        });
+                        if(!any){
                             delete modelValue.value.translations[locale];
                         }
                     });
@@ -159,7 +165,7 @@ buildInputValue();
                       :config="ckconfig"
                       :editor="Editor"></CKEditor>
             <div class="flex justify-end mt-2">
-                <Dropdown v-if="$page.props.locales.length > 1"
+                <Dropdown v-if="$page.props.default.locales.length > 1"
                           class="w-full">
                     <template #button="{open}">
                         <button class=" w-full py-2.5 px-4 bg-white dark:bg-gray-500 border border rounded-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
@@ -168,7 +174,7 @@ buildInputValue();
                         </button>
                     </template>
                     <div class="grid divide-y divide-y-gray-300">
-                        <button v-for="locale in $page.props.locales"
+                        <button v-for="locale in $page.props.default.locales"
                                 class="px-4 py-2 text-sm"
                                 type="button"
                                 @click="selectedLocale=locale.code">

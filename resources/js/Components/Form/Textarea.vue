@@ -23,8 +23,7 @@ const props = defineProps({
 });
 
 const attrs = useAttrs();
-const pageProps = usePage().props.value;
-const selectedLocale = ref(pageProps.locale);
+const selectedLocale = ref(usePage().props.value.default.locale);
 const inputId = ref(null);
 const inputValue = ref();
 const error = ref();
@@ -76,10 +75,23 @@ const setInputValue = (value) => {
                 }
                 modelValue.value["translations"][selectedLocale.value][attrs["name"]] = value;
             } else if (modelValue.value.translations.hasOwnProperty(selectedLocale.value)) {
+                modelValue.value["translations"][selectedLocale.value][attrs["name"]] = value;
                 if (modelValue.value["translations"][selectedLocale.value].hasOwnProperty(attrs["name"])) {
-                    delete modelValue.value["translations"][selectedLocale.value][attrs["name"]];
+                    // delete modelValue.value["translations"][selectedLocale.value][attrs["name"]];
+                    // Object.keys(modelValue.value.translations).forEach(locale => {
+                    //     if (!Object.keys(modelValue.value.translations[locale]).length) {
+                    //         delete modelValue.value.translations[locale];
+                    //     }
+                    // });
+
                     Object.keys(modelValue.value.translations).forEach(locale => {
-                        if (!Object.keys(modelValue.value.translations[locale]).length) {
+                        let any = false;
+                        Object.keys(modelValue.value.translations[locale]).forEach(property => {
+                            if (modelValue.value.translations[locale][property]) {
+                                return any = true;
+                            }
+                        });
+                        if (!any) {
                             delete modelValue.value.translations[locale];
                         }
                     });
@@ -115,9 +127,14 @@ watch(selectedLocale, value => {
 });
 watch(errors, value => {
     for (const [errorKey, errorValue] of Object.entries(value)) {
-        const re = new RegExp(attrs.name + "$");
-        if (re.test(errorKey)) {
-            error.value = errorValue;
+        const re = new RegExp("[.]" + attrs.name + "$");
+        const rex = new RegExp("^" + attrs.name + "$");
+        if (re.test(errorKey) || rex.test(errorKey)) {
+            if (typeof errorValue === "object") {
+                error.value = errorValue[0];
+            } else {
+                error.value = errorValue;
+            }
             return;
         } else {
             error.value = null;
@@ -184,7 +201,8 @@ buildInputValue();
                 <div v-if="error"
                      class="text-red-300 text-sm mt-1">* {{ error }}
                 </div>
-                <Dropdown v-if="translation && $page.props.locales.length > 1"
+                <Dropdown v-if="translation && $page.props.default.locales.length > 1"
+                          center
                           class="w-full">
                     <template #button="{open}">
                         <button class="py-2.5 w-full px-4 my-2 bg-white dark:bg-gray-500 border rounded-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
@@ -192,12 +210,13 @@ buildInputValue();
                             {{ selectedLocale }}
                         </button>
                     </template>
-                    <div class="grid divide-y divide-y-gray-300">
-                        <button v-for="locale in $page.props.locales"
-                                class="px-4 py-2 text-sm"
+                    <div class="grid divide-y divide-y-gray-300 dark:divide-gray-700 bg-white dark:bg-gray-800 rounded overflow-hidden">
+                        <button v-for="loc in $page.props.default.locales"
+                                v-show="loc.code !== selectedLocale"
+                                class="px-4 py-2 text-sm hover:dark:bg-gray-900"
                                 type="button"
-                                @click="selectedLocale=locale.code">
-                            {{ locale.name }}
+                                @click="selectedLocale=loc.code">
+                            {{ loc.name }}
                         </button>
                     </div>
                 </Dropdown>

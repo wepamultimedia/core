@@ -19,12 +19,13 @@ class FileManagerController extends Controller
 {
 	use StorageControllerTrait;
 	
+	
 	/**
 	 * @param File $file
 	 *
 	 * @return void
 	 */
-	public function destroy(File $file) : void
+	public function destroy(File $file): void
 	{
 		$fileTypeName = strtolower($file->type->name);
 		
@@ -159,6 +160,20 @@ class FileManagerController extends Controller
 	}
 	
 	/**
+	 * @return string
+	 */
+	public function mimeTypes(): string
+	{
+		return FileType::select(['extension'])
+			->whereNotNull('mime')
+			->where('extension', '<>', '.')
+			->get()
+			->map(function($type) {
+				return '.' . $type->extension;
+			})->implode(',');
+	}
+	
+	/**
 	 * @param $id
 	 *
 	 * @return void
@@ -183,8 +198,8 @@ class FileManagerController extends Controller
 		if($file->extension() === 'jpg' or $file->extension() === 'jpeg' or $file->extension() === 'png') {
 			
 			$name = $name ?? time() . '.' . $file->extension();
-			
-			if($savedFile = $this->storageImage($file, 'file-manager', $name, 800)) {
+
+			if($savedFile = $this->storageImage($file, 'file-manager', $name, $request->max_size)) {
 				$data = collect($request->all())->filter()
 					->merge([
 						'url' => $savedFile['url'],

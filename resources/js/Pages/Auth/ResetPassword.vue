@@ -1,9 +1,13 @@
 <script setup>
 import { Head, useForm } from "@inertiajs/inertia-vue3";
-import AuthenticationCard from "@/Components/AuthenticationCard.vue";
+import AuthenticationCard from "@/Core/Components/AuthenticationCard.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
+import { useDark } from "@vueuse/core";
+import Input from "@core/Components/Form/Input.vue";
+
+const isDark = useDark();
 
 const props = defineProps({
     email: String, token: String
@@ -21,43 +25,41 @@ const submit = () => {
 </script>
 <template>
     <Head :title="__('reset_password')"/>
-    <AuthenticationCard>
+    <AuthenticationCard class="dark:bg-gray-900">
         <template #logo>
-            <img :alt="$page.props.appName"
+            <img :alt="$page.props.default.appName"
                  class="h-14"
                  src="/images/logo.svg">
         </template>
         <form @submit.prevent="submit">
-            <div>
-                <InputLabel :value="__('email')"
-                          for="email"/>
-                <TextInput id="email"
-                          v-model="form.email"
-                          autofocus
-                          class="mt-1 block w-full"
-                          disabled
-                          required
-                          type="email"/>
+            <div class="my-4">
+                <Input v-model="form.email"
+                       :errors="form.errors"
+                       :label="__('email')"
+                       autofocus
+                       name="email"
+                       required
+                       type="email"/>
             </div>
-            <div class="mt-4">
-                <InputLabel :value="__('password')"
-                          for="password"/>
-                <TextInput id="password"
-                          v-model="form.password"
-                          autocomplete="new-password"
-                          class="mt-1 block w-full"
-                          required
-                          type="password"/>
+            <div class="my-4">
+                <Input v-model="form.password"
+                       :errors="form.errors"
+                       :label="__('password')"
+                       autocomplete="new-password"
+                       autofocus
+                       name="password"
+                       required
+                       type="password"/>
             </div>
-            <div class="mt-4">
-                <InputLabel :value="__('confirm_password')"
-                          for="password_confirmation"/>
-                <TextInput id="password_confirmation"
-                          v-model="form.password_confirmation"
-                          autocomplete="new-password"
-                          class="mt-1 block w-full"
-                          required
-                          type="password"/>
+            <div class="my-4">
+                <Input v-model="form.password_confirmation"
+                       :errors="form.errors"
+                       :label="__('confirm_password')"
+                       autocomplete="new-password"
+                       autofocus
+                       name="password_confirmation"
+                       required
+                       type="password"/>
             </div>
             <div class="flex items-center justify-end mt-4">
                 <PrimaryButton :class="{ 'opacity-25': form.processing }"

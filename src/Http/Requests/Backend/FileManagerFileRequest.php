@@ -5,6 +5,7 @@ namespace Wepa\Core\Http\Requests\Backend;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Wepa\Core\Models\FileType;
 
 
 /**
@@ -21,7 +22,7 @@ class FileManagerFileRequest extends FormRequest
 	 *
 	 * @return bool
 	 */
-	public function authorize()
+	public function authorize(): bool
 	{
 		return true;
 	}
@@ -33,7 +34,7 @@ class FileManagerFileRequest extends FormRequest
 	{
 		return collect(parent::messages())
 			->merge([
-				'name.unique' => 'The name has already been taken.'
+				'name.unique' => 'The name has already been taken.',
 			])
 			->toArray();
 	}
@@ -43,16 +44,28 @@ class FileManagerFileRequest extends FormRequest
 	 *
 	 * @return array<string, mixed>
 	 */
-	public function rules()
+	public function rules(): array
 	{
+		$extension = $this->file('file')->extension();
+		$isImage = ($extension === 'jpg' or $extension === 'jpeg' or $extension === 'png');
+
 		$rules = [
-			'alt_name' => 'string|required',
+			'alt_name' => ['string', 'nullable', Rule::when($isImage, ['required'])],
 			'description' => 'string|nullable',
 		];
 		
-		switch(request()->method){
+		$mimes = FileType::select(['extension'])
+			->whereNotNull('mime')
+			->where('extension', '<>', '.')
+			->get()
+			->map(function ($type){
+				return $type->extension;
+			})->implode(',');
+		
+		switch(request()->method) {
 			case 'POST':
 				return array_merge($rules, [
+					'max_size' => [Rule::when($isImage, ['int'])],
 					'name' => [
 						'string',
 						'required',
@@ -61,7 +74,7 @@ class FileManagerFileRequest extends FormRequest
 								->where('parent_id', $this['parent_id']);
 						}),
 					],
-					'file' => 'required|mimes:png,jpg,jpeg,pdf|max:4096',
+					'file' => 'required|mimes:' . $mimes . '|max:4096',
 				]);
 			case 'PUT':
 				return array_merge($rules, [
@@ -75,6 +88,5 @@ class FileManagerFileRequest extends FormRequest
 					],
 				]);
 		}
-		
 	}
 }

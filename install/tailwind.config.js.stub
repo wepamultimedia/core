@@ -1,0 +1,83 @@
+const defaultTheme = require("tailwindcss/defaultTheme");
+
+function withOpacity(variableName) {
+    return ({opacityValue}) => {
+        if (opacityValue !== undefined) {
+            return `rgba(var(${variableName}), ${opacityValue})`;
+        }
+        return `rgb(var(${variableName}))`;
+    };
+}
+
+/** @type {import("tailwindcss").Config} */
+module.exports = {
+    darkMode: "class",
+    content: [
+        "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
+        "./vendor/laravel/jetstream/**/*.blade.php",
+        "./storage/framework/views/*.php",
+        "./resources/views/**/*.blade.php",
+        "./resources/js/**/*.vue"
+    ],
+    theme: {
+        container: {
+            center: true,
+            padding: {
+                DEFAULT: "2rem",
+                sm: "2rem",
+                md: "2rem",
+                lg: "4rem",
+                xl: "5rem",
+                "2xl": "6rem"
+            }
+        },
+        extend: {
+            colors: {
+                skin: {
+                    base: withOpacity("--color-base"),
+                    "base-dark": withOpacity("--color-base-dark"),
+                    muted: withOpacity("--color-muted"),
+                    "muted-dark": withOpacity("--color-muted-dark"),
+                    inverted: withOpacity("--color-inverted"),
+                    "inverted-dark": withOpacity("--color-inverted-dark"),
+                    fill: withOpacity("--color-fill"),
+                    "fill-dark": withOpacity("--color-fill-dark"),
+                    accent: withOpacity("--color-accent"),
+                    "accent-hover": withOpacity("--color-accent-hover"),
+                    "accent-dark": withOpacity("--color-accent-dark"),
+                    "accent-hover-dark": withOpacity("--color-accent-hover-dark"),
+                    background: withOpacity("--color-background"),
+                    "background-dark": withOpacity("--color-background-dark"),
+                    light: withOpacity("--color-light"),
+                    dark: withOpacity("--color-dark"),
+                    success: withOpacity("--color-success"),
+                    info: withOpacity("--color-info"),
+                    warning: withOpacity("--color-warning"),
+                    danger: withOpacity("--color-danger"),
+                    primary: {
+                        DEFAULT: withOpacity("--color-primary-500"),
+                        900: withOpacity("--color-primary-900"),
+                        800: withOpacity("--color-primary-800"),
+                        700: withOpacity("--color-primary-700"),
+                        600: withOpacity("--color-primary-600"),
+                        500: withOpacity("--color-primary-500"),
+                        400: withOpacity("--color-primary-400"),
+                        300: withOpacity("--color-primary-300"),
+                        200: withOpacity("--color-primary-200"),
+                        100: withOpacity("--color-primary-100")
+                    }
+                }
+            },
+            fontFamily: {
+                sans: [
+                    "Nunito", ...defaultTheme.fontFamily.sans
+                ]
+            }
+        }
+    },
+
+    plugins: [
+        require("@tailwindcss/forms"),
+        require("@tailwindcss/typography"),
+    ]
+};

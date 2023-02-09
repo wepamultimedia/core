@@ -26,7 +26,7 @@ trait SeoControllerTrait
 	 */
 	protected function slugRedirect(Request $request, string $slug)
 	{
-		if($seo = Seo::whereTranslation('slug', $slug)->first()) {
+		if($seo = Seo::whereTranslation('slug', $slug)->attrsToArray(['site'])->first()) {
 			
 			Inertia::share('seo', $seo);
 			

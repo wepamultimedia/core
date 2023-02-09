@@ -13,10 +13,7 @@
 use Illuminate\Support\Facades\Route;
 use Wepa\Core\Http\Controllers\Frontend\DashboardController;
 use Wepa\Core\Http\Controllers\Frontend\InertiaController;
-use Wepa\Core\Http\Controllers\Frontend\LoginController;
-use Wepa\Core\Http\Controllers\ForgotPasswordController;
-use Wepa\Core\Http\Controllers\RegisterController;
-use Wepa\Core\Http\Controllers\ResetPasswordController;
+use Wepa\Core\Http\Controllers\LocaleController;
 
 require 'admin.php';
 
@@ -25,6 +22,7 @@ Route::middleware(['web', 'auth:sanctum'])->group(function(){
 });
 
 Route::middleware('web')->group(function() {
+	Route::get('/locale/{locale}', [LocaleController::class, 'switchLocale'])->name('locale');
 	Route::get('{slug}', [InertiaController::class, 'slugRedirect']);
 });
 

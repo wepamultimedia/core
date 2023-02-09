@@ -1,11 +1,16 @@
 <script setup>
 import { ref } from "vue";
 import { Head, useForm } from "@inertiajs/inertia-vue3";
-import AuthenticationCard from "@/Components/AuthenticationCard.vue";
+import AuthenticationCard from "@/Core/Components/AuthenticationCard.vue";
 import AuthenticationCardLogo from "@/Core/Components/AuthenticationCardLogo.vue";
 import TextInput from "@/Components/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputError from "@/Components/InputError.vue";
+import { useDark } from "@vueuse/core";
+import Input from "@core/Components/Form/Input.vue";
+
+
+const isDark = useDark();
 
 const form = useForm({
     password: ""
@@ -25,7 +30,7 @@ const submit = () => {
 </script>
 <template>
     <Head :title="__('secure_area')"/>
-    <AuthenticationCard>
+    <AuthenticationCard class="dark:bg-gray-900">
         <template #logo>
             <AuthenticationCardLogo/>
         </template>
@@ -34,18 +39,14 @@ const submit = () => {
         </div>
         <form @submit.prevent="submit">
             <div>
-                <TextInput :value="__('password')"
-                           for="password"/>
-                <TextInput id="password"
-                           ref="passwordInput"
-                           v-model="form.password"
-                           autocomplete="current-password"
-                           autofocus
-                           class="mt-1 block w-full"
-                           required
-                           type="password"/>
-                <InputError :message="form.errors.password"
-                            class="mt-2"/>
+                <Input v-model="form.password"
+                       ref="passwordInput"
+                       autofocus
+                       :errors="form.errors"
+                       :label="__('password')"
+                       name="password"
+                       required
+                       type="password"/>
             </div>
             <div class="flex justify-end mt-4">
                 <PrimaryButton :class="{ 'opacity-25': form.processing }"

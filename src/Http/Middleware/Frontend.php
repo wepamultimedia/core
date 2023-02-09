@@ -21,9 +21,9 @@ class Frontend
 	 */
 	public function handle(Request $request, Closure $next)
 	{
-		Inertia::share([
-			'menu' => [],
-		]);
+//		Inertia::share([
+//			'menu' => [],
+//		]);
 		
 		return $next($request);
 	}

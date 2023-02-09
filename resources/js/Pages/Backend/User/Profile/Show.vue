@@ -1,5 +1,5 @@
 <script>
-import MainLayout from "@/Pages/Core/Layouts/Backend/MainLayout.vue";
+import MainLayout from "@/Pages/Core/Backend/Layouts/MainLayout/MainLayout.vue";
 
 export default {
     layout: (h, page) => h(MainLayout, {

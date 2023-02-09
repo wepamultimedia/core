@@ -2,37 +2,78 @@
 
 namespace Wepa\Core\Http\Traits;
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 use Laravel\Jetstream\Jetstream;
+use Wepa\Core\Models\Seo;
 
 
 trait InertiaControllerTrait
 {
 	public string $packageName;
+	protected string $menuScope = '';
 	protected array $share = [];
 	protected array $translations = [];
+	
+	public function addSeo(string $alias): void
+	{
+		$seo = Seo::where('alias', $alias)->first()->attrsToArray('site');
+		
+		// Si tiene seo y no tiene la etiqueta noindex o nofollow defino lo contrario
+		if(!$seo->robots) {
+			$seo->robots = ['index', 'follow'];
+		} else {
+			if(!in_array('noindex', $seo->robots)) {
+				$seo->robots = array_merge($seo->robots, ['index']);
+			}
+			
+			if(!in_array('nofollow', $seo->robots)) {
+				$seo->robots = array_merge($seo->robots, ['follow']);
+			}
+		}
+		
+		// Si no tiene seo defino noindex y no follow
+		if(!$seo) {
+			$seo = new Seo([
+				'robots' => ['noindex', 'nofollow'],
+			]);
+		}
+		
+		$this->addShare([
+			'seo' => $seo->toArray(),
+		]);
+	}
+	
+	/**
+	 * @param array $share
+	 *
+	 * @return void
+	 */
+	protected function addShare(array $share): void
+	{
+		$this->share = array_merge($this->share, $share);
+	}
 	
 	/**
 	 * @param Request $request
 	 * @param string $view
 	 * @param mixed $tranlation
 	 * @param array $props
-	 * @param array $share
 	 *
 	 * @return Response
 	 */
 	public function jetrender(Request $request,
 	                          string  $view,
 	                          mixed   $tranlation = [],
-	                          array   $props = [],
-	                          array   $share = []): Response
+	                          array   $props = []): Response
 	{
-		$this->buildRender($view, $tranlation, $share);
+		$this->buildRender($view, $tranlation);
 		
 		return Jetstream::inertia()->render($request, $view, $props);
 	}
@@ -45,8 +86,7 @@ trait InertiaControllerTrait
 	 * @return void
 	 */
 	protected function buildRender(string $view,
-	                               mixed  $tranlation = [],
-	                               array  $share = []): void
+	                               mixed  $tranlation = []): void
 	{
 		$this->buildViewPath($view);
 		
@@ -54,19 +94,21 @@ trait InertiaControllerTrait
 		
 		if($user)
 			$user->tokens()->where('name', 'inertia')->delete();
-		
+
 		$defatultShare = [
-			'access_token' => $user ? $user->createToken('inertia')->plainTextToken : null,
-			'theme' => config('core.theme'),
-			'locale' => app()->getLocale(),
-			'locales' => config('core.locales'),
-			'translation' => $this->translation($tranlation),
-			'appName' => config('app.name'),
-			'baseUrl' => request()->root(),
+			'default' => [
+				'access_token' => $user ? $user->createToken('inertia')->plainTextToken : null,
+				'theme' => config('core.theme'),
+				'locale' => app()->getLocale(),
+				'locales' => config('core.locales'),
+				'appName' => config('app.name'),
+				'baseUrl' => request()->root(),
+				'translation' => $this->translation($tranlation),
+				'storageUrl' => preg_replace('/\/$/', '', Storage::disk(config('filesystems.default'))->url(''))
+			],
 		];
 		
 		$this->addShare($defatultShare);
-		$this->addShare($share);
 		$this->publishShare();
 	}
 	
@@ -170,11 +212,6 @@ trait InertiaControllerTrait
 		return array_merge($translation, $packageTranslation);
 	}
 	
-	protected function addShare(array $share)
-	{
-		$this->share = array_merge($this->share, $share);
-	}
-	
 	/**
 	 * @return void
 	 */
@@ -193,10 +230,9 @@ trait InertiaControllerTrait
 	 */
 	public function render(string $view,
 	                       mixed  $tranlation = [],
-	                       array  $props = [],
-	                       array  $share = []): Response
+	                       array  $props = []): Response
 	{
-		$this->buildRender($view, $tranlation, $share);
+		$this->buildRender($view, $tranlation);
 		
 		return Inertia::render($view, $props);
 	}
