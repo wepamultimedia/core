@@ -102,5 +102,4 @@ return [
 			'position' => 4,
 		],
 	],
-	
 ];

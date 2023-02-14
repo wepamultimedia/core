@@ -2,12 +2,10 @@
 
 namespace Wepa\Core\Models;
 
-
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Wepa\Core\Http\Traits\TranslationsTrait;
-
 
 /**
  * Wepa\Core\Models\Role
@@ -24,6 +22,7 @@ use Wepa\Core\Http\Traits\TranslationsTrait;
  * @property-read int|null $translations_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property-read int|null $users_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Role listsTranslations(string $translationField)
  * @method static \Illuminate\Database\Eloquent\Builder|Role newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Role newQuery()
@@ -43,14 +42,14 @@ use Wepa\Core\Http\Traits\TranslationsTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereTranslationLike(string $translationField, $value, ?string $locale = null)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role withTranslation()
+ *
  * @mixin \Eloquent
  */
 class Role extends \Spatie\Permission\Models\Role implements TranslatableContract
 {
-	use HasFactory;
-	use Translatable;
-	use TranslationsTrait;
-	
-	
-	public $translatedAttributes = ['description'];
+    use HasFactory;
+    use Translatable;
+    use TranslationsTrait;
+
+    public $translatedAttributes = ['description'];
 }
