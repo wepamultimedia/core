@@ -2,13 +2,11 @@
 
 namespace Wepa\Core\Models;
 
-
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
-
 
 /**
  * Wepa\Core\Models\Site
@@ -36,6 +34,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $icon
  * @property string|null $logo
  * @property string|null $logo_invert
+ *
  * @method static Builder|Site newModelQuery()
  * @method static Builder|Site newQuery()
  * @method static Builder|Site query()
@@ -58,70 +57,70 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Site whereUpdatedAt($value)
  * @method static Builder|Site whereVimeoUrl($value)
  * @method static Builder|Site whereYoutubeUrl($value)
+ *
  * @mixin Eloquent
  */
 class Site extends Model
 {
-	protected array $attrsArray = [];
-	
-	protected $fillable = [
-		'seo_id',
-		'maintenance',
-		'company',
-		'email',
-		'phone',
-		'mobile',
-		'address',
-		'latitude',
-		'longitude',
-		'facebook',
-		'twitter',
-		'youtube',
-		'youtube',
-		'skype',
-		'linkedin',
-		'instagram',
-		'vimeo',
-		'twitch',
-		'whatsapp',
-		'icon',
-		'logo',
-		'logo_invert'
-	];
-	
-	protected $table = 'core_site';
-	
-	/**
-	 * @return $this
-	 */
-	public function attrsToArray(array|string $attrs = []): static
-	{
-		if(is_array($attrs)) {
-			$this->attrsArray = array_merge($this->attrsArray, $attrs);
-		} else {
-			$this->attrsArray[] = $attrs;
-		}
-		
-		return $this;
-	}
-	
-	/**
-	 * @return HasOne
-	 */
-	public function seo(): HasOne
-	{
-		return $this->hasOne(Seo::class, 'id', 'seo_id');
-	}
-	
-	public function toArray(): array
-	{
-		$collection = collect(parent::toArray());
-		
-		foreach($this->attrsArray as $attr) {
-			$collection = $collection->merge([$attr => $this->{$attr}]);
-		}
-		
-		return $collection->toArray();
-	}
-	
+    protected array $attrsArray = [];
+
+    protected $fillable = [
+        'seo_id',
+        'maintenance',
+        'company',
+        'email',
+        'phone',
+        'mobile',
+        'address',
+        'latitude',
+        'longitude',
+        'facebook',
+        'twitter',
+        'youtube',
+        'youtube',
+        'skype',
+        'linkedin',
+        'instagram',
+        'vimeo',
+        'twitch',
+        'whatsapp',
+        'icon',
+        'logo',
+        'logo_invert',
+    ];
+
+    protected $table = 'core_site';
+
+    /**
+     * @return $this
+     */
+    public function attrsToArray(array|string $attrs = []): static
+    {
+        if (is_array($attrs)) {
+            $this->attrsArray = array_merge($this->attrsArray, $attrs);
+        } else {
+            $this->attrsArray[] = $attrs;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function seo(): HasOne
+    {
+        return $this->hasOne(Seo::class, 'id', 'seo_id');
+    }
+
+    public function toArray(): array
+    {
+        $collection = collect(parent::toArray());
+
+        foreach ($this->attrsArray as $attr) {
+            $collection = $collection->merge([$attr => $this->{$attr}]);
+        }
+
+        return $collection->toArray();
+    }
 }
