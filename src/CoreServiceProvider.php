@@ -33,14 +33,14 @@ class CoreServiceProvider extends PackageServiceProvider
 		$this->registerViews();
 		
 		$this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+		
 		$this->publishes([
 			__DIR__ . '/../database/migrations/' => database_path('migrations'),
 		], 'core-migrations');
 		
-		// Install
 		$this->publishes([
-			__DIR__ . '/../install/resources/lang' => resource_path('lang'),
-		], ['core-install']);
+			$this->package->basePath('/../resources/dist') => public_path("vendor/{$this->package->shortName()}"),
+		], ['core', "{$this->package->shortName()}-assets"]);
 		
 		// JS
 		$this->publishes([

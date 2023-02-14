@@ -105,7 +105,7 @@ const submit = () => {
                                   class="grid md:grid-cols-2 lg:grid-cols-3 gap-y-6"
                                   label="description"
                                   name="selectedPermissions"
-                                  value="name"/>
+                                  property-value="name"/>
                     </div>
                     <div class="p-3 bg-gray-50 dark:bg-gray-500 flex justify-end">
                         <SaveFormButton :form="form"/>

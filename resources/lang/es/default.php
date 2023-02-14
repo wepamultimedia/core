@@ -39,4 +39,6 @@ return [
 	'max_size_legend' => 'Es importante que la imagen no tenga un tamaño muy grande ya que influye en el tiempo de carga y puedes ser penalizado por los buscadores y afectar de forma directa en la experiencia del usuario.',
 	'original_size' => 'Preservar el tamaño original',
 	'saved' => 'Guardado',
+	'copy_link' => 'Copiar enlace',
+	'link_copied' => 'Enlace copiado',
 ];

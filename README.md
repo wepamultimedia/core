@@ -23,8 +23,10 @@ npm install vuex@next
 npm install @vueuse/core
 npm install vue-inline-svg@next
 npm install vue-screen@next
+npm install @inertiajs/progress
+npm install sass
 
-npm i vuex@next @vueuse/core vue-inline-svg@next vue-screen@next
+npm i vuex@next @vueuse/core vue-inline-svg@next vue-screen@next @inertiajs/progress sass
 ```
 
 ### Vendor Publish

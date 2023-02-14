@@ -41,4 +41,6 @@ return [
 	'max_size_legend' => 'It is important that the image does not have a very large size because it influences the loading time and can be penalized by search engines and directly affect the user experience.',
 	'original_size' => 'preserve the original size.',
 	'saved' => 'Saved',
+	'copy_link' => 'Copy link',
+	'link_copied' => 'Link copied',
 ];

@@ -6,17 +6,6 @@ export default {
 };
 </script>
 <script setup>
-import { useStore } from "vuex";
-
-const store = useStore();
-function addAlert(){
-    store.dispatch("addAlert", {
-        show: true,
-        message: "Hola mundo",
-        type: "info"
-    });
-}
 </script>
 <template>
-    <button @click="addAlert()">Add alert</button>
 </template>

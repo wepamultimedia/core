@@ -54,7 +54,7 @@ watch(errors, value => {
         const re = new RegExp("[.]" + attrs.name + "$");
         const rex = new RegExp("^" + attrs.name + "$");
         if (re.test(errorKey) || rex.test(errorKey)) {
-            if(typeof errorValue === "object"){
+            if (typeof errorValue === "object") {
                 error.value = errorValue[0];
             } else {
                 error.value = errorValue;
@@ -67,12 +67,12 @@ watch(errors, value => {
 });
 
 onMounted(() => {
-    if (input.value.hasAttribute('autofocus')) {
+    if (input.value.hasAttribute("autofocus")) {
         input.value.focus();
     }
 });
 
-defineExpose({ focus: () => input.value.focus() });
+defineExpose({focus: () => input.value.focus()});
 
 const buildInputValue = () => {
     if (attrs.id) {
@@ -114,17 +114,17 @@ const setInputValue = (value) => {
                 }
                 modelValue.value["translations"][selectedLocale.value][attrs["name"]] = value;
             } else if (modelValue.value.translations.hasOwnProperty(selectedLocale.value)) {
-                modelValue.value["translations"][selectedLocale.value][attrs["name"]] = value;
                 if (modelValue.value["translations"][selectedLocale.value].hasOwnProperty(attrs["name"])) {
+                    modelValue.value["translations"][selectedLocale.value][attrs["name"]] = null;
                     Object.keys(modelValue.value.translations).forEach(locale => {
                         let any = false;
                         Object.keys(modelValue.value.translations[locale]).forEach(property => {
-                            if(modelValue.value.translations[locale][property]){
+                            if (modelValue.value.translations[locale][property]) {
                                 any = true;
                                 return true;
                             }
                         });
-                        if(!any){
+                        if (!any) {
                             delete modelValue.value.translations[locale];
                         }
                     });
@@ -153,11 +153,18 @@ buildInputValue();
                 </span>
             </label>
             <div class="flex items-center mt-1">
+                    <button v-if="$slots.icon" class="py-2.5 px-2 bg-white dark:bg-gray-500 border border-r-0 rounded-l-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
+                            type="button">
+                        <slot name="icon"></slot>
+                    </button>
                 <div class="w-full">
                     <input :id="inputId"
                            ref="input"
                            v-model="inputValue"
-                           :class="{'rounded-r-none ': translation && $page.props.default.locales.length > 1}"
+                           :class="[
+                               {'rounded-r-none': translation && $page.props.default.locales.length > 1},
+                               {'rounded-l-none': $slots.icon}
+                               ]"
                            class="px-3 py-2
                                   placeholder-gray-300 dark:placeholder-gray-500
                                   bg-white dark:bg-inherit
@@ -181,7 +188,8 @@ buildInputValue();
                         {{ legend }}
                     </div>
                 </div>
-                <Dropdown v-if="translation && $page.props.default.locales.length > 1" right>
+                <Dropdown v-if="translation && $page.props.default.locales.length > 1"
+                          right>
                     <template #button="{open}">
                         <button class="py-2.5 px-4 bg-white dark:bg-gray-500 border-t border-b border-r rounded-r-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
                                 type="button">

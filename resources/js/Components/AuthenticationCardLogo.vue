@@ -4,6 +4,6 @@ import { Link } from "@inertiajs/inertia-vue3";</script>
     <Link :href="'/'">
         <inline-svg :alt="$page.props.default.appName"
                     class="h-14"
-                    src="/images/logo.svg"/>
+                    src="/vendor/core/images/logo.svg"/>
     </Link>
 </template>

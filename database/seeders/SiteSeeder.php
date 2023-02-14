@@ -18,25 +18,29 @@ class SiteSeeder extends Seeder
 	 */
 	public function run()
 	{
-		$seo = Seo::create([
-			'package' => 'core',
-			'alias' => 'home',
-			'canonical' => true,
-			'page_type' => 'website',
-			'en' => [
-				'title' => 'Keyword - Company name',
-				'description' => 'Keyword summary of company',
-			],
-			'es' => [
-				'title' => 'Palabra clave - Nombre de empresa',
-				'description' => 'Palabra clave - Resumen de la empresa',
-			],
-		]);
+		if($seo = !Seo::where('alias', 'home')->first()){
+			$seo = Seo::create([
+				'package' => 'core',
+				'alias' => 'home',
+				'canonical' => true,
+				'page_type' => 'website',
+				'en' => [
+					'title' => 'Keyword - Company name',
+					'description' => 'Keyword summary of company',
+				],
+				'es' => [
+					'title' => 'Palabra clave - Nombre de empresa',
+					'description' => 'Palabra clave - Resumen de la empresa',
+				],
+			]);
+		}
 		
-		Site::create([
-			'seo_id' => $seo->id,
-			'updated_at' => $date = Carbon::now(),
-			'created_at' => $date,
-		]);
+		if(!Site::first()){
+			Site::create([
+				'seo_id' => $seo->id,
+				'updated_at' => $date = Carbon::now(),
+				'created_at' => $date,
+			]);
+		}
 	}
 }

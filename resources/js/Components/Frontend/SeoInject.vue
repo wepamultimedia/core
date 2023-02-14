@@ -6,9 +6,10 @@ const props = defineProps(["title"]);
 
 const page = usePage().props.value;
 const seo = page.seo;
-const title = props.title;
-const url = page.default.baseUrl + (seo.slug ? `/${seo.slug}` : "");
+const title = seo?.title ? seo.title : props.title;
+const url = page.default.baseUrl + (seo?.slug ? `/${seo.slug}` : "");
 const locale = page.default.locales.find(loc => loc.code === page.default.locale);
+
 </script>
 <template>
     <Head :title="title">
@@ -17,7 +18,7 @@ const locale = page.default.locales.find(loc => loc.code === page.default.locale
               rel="canonical">
         <meta :content="seo.robots"
               name="robots">
-        <meta :content="seo.description"
+        <meta v-if="seo.description" :content="seo.description"
               name="description">
         <meta :content="seo.image"
               itemprop="image">
@@ -25,7 +26,7 @@ const locale = page.default.locales.find(loc => loc.code === page.default.locale
         <!-- Social media -->
         <meta :content="locale.iso"
               property="og:locale">
-        <meta :content="seo.page_type"
+        <meta v-if="seo.page_type" :content="seo.page_type"
               property="og:type">
         <meta :content="seo.facebook_title ? seo.facebook_title : seo.title"
               property="og:title">

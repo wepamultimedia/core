@@ -7,6 +7,8 @@ import Input from "@/Core/Components/Form/Input.vue";
 import ToggleButton from "@/Core/Components/Form/ToggleButton.vue";
 import { usePage } from "@inertiajs/inertia-vue3";
 import Textarea from "@core/Components/Form/Textarea.vue";
+import { useStore } from "vuex";
+import { __ } from "@core/Mixins/translations";
 
 const props = defineProps({
     errors: String,
@@ -34,7 +36,8 @@ const search = _.throttle(value => {
 const mimeTypes = ref();
 const loading = ref(false);
 const loadingSubmit = ref(false);
-
+const defaultProps = usePage().props.value.default;
+const store = useStore();
 // File
 const fileInput = ref();
 const isImage = () => {
@@ -67,8 +70,32 @@ const file = reactive({
         maxSize: 800
     },
     selected: null,
+    copyLink: () => {
+        let link = `${file.selected.url}`;
+        const el = document.createElement("textarea");
+        el.value = link;
+        el.setAttribute("readonly", "");
+        el.style.position = "absolute";
+        el.style.left = "-9999px";
+        document.body.appendChild(el);
+        const selected = document.getSelection().rangeCount > 0 ? document.getSelection().getRangeAt(0) : false;
+        el.select();
+        document.execCommand("copy");
+        document.body.removeChild(el);
+        if (selected) {
+            document.getSelection().removeAllRanges();
+            document.getSelection().addRange(selected);
+        }
+
+        //navigator.clipboard.writeText(link);
+        store.dispatch("addAlert", {
+            type: "info",
+            title: `${__("link_copied")}`,
+            message: `${link}`
+        });
+    },
     createSubmit: () => {
-        if(!loading.value) {
+        if (!loading.value) {
             const formData = new FormData();
             formData.append("parent_id", currentParentId.value ? currentParentId.value : "");
             formData.append("name", file.form.name);
@@ -77,20 +104,12 @@ const file = reactive({
             formData.append("file", fileInput.value.files[0]);
             formData.append("max_size", file.originalSize ? 0 : file.form.maxSize);
             loading.value = true;
-            axios.post(route("api.filenamager.file.store", {
+            axios.post(route("api.v1.filenamager.file.store", {
                 parentId: currentParentId.value,
                 page: files.value.current_page
-            }), formData, {
-                withCredentials: true,
-                headers: {
-                    "Authorization": "Bearer " + usePage().props.value.default.access_token,
-                    "Content-Type": "multipart/form-data"
-                }
-            }).then(response => {
-                if (response.status === 200) {
-                    refresh(response.data);
-                    resetFileFlap();
-                }
+            }), formData).then(response => {
+                refresh(response.data);
+                resetFileFlap();
                 loading.value = false;
             }).catch(error => {
                 errors.value = error.response.data.errors;
@@ -100,7 +119,7 @@ const file = reactive({
     },
     updateSubmit: () => {
         loading.value = true;
-        axios.put(route("api.filenamager.file.update", {
+        axios.put(route("api.v1.filenamager.file.update", {
             file: file.form.id,
             page: files.value.current_page
         }), {
@@ -109,16 +128,9 @@ const file = reactive({
             "name": file.form.name,
             "alt_name": file.form.altName,
             "description": file.form.description
-        }, {
-            withCredentials: true,
-            headers: {
-                "Authorization": "Bearer " + usePage().props.value.default.access_token
-            }
         }).then(response => {
-            if (response.status === 200) {
-                refresh(response.data);
-                resetFileFlap();
-            }
+            refresh(response.data);
+            resetFileFlap();
             loading.value = false;
         }).catch(error => {
             errors.value = error.response.data.errors;
@@ -127,16 +139,9 @@ const file = reactive({
     },
     deleteSubmit: () => {
         loading.value = true;
-        axios.delete(route("api.filenamager.file.destroy", {file: file.form.id}), {
-            withCredentials: true,
-            headers: {
-                "Authorization": "Bearer " + usePage().props.value.default.access_token
-            }
-        }).then(response => {
-            if (response.status === 200) {
-                getFiles(currentParentId.value);
-                resetFileFlap();
-            }
+        axios.delete(route("api.v1.filenamager.file.destroy", {file: file.form.id})).then(response => {
+            getFiles(currentParentId.value);
+            resetFileFlap();
             loading.value = false;
         }).catch(error => {
             errors.value = error.response.data.errors;
@@ -191,20 +196,15 @@ const folder = reactive({
     confirmDeleteInput: "",
     form: {
         id: null,
+        parent_id: currentParentId.value,
         name: ""
     },
     createSubmit: () => {
         loading.value = true;
-        axios.post(route("api.filenamager.folder.store", {parentId: currentParentId.value}), folder.form, {
-            withCredentials: true,
-            headers: {
-                "Authorization": "Bearer " + usePage().props.value.default.access_token
-            }
-        }).then(response => {
-            if (response.status === 200) {
-                refresh(response.data);
-                resetFolderFlap();
-            }
+        folder.form.parent_id = currentParentId;
+        axios.post(route("api.v1.filenamager.folder.store", {parentId: currentParentId.value}), folder.form).then(response => {
+            refresh(response.data);
+            resetFolderFlap();
             loading.value = false;
         }).catch(error => {
             errors.value = error.response.data.errors;
@@ -213,20 +213,13 @@ const folder = reactive({
     },
     updateSubmit: () => {
         loading.value = true;
-        axios.put(route("api.filenamager.folder.update", {
+        axios.put(route("api.v1.filenamager.folder.update", {
             file: folder.form.id,
             parentId: currentParentId.value,
             page: files.value.current_page
-        }), folder.form, {
-            withCredentials: true,
-            headers: {
-                "Authorization": "Bearer " + usePage().props.value.default.access_token
-            }
-        }).then(response => {
-            if (response.status === 200) {
-                refresh(response.data);
-                resetFolderFlap();
-            }
+        }), folder.form).then(response => {
+            refresh(response.data);
+            resetFolderFlap();
             loading.value = false;
         }).catch(error => {
             errors.value = error.response.data.errors;
@@ -235,20 +228,13 @@ const folder = reactive({
     },
     deleteSubmit: () => {
         loading.value = true;
-        axios.delete(route("api.filenamager.file.destroy", {
+        axios.delete(route("api.v1.filenamager.file.destroy", {
             file: folder.form.id,
             parentId: currentParentId.value,
             page: files.value.current_page
-        }), {
-            withCredentials: true,
-            headers: {
-                "Authorization": "Bearer " + usePage().props.value.default.access_token
-            }
-        }).then(response => {
-            if (response.status === 200) {
-                getFiles(currentParentId.value, currentPage.value);
-                resetFolderFlap();
-            }
+        })).then(response => {
+            getFiles(currentParentId.value, currentPage.value);
+            resetFolderFlap();
             loading.value = false;
         }).catch(error => {
             errors.value = error.response.data.errors;
@@ -294,20 +280,13 @@ const refresh = data => {
 };
 const getFiles = (parentId = null, page = null, search = null) => {
     loading.value = true;
-    axios.get(route("api.filenamager.index", {
+    axios.get(route("api.v1.filenamager.index", {
         parentId,
         page,
         search
-    }), {
-        withCredentials: true,
-        headers: {
-            "Authorization": "Bearer " + usePage().props.value.default.access_token
-        }
-    }).then(response => {
-        if (response.status === 200) {
-            currentParentId.value = parentId;
-            refresh(response.data);
-        }
+    })).then(response => {
+        currentParentId.value = parentId;
+        refresh(response.data);
         loading.value = false;
     }).catch(error => {
         errors.value = error.response.data.errors;
@@ -315,12 +294,7 @@ const getFiles = (parentId = null, page = null, search = null) => {
     });
 };
 const getMimeTypes = () => {
-    axios.get(route("api.filenamager.mime_types"), {
-        withCredentials: true,
-        headers: {
-            "Authorization": "Bearer " + usePage().props.value.default.access_token
-        }
-    }).then(response => {
+    axios.get(route("api.v1.filenamager.mime_types")).then(response => {
         mimeTypes.value = response.data;
         loading.value = false;
     }).catch(error => {
@@ -452,7 +426,9 @@ getMimeTypes();
                      @click="file.type.icon === 'folder' ? onClick(() => updateFolder(file), () => getFiles(file.id)) : updateFile(file)">
                     <inline-svg :src="'/vendor/core/icons/file-types/' + file.type.icon + '.svg'"
                                 class="w-full h-auto"></inline-svg>
-                    <p class="text-sm font-bold mt-2 text-center">{{ file.name }}.{{ file.type.extension }}</p>
+                    <p class="text-sm font-bold mt-2 text-center">{{ file.name }}
+                        <span v-if="file.type.extension !== '.'">.{{ file.type.extension }}</span>
+                    </p>
                 </div>
             </div>
         </div>
@@ -478,7 +454,8 @@ getMimeTypes();
                        :errors="errors"
                        :label="__('name')"
                        name="name"/>
-                <button class="btn btn-success justify-center"
+                <button :disabled="loading"
+                        class="btn btn-success justify-center"
                         type="submit">{{ __("save") }}
                 </button>
                 <button class="btn btn-secondary justify-center"
@@ -496,7 +473,8 @@ getMimeTypes();
                        :errors="errors"
                        :label="__('name')"
                        name="name"/>
-                <button class="btn btn-success justify-center"
+                <button :disabled="loading"
+                        class="btn btn-success justify-center"
                         type="submit">{{ __("save") }}
                 </button>
                 <button class="btn btn-info justify-center"
@@ -545,8 +523,7 @@ getMimeTypes();
                    name="name"
                    required/>
             <div v-if="isImage()">
-                <Textarea
-                          v-model="file.form.altName"
+                <Textarea v-model="file.form.altName"
                           :errors="errors"
                           :label="__('alt_name')"
                           :legend="__('image_alt_name_legend')"
@@ -554,8 +531,7 @@ getMimeTypes();
                           required></Textarea>
             </div>
             <div v-if="isImage()">
-                <Textarea
-                          v-model="file.form.description"
+                <Textarea v-model="file.form.description"
                           :errors="errors"
                           :label="__('description')"
                           :legend="__('image_description_legend')"
@@ -603,8 +579,16 @@ getMimeTypes();
                     @click.prevent="file.createSubmit()">
                 <span v-if="!loading">{{ __("upload") }}</span>
                 <span v-if="loading">
-                    <svg fill="none" class="animate-spin w-5 h-5 " stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"></path>
+                    <svg aria-hidden="true"
+                         class="animate-spin w-5 h-5 "
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="1.5"
+                         viewBox="0 0 24 24"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"></path>
                     </svg>
                 </span>
             </button>
@@ -648,6 +632,10 @@ getMimeTypes();
             <button class="btn btn-success justify-center"
                     type="button"
                     @click.prevent="file.updateSubmit()">{{ __("save") }}
+            </button>
+            <button class="btn btn-info justify-center"
+                    type="button"
+                    @click.prevent="file.copyLink()">{{ __("copy_link") }}
             </button>
             <button class="btn btn-secondary justify-center"
                     @click.prevent="resetFileFlap()">{{ __("close") }}

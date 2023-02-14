@@ -3,6 +3,7 @@
 namespace Wepa\Core\Http\Traits;
 
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Lang;
@@ -21,34 +22,7 @@ trait InertiaControllerTrait
 	protected array $share = [];
 	protected array $translations = [];
 	
-	public function addSeo(string $alias): void
-	{
-		$seo = Seo::where('alias', $alias)->first()->attrsToArray('site');
-		
-		// Si tiene seo y no tiene la etiqueta noindex o nofollow defino lo contrario
-		if(!$seo->robots) {
-			$seo->robots = ['index', 'follow'];
-		} else {
-			if(!in_array('noindex', $seo->robots)) {
-				$seo->robots = array_merge($seo->robots, ['index']);
-			}
-			
-			if(!in_array('nofollow', $seo->robots)) {
-				$seo->robots = array_merge($seo->robots, ['follow']);
-			}
-		}
-		
-		// Si no tiene seo defino noindex y no follow
-		if(!$seo) {
-			$seo = new Seo([
-				'robots' => ['noindex', 'nofollow'],
-			]);
-		}
-		
-		$this->addShare([
-			'seo' => $seo->toArray(),
-		]);
-	}
+	
 	
 	/**
 	 * @param array $share
@@ -85,19 +59,13 @@ trait InertiaControllerTrait
 	 *
 	 * @return void
 	 */
-	protected function buildRender(string $view,
+	protected function buildRender(string &$view,
 	                               mixed  $tranlation = []): void
 	{
 		$this->buildViewPath($view);
 		
-		$user = request()->user();
-		
-		if($user)
-			$user->tokens()->where('name', 'inertia')->delete();
-
 		$defatultShare = [
 			'default' => [
-				'access_token' => $user ? $user->createToken('inertia')->plainTextToken : null,
 				'theme' => config('core.theme'),
 				'locale' => app()->getLocale(),
 				'locales' => config('core.locales'),
@@ -232,6 +200,7 @@ trait InertiaControllerTrait
 	                       mixed  $tranlation = [],
 	                       array  $props = []): Response
 	{
+		$this->beforeRender();
 		$this->buildRender($view, $tranlation);
 		
 		return Inertia::render($view, $props);

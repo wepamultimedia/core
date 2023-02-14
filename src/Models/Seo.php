@@ -8,6 +8,7 @@ use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use phpDocumentor\Reflection\Types\Boolean;
 use Wepa\Core\Http\Traits\TranslationsTrait;
 
@@ -70,6 +71,7 @@ class Seo extends Model implements TranslatableContract
 	
 	
 	public $timestamps = false;
+	
 	public array $translatedAttributes = [
 		'keyword',
 		'title',
@@ -86,12 +88,15 @@ class Seo extends Model implements TranslatableContract
 		'twitter_image_title',
 		'twitter_image_alt',
 	];
+	
 	protected array $attrsArray = [];
+	
 	protected $casts = [
 		'route_params' => 'array',
 		'request_params' => 'array',
 		'robots' => 'array',
 	];
+	
 	protected $fillable = [
 		'controller',
 		'package',
@@ -123,22 +128,31 @@ class Seo extends Model implements TranslatableContract
 		return $this;
 	}
 	
-	public function site() : Attribute
-	{
-		return Attribute::make(
-			get: fn () => Site::first()->only(['company', 'email', 'phone', 'mobile', 'address', 'latitude', 'longitude']),
-		);
-	}
-	
-	public function toArray()
+	/**
+	 * @return array|Collection
+	 */
+	public function toArray(): array|Collection
 	{
 		$collection = collect(parent::toArray())
-			->merge(['translations' => $this->getTranslationsArray()]);
+			->merge(['translations' => $this->getTranslationsArray()])
+			->merge(['site' => $this->site()]);
 		
 		foreach($this->attrsArray as $attr) {
 			$collection = $collection->merge([$attr => $this->{$attr}]);
 		}
 		
 		return $collection;
+	}
+	
+	/**
+	 * @return Attribute
+	 */
+	public function site(): Attribute
+	{
+		return Attribute::make(
+			get: fn() => Site::first()->only([
+				'company', 'email', 'phone', 'mobile', 'address', 'latitude', 'longitude'
+			]),
+		);
 	}
 }

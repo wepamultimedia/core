@@ -9,6 +9,26 @@ return [
 		'frontend' => '',
 		'backend'  => '',
 	], // resources/views/themes/{theme}
+	'locales'      => [
+		[
+			'code' => 'es',
+			'iso'  => 'es_ES',
+			'flag'  => 'ES',
+			'name' => 'Español',
+		],
+//		[
+//			'code' => 'en',
+//			'iso'  => 'en_US',
+//			'flag'  => 'US',
+//			'name' => 'English',
+//		],
+//		[
+//			'code' => 'fr',
+//			'iso'  => 'fr_FR',
+//			'flag'  => 'FR',
+//			'name' => 'Française',
+//		],
+	],
 	'backend_menu' => [
 		[
 			'label'    => 'en:Dashboard|es:Escritorio',
@@ -82,24 +102,5 @@ return [
 			'position' => 4,
 		],
 	],
-	'locales'      => [
-		[
-			'code' => 'es',
-			'iso'  => 'es_ES',
-			'flag'  => 'ES',
-			'name' => 'Español',
-		],
-		[
-			'code' => 'en',
-			'iso'  => 'en_US',
-			'flag'  => 'US',
-			'name' => 'English',
-		],
-		[
-			'code' => 'fr',
-			'iso'  => 'fr_FR',
-			'flag'  => 'FR',
-			'name' => 'Française',
-		],
-	],
+	
 ];

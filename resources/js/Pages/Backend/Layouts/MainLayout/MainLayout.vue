@@ -164,17 +164,17 @@ const logout = () => {
 </template>
 <style scoped>
 .logo-white {
-    background-image : url("/images/logo-white.svg");
+    background-image : url("/vendor/core/images/logo-white.svg");
     @apply bg-contain bg-left-bottom bg-no-repeat h-10
 }
 
 .dark .logo {
-    background-image : url("/images/logo-white.svg");
+    background-image : url("/vendor/core/images/logo-white.svg");
     @apply bg-contain bg-left-bottom bg-no-repeat h-10
 }
 
 .logo {
-    background-image : url("/images/logo.svg");
+    background-image : url("/vendor/core/images/logo.svg");
     @apply bg-contain bg-left-bottom bg-no-repeat h-10
 }
 </style>

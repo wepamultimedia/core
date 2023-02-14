@@ -266,17 +266,22 @@ onMounted(() => {
         }
     });
     watch(() => values.title, (value, oldValue) => {
+        values.facebook_title = values.facebook_title === null ? '' : values.facebook_title;
         if (values.facebook_title === oldValue) {
             values.facebook_title = value;
         }
+
+        values.twitter_title = values.twitter_title === null ? '' : values.twitter_title;
         if (values.twitter_title === oldValue) {
             values.twitter_title = value;
         }
     });
     watch(() => values.description, (value, oldValue) => {
+        values.facebook_description = values.facebook_description === null ? '' : values.facebook_description;
         if (values.facebook_description === oldValue) {
             values.facebook_description = value;
         }
+        values.twitter_description = values.twitter_description === null ? '' : values.twitter_description;
         if (values.twitter_description === oldValue) {
             values.twitter_description = value;
         }

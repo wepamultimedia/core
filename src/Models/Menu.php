@@ -109,34 +109,26 @@ class Menu extends Model implements TranslatableContract
 					$item, ['package' => $package, 'app' => $app]
 				);
 				
-				if(!$menu = Menu::where('package', $package)
-					->where('app', $app)
-					->where('parent_id', $parentId)
-					->where('route', $newItem['route'])) {
-					
-					unset($newItem['children']);
-					$newItem['position'] = self::nextPosition(['parent_id' => $parentId]);
-					
-					$menu = Menu::create($newItem);
-					
-					if(Arr::exists($item, 'position')) {
-						$menu->updatePosition($item['position'],
-							['parent_id' => $parentId]);
-					}
-					
-					if($parentId) {
-						$menu->parent_id = $parentId;
-						$menu->save();
-					}
-					
-					if(Arr::exists($item, 'children')) {
-						$this->addItems($item['children'],
-							$package,
-							$app,
-							$menu->id);
-					}
-				} else {
-					$menu->update($newItem);
+				unset($newItem['children']);
+				$newItem['position'] = self::nextPosition(['parent_id' => $parentId]);
+				
+				$menu = Menu::create($newItem);
+				
+				if(Arr::exists($item, 'position')) {
+					$menu->updatePosition($item['position'],
+						['parent_id' => $parentId]);
+				}
+				
+				if($parentId) {
+					$menu->parent_id = $parentId;
+					$menu->save();
+				}
+				
+				if(Arr::exists($item, 'children')) {
+					$this->addItems($item['children'],
+						$package,
+						$app,
+						$menu->id);
 				}
 			}
 		}

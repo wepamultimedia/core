@@ -1,6 +1,6 @@
 <?php
 
-namespace Wepa\Core\Http\Controllers\Api;
+namespace Wepa\Core\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;

@@ -1,6 +1,4 @@
 import { createStore } from "vuex";
-import { usePage } from "@inertiajs/inertia-vue3";
-import { random } from "lodash";
 
 const store = createStore({
     state: {
@@ -9,11 +7,7 @@ const store = createStore({
         menu: []
     }, actions: {
         async menu({commit, dispatch}, app) {
-            axios.get("/api/menu/" + app, {
-                withCredentials: true, headers: {
-                    "Authorization": `Bearer ${usePage().props.value.default.access_token}`
-                }
-            }).then(response => {
+            axios.get(route("api.v1.menu.index", {app: "backend"})).then(response => {
                 commit("SET_MENU", response.data);
                 dispatch("menuActiveItem");
             }).catch(() => {
@@ -64,11 +58,11 @@ const store = createStore({
         ADD_ALERT(state, alert) {
             let showAny = false;
             state.alerts.map(a => {
-                if(a.show)
+                if (a.show)
                     showAny = true;
             });
 
-            if(!showAny)
+            if (!showAny)
                 state.alerts = state.alerts.filter(a => a.show === true);
 
             alert.id = uuid();
@@ -77,7 +71,7 @@ const store = createStore({
         },
         REMOVE_ALERT(state, alert) {
             let index = state.alerts.indexOf(state.alerts.find(a => a.id === alert.id));
-            state.alerts[index].show = false
+            state.alerts[index].show = false;
         }
     }
 });
@@ -85,8 +79,9 @@ const store = createStore({
 export default store;
 
 function uuid() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        let r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+        let r = Math.random() * 16 | 0,
+            v = c === "x" ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
 }

@@ -66,7 +66,9 @@ class RoleSeeder extends Seeder
 	    ];
 	
 	    foreach($roles as $role) {
-		    Role::create(array_merge($role, ['guard_name' => 'web']));
+			if(!Role::where('name', $role['name'])->first()){
+		        Role::create(array_merge($role, ['guard_name' => 'web']));
+			}
 	    }
 	
 	    $permissions = [
@@ -143,7 +145,9 @@ class RoleSeeder extends Seeder
 	    ];
 	
 	    foreach($permissions as $permission) {
-		    Permission::create(array_merge($permission, ['guard_name' => 'web']));
+		    if(!Permission::where('name', $permission['name'])->first()) {
+			    Permission::create(array_merge($permission, ['guard_name' => 'web']));
+		    }
 	    }
 	
 	    // Asign super admin role to super admin user

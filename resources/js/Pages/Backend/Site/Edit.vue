@@ -21,7 +21,7 @@ import { useStore } from "vuex";
 import { __ } from "@core/Mixins/translations";
 import iconSizes from "@core/Mixins/iconSizes";
 
-const props = defineProps(["site","errors", "seo"]);
+const props = defineProps(["site", "errors", "seo"]);
 const store = useStore();
 const {site, seo} = toRefs(props);
 
@@ -36,6 +36,15 @@ const form = reactive({
     address: site.value.address,
     latitude: site.value.latitude,
     longitude: site.value.longitude,
+    facebook: site.value.facebook,
+    twitter: site.value.twitter,
+    youtube: site.value.youtube,
+    skype: site.value.skype,
+    linkedin: site.value.linkedin,
+    instagram: site.value.instagram,
+    vimeo: site.value.vimeo,
+    twitch: site.value.twitch,
+    whatsapp: site.value.whatsapp,
     seo: site.value.seo
 });
 const formIcon = useForm({
@@ -45,6 +54,10 @@ const formIcon = useForm({
 const SeoFormComponent = ref();
 const submiting = ref(false);
 const defaultProps = usePage().props.value.default;
+const sections = reactive({
+    general: true,
+    social: false
+});
 
 function checkIcons() {
     const url = `${defaultProps.storageUrl}/icons`;
@@ -56,19 +69,20 @@ function checkIcons() {
         });
     });
 }
+
 function submit() {
     submiting.value = true;
     axios.put(route("admin.site.update"), form, {
         preserveScroll: true,
-        preserveState: true,
+        preserveState: true
     }).then(() => {
         store.dispatch("addAlert", {type: "success", message: __("saved")});
         submiting.value = false;
-    }).catch(()=> {
+    }).catch(() => {
         store.dispatch("addAlert", {type: "error", message: errors.value});
 
         submiting.value = false;
-    })
+    });
 
 
     // form.put(route("admin.site.update"), {
@@ -97,20 +111,29 @@ function submit() {
     //     }
     // });
 }
+
 function submitIcon() {
-    if(formIcon.file) {
+    if (formIcon.file) {
         formIcon.post(route("admin.site.icons.generate"), {
             preserveState: true,
             preserveScroll: true,
             onSuccess: () => {
                 store.dispatch("addAlert", {type: "success", message: __("icons_generated")});
-                checkIcons()
+                checkIcons();
             }
         });
     }
 }
-function setPlace(place){
+
+function setPlace(place) {
     console.log(place);
+}
+
+function activeSeccion(section) {
+    Object.keys(sections).forEach(function (key) {
+        sections[key] = false;
+    });
+    sections[section] = true;
 }
 
 checkIcons();
@@ -126,63 +149,186 @@ checkIcons();
                 <div class="col-span-1">
                     <p class="text-sm">{{ __("edit_summary") }}</p>
                 </div>
-                <div class="col-span-2
-                        border
-                        dark:border-gray-600
-                        bg-white dark:bg-gray-600
-                        text-gray-700 dark:text-gray-300
-                        rounded-lg
-                        shadow">
-                    <div class="grid grid-cols-6 p-6">
-                        <div class="col-span-6 sm:col-span-6 lg:col-span-5 xl:col-span-4 mb-6">
-                            <div class="mb-4">
-                                <Input v-model="form.company"
-                                       :errors="errors"
-                                       :label="__('company')"
-                                       autofocus
-                                       name="company"/>
-                            </div>
-                            <div class="mb-4">
-                                <Input v-model="form.email"
-                                       :errors="errors"
-                                       :label="__('email')"
-                                       name="email"
-                                       type="email"/>
-                            </div>
-                            <div class="mb-4 grid grid-cols-2 gap-2">
-                                <Input v-model="form.phone"
-                                       :errors="errors"
-                                       :label="__('phone')"
-                                       name="phone"/>
-                                <Input v-model="form.mobile"
-                                       :errors="errors"
-                                       :label="__('mobile')"
-                                       name="mobile"/>
-                            </div>
-                            <div class="mb-4">
-                                <Input v-model="form.address"
-                                       :errors="errors"
-                                       :label="__('address')"
-                                       name="address"/>
-                            </div>
-                            <div class="mb-4 grid grid-cols-2 gap-2">
-                                <Input v-model="form.latitude"
-                                       :errors="errors"
-                                       :label="__('latitude')"
-                                       name="latitude"/>
-                                <Input v-model="form.longitude"
-                                       :errors="errors"
-                                       :label="__('longitude')"
-                                       name="longitude"/>
-                            </div>
-                            <div>
+                <div class="col-span-2">
+                    <!-- Buttons -->
+                    <div class="grid grid-cols-2 gap-1 mb-2 sm:mb-0">
+                        <button :class="{'bg-white dark:bg-gray-600 font-bold': sections.general}"
+                                class="sm:mb-0 border sm:border-b-0 border-gray-300 dark:border-gray-700 z-10 px-4 py-2 rounded sm:rounded-b-none"
+                                type="button"
+                                @click="activeSeccion('general')">
+                            {{ __("general") }}
+                        </button>
+                        <button :class="{'bg-white dark:bg-gray-600': sections.social}"
+                                class="sm:mb-0 border sm:border-b-0 border-gray-300 dark:border-gray-700 z-10 px-4 py-2 rounded sm:rounded-b-none"
+                                type="button"
+                                @click="activeSeccion('social')">
+                            {{ __("social_networks") }}
+                        </button>
+                    </div>
+                    <div class="border
+                                border border-t-0 border-gray-300 dark:border-gray-700
+                                dark:border-gray-600
+                                bg-white dark:bg-gray-600
+                                text-gray-700 dark:text-gray-300
+                                rounded-b-lg
+                                shadow">
+                        <!-- General -->
+                        <div v-show="sections.general"
+                             class="grid grid-cols-6 p-6">
+                            <div class="col-span-6 sm:col-span-6 lg:col-span-5 xl:col-span-4 mb-6">
+                                <div class="mb-4">
+                                    <Input v-model="form.company"
+                                           :errors="errors"
+                                           :label="__('company')"
+                                           autofocus
+                                           name="company"/>
+                                </div>
+                                <div class="mb-4">
+                                    <Input v-model="form.email"
+                                           :errors="errors"
+                                           :label="__('email')"
+                                           name="email"
+                                           type="email"/>
+                                </div>
+                                <div class="mb-4 grid grid-cols-2 gap-2">
+                                    <Input v-model="form.phone"
+                                           :errors="errors"
+                                           :label="__('phone')"
+                                           name="phone"/>
+                                    <Input v-model="form.mobile"
+                                           :errors="errors"
+                                           :label="__('mobile')"
+                                           name="mobile"/>
+                                </div>
+                                <div class="mb-4">
+                                    <Input v-model="form.address"
+                                           :errors="errors"
+                                           :label="__('address')"
+                                           name="address"/>
+                                </div>
+                                <div class="mb-4 grid grid-cols-2 gap-2">
+                                    <Input v-model="form.latitude"
+                                           :errors="errors"
+                                           :label="__('latitude')"
+                                           name="latitude"/>
+                                    <Input v-model="form.longitude"
+                                           :errors="errors"
+                                           :label="__('longitude')"
+                                           name="longitude"/>
+                                </div>
+                                <div></div>
                             </div>
                         </div>
-                    </div>
-                    <div class="rounded-b-lg overflow-hidden">
-                        <div class="p-3 bg-gray-200 dark:bg-gray-500 flex justify-end items-center">
-                            <SaveFormButton :form="form"
-                                            :submiting="submiting"/>
+                        <!-- Social networks -->
+                        <div v-show="sections.social"
+                             class="grid grid-cols-6 p-6">
+                            <div class="col-span-6 sm:col-span-6 lg:col-span-5 xl:col-span-4 mb-6">
+                                <div class="mb-4">
+                                    <Input v-model="form.facebook"
+                                           :errors="errors"
+                                           autofocus
+                                           name="facebook">
+                                        <template #icon>
+                                            <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
+                                                        src="/vendor/core/icons/social-networks/facebook.svg"></inline-svg>
+                                        </template>
+                                    </Input>
+                                </div>
+                                <div class="mb-4">
+                                    <Input v-model="form.twitter"
+                                           :errors="errors"
+                                           autofocus
+                                           name="twitter">
+                                        <template #icon>
+                                            <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
+                                                        src="/vendor/core/icons/social-networks/twitter.svg"></inline-svg>
+                                        </template>
+                                    </Input>
+                                </div>
+                                <div class="mb-4">
+                                    <Input v-model="form.youtube"
+                                           :errors="errors"
+                                           autofocus
+                                           name="youtube">
+                                        <template #icon>
+                                            <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
+                                                        src="/vendor/core/icons/social-networks/youtube.svg"></inline-svg>
+                                        </template>
+                                    </Input>
+                                </div>
+                                <div class="mb-4">
+                                    <Input v-model="form.skype"
+                                           :errors="errors"
+                                           autofocus
+                                           name="skype">
+                                        <template #icon>
+                                            <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
+                                                        src="/vendor/core/icons/social-networks/skype.svg"></inline-svg>
+                                        </template>
+                                    </Input>
+                                </div>
+                                <div class="mb-4">
+                                    <Input v-model="form.linkedin"
+                                           :errors="errors"
+                                           autofocus
+                                           name="linkedin">
+                                        <template #icon>
+                                            <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
+                                                        src="/vendor/core/icons/social-networks/linkedin.svg"></inline-svg>
+                                        </template>
+                                    </Input>
+                                </div>
+                                <div class="mb-4">
+                                    <Input v-model="form.instagram"
+                                           :errors="errors"
+                                           autofocus
+                                           name="instagram">
+                                        <template #icon>
+                                            <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
+                                                        src="/vendor/core/icons/social-networks/instagram.svg"></inline-svg>
+                                        </template>
+                                    </Input>
+                                </div>
+                                <div class="mb-4">
+                                    <Input v-model="form.vimeo"
+                                           :errors="errors"
+                                           autofocus
+                                           name="vimeo">
+                                        <template #icon>
+                                            <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
+                                                        src="/vendor/core/icons/social-networks/vimeo.svg"></inline-svg>
+                                        </template>
+                                    </Input>
+                                </div>
+                                <div class="mb-4">
+                                    <Input v-model="form.twitch"
+                                           :errors="errors"
+                                           autofocus
+                                           name="twitch">
+                                        <template #icon>
+                                            <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
+                                                        src="/vendor/core/icons/social-networks/twitch.svg"></inline-svg>
+                                        </template>
+                                    </Input>
+                                </div>
+                                <div class="mb-4">
+                                    <Input v-model="form.whatsapp"
+                                           :errors="errors"
+                                           autofocus
+                                           name="whatsapp">
+                                        <template #icon>
+                                            <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
+                                                        src="/vendor/core/icons/social-networks/whatsapp.svg"></inline-svg>
+                                        </template>
+                                    </Input>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rounded-b-lg overflow-hidden">
+                            <div class="p-3 bg-gray-200 dark:bg-gray-500 flex justify-end items-center">
+                                <SaveFormButton :form="form"
+                                                :submiting="submiting"/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -225,7 +371,8 @@ checkIcons();
                                    name="file"
                                    type="file"
                                    @input="formIcon.file = $event.target.files[0]"/>
-                            <SaveFormButton :form="formIcon" v-if="formIcon.file"
+                            <SaveFormButton v-if="formIcon.file"
+                                            :form="formIcon"
                                             type="button"
                                             @click.prevent="submitIcon()">{{ __("generate_icons") }}
                             </SaveFormButton>
@@ -255,15 +402,24 @@ checkIcons();
                                                       d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
                                                       fill-rule="evenodd"></path>
                                             </svg>
-                                            <a :href="`${defaultProps.storageUrl}/icons/${icon.name}.png`" target="_blank" class="text-sm">{{ icon.name }}</a>
+                                            <a :href="`${defaultProps.storageUrl}/icons/${icon.name}.png`"
+                                               class="text-sm"
+                                               target="_blank">{{ icon.name }}
+                                            </a>
                                         </li>
                                     </ul>
                                 </li>
                             </ul>
                         </div>
                         <div class="p-6 flex items-center justify-center gap-2">
-                            <a class="btn btn-info" :href="`${defaultProps.storageUrl}/icons/manifest.json`" target="_blank">manifest.json</a>
-                            <a class="btn btn-info" :href="`${defaultProps.storageUrl}/icons/browserconfig.xml`" target="_blank">browserconfig.xml</a>
+                            <a :href="`${defaultProps.storageUrl}/icons/manifest.json`"
+                               class="btn btn-info"
+                               target="_blank">manifest.json
+                            </a>
+                            <a :href="`${defaultProps.storageUrl}/icons/browserconfig.xml`"
+                               class="btn btn-info"
+                               target="_blank">browserconfig.xml
+                            </a>
                         </div>
                     </div>
                     <div class="rounded-b-lg overflow-hidden">
@@ -275,7 +431,6 @@ checkIcons();
                 </div>
             </div>
         </form>
-
     </div>
 </template>
 <style lang="scss"

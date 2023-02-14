@@ -24,7 +24,7 @@ const alerts = computed(() => store.getters["alerts"]);
 const {timeout, position} = toRefs(props);
 </script>
 <template>
-    <div class="grid z-30 w-[90%] md:w-1/2 xl:w-2/5 fixed"
+    <div class="grid z-50 w-[90%] md:w-1/2 xl:w-2/5 fixed"
         :class="[
             {'left-1/2 -translate-x-1/2 bottom-5' : position === 'bottom-center'},
             {'right-5 bottom-5' : position === 'bottom-right'},

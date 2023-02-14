@@ -1,6 +1,6 @@
 <?php
 
-namespace Wepa\Core\Http\Controllers\Api;
+namespace Wepa\Core\Http\Controllers\Api\V1;
 
 
 use App\Http\Controllers\Controller;
@@ -134,7 +134,7 @@ class FileManagerController extends Controller
 	 */
 	public function folderUpdate(Request $request,
 	                             File    $file,
-	                             string  $parentId = null): array
+	                             int  $parentId = null): array
 	{
 		$this->validate($request, [
 			'name' => 'string|required',
@@ -197,7 +197,7 @@ class FileManagerController extends Controller
 		
 		if($file->extension() === 'jpg' or $file->extension() === 'jpeg' or $file->extension() === 'png') {
 			
-			$name = $name ?? time() . '.' . $file->extension();
+			$name = $name ?? time() . 'Api' . $file->extension();
 
 			if($savedFile = $this->storageImage($file, 'file-manager', $name, $request->max_size)) {
 				$data = collect($request->all())->filter()

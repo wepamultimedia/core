@@ -17,7 +17,7 @@ return new class extends Migration {
 		Schema::create('core_seo', function(Blueprint $table) {
 			$table->id();
 			$table->string('package')->index()->nullable();
-			$table->string('alias')->index()->nullable();
+			$table->string('alias')->index()->unique()->nullable();
 			$table->string('controller')->nullable();
 			$table->string('action')->nullable();
 			$table->string('request_params')->nullable();
@@ -30,6 +30,7 @@ return new class extends Migration {
 			$table->string('facebook_image')->nullable();
 			$table->string('twitter_image')->nullable();
 		});
+		
 		Schema::create('core_seo_translations', function(Blueprint $table) {
 			$table->id();
 			$table->foreignId('seo_id');

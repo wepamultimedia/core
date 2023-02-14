@@ -75,15 +75,8 @@ const setInputValue = (value) => {
                 }
                 modelValue.value["translations"][selectedLocale.value][attrs["name"]] = value;
             } else if (modelValue.value.translations.hasOwnProperty(selectedLocale.value)) {
-                modelValue.value["translations"][selectedLocale.value][attrs["name"]] = value;
                 if (modelValue.value["translations"][selectedLocale.value].hasOwnProperty(attrs["name"])) {
-                    // delete modelValue.value["translations"][selectedLocale.value][attrs["name"]];
-                    // Object.keys(modelValue.value.translations).forEach(locale => {
-                    //     if (!Object.keys(modelValue.value.translations[locale]).length) {
-                    //         delete modelValue.value.translations[locale];
-                    //     }
-                    // });
-
+                    modelValue.value["translations"][selectedLocale.value][attrs["name"]] = null;
                     Object.keys(modelValue.value.translations).forEach(locale => {
                         let any = false;
                         Object.keys(modelValue.value.translations[locale]).forEach(property => {

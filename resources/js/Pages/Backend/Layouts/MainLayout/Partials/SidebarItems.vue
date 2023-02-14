@@ -9,6 +9,7 @@ const props = defineProps({
         type: Object,
         default: null
     },
+    buttonClass: String,
     onHover: Boolean,
     minimized: {
         type: Boolean,
@@ -64,6 +65,7 @@ const show = computed(() => {
     <div :class="{'bg-white bg-opacity-10 rounded-lg': show && item.hasOwnProperty('submenu')}"
          class="p-2 mb-2 transition-all duration-200 ease-in-out">
         <button class="relative flex items-center w-full min-h-max"
+                :class="[buttonClass]"
                 @click="open = !open">
             <div class="flex items-center w-full">
                 <icon v-if="item.icon"
@@ -89,7 +91,7 @@ const show = computed(() => {
                         </Link>
                         <svg v-show="loading && selectedItemId === item.id"
                              aria-hidden="true"
-                             class="animate-spin w-5 h-5 stroke-skin-base"
+                             class="animate-spin w-5 h-5"
                              fill="none"
                              stroke="currentColor"
                              stroke-width="1.5"
@@ -121,10 +123,10 @@ const show = computed(() => {
                         min-w-[200px] max-w-[300px]
                         text-sm">
                 <template v-for="subitem in item.submenu">
-                    <div class="relative">
+                    <div class="block w-full" :class="[buttonClass]">
                         <span v-if="subitem.isActive"
                               class="absolute w-2 h-2 left-2 top-3 rounded-full bg-skin-base dark:bg-skin-base-dark"></span>
-                        <div class="flex items-center justify-between">
+                        <button class="flex items-center justify-between w-full">
                             <Link :class="[{'font-bold': subitem.isActive}]"
                                   :disabled="loading || subitem.isActive"
                                   :href="route(subitem.route)"
@@ -148,7 +150,7 @@ const show = computed(() => {
                                       stroke-linecap="round"
                                       stroke-linejoin="round"></path>
                             </svg>
-                        </div>
+                        </button>
                     </div>
                 </template>
             </div>

@@ -25,14 +25,15 @@ return new class extends Migration {
 			$table->string('address')->nullable();
 			$table->string('latitude')->nullable();
 			$table->string('longitude')->nullable();
-			$table->string('facebook_url')->nullable();
-			$table->string('twitter_url')->nullable();
-			$table->string('youtube_url')->nullable();
-			$table->string('skype_url')->nullable();
-			$table->string('linkedin_url')->nullable();
-			$table->string('instagram_url')->nullable();
-			$table->string('vimeo_url')->nullable();
-			$table->string('twitch_url')->nullable();
+			$table->string('facebook')->nullable();
+			$table->string('twitter')->nullable();
+			$table->string('youtube')->nullable();
+			$table->string('skype')->nullable();
+			$table->string('linkedin')->nullable();
+			$table->string('instagram')->nullable();
+			$table->string('vimeo')->nullable();
+			$table->string('twitch')->nullable();
+			$table->string('whatsapp')->nullable();
 			$table->string('icon')->nullable();
 			$table->string('logo')->nullable();
 			$table->string('logo_invert')->nullable();
@@ -40,7 +41,8 @@ return new class extends Migration {
 			
 			$table->foreign('seo_id')
 				->references('id')
-				->on('core_seo');
+				->on('core_seo')
+				->restrictOnDelete();
 		});
 	}
 	

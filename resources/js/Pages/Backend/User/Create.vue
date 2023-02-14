@@ -16,7 +16,7 @@ export default {
 };
 </script>
 <script setup>
-import { ref } from "vue";
+import {ref} from "vue";
 import Checkbox from "@core/Components/Form/Checkbox.vue";
 import Input from "@core/Components/Form/Input.vue";
 import SaveFormButton from "@core/Components/Form/SaveFormButton.vue";
@@ -30,20 +30,21 @@ defineProps({
 });
 
 const store = useStore();
-const selectedRoles = ref([]);
+
 const form = useForm({
     name: "",
     email: "",
-    selectedRoles: selectedRoles.value,
+    selectedRoles: [],
     password: "",
     password_confirmation: ""
 });
+
 function submit() {
     form.post(route("admin.users.store"), {
         onSuccess: () => store.dispatch("addAlert", { type: 'success', message: __('saved')}),
         onError: () => store.dispatch("addAlert", { type: 'error', message: form.errors}),
     });
-};
+}
 </script>
 <template>
     <form class="mb-14 text-skin-base dark:text-skin-base-dark"
@@ -119,7 +120,7 @@ function submit() {
                                   class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-6"
                                   label="description"
                                   name="selectedRoles"
-                                  value="name"/>
+                                  property-value="name"/>
                     </div>
                     <div class="p-3 bg-gray-200 dark:bg-gray-500 flex justify-end">
                         <SaveFormButton :form="form"/>

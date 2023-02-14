@@ -5,8 +5,8 @@ namespace Wepa\Core\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\Process\Process;
 use Wepa\Core\Models\Menu;
-use ZipArchive;
 
 
 class CoreInstallCommand extends Command
@@ -25,14 +25,21 @@ class CoreInstallCommand extends Command
 	protected $signature = 'core:install';
 	
 	/**
-	 * Execute the console command.
-	 *
-	 * @return void
+	 * @return int
 	 */
-	public function handle(): void
+	public function handle()
 	{
-		Menu::loadPackageItems('core');
+		$this->call('migrate');
+		$this->call('vendor:publish', ['--tag' => 'core']);
 		$this->copyFiles();
+		Menu::loadPackageItems('core');
+		$this->call('db:seed', ['class' => 'Wepa\Core\Database\seeders\DefaultSeeder']);
+		
+		$process = Process::fromShellCommandline('npm i vuex@next @vueuse/core vue-inline-svg@next vue-screen@next @inertiajs/progress sass');
+		$process->run();
+		$this->info($process->getOutput());
+		
+		return self::SUCCESS;
 	}
 	
 	/**
@@ -42,11 +49,27 @@ class CoreInstallCommand extends Command
 	{
 		$files = CoreMakeInstallCommand::files();
 		foreach($files as $file) {
-			if(File::exists($file['from'])){
+			
+			$from = $file['from'];
+			$to = __DIR__ . '/../../install/' . $file['to'];
+			
+			if(File::exists($file['from']) && !$this->fileIsEqual($to, $from)) {
 				File::copy($file['from'], $file['from'] . '.backup');
 			}
 			
-			File::copy(__DIR__ . '/../../install/' . $file['to'], $file['from']);
+			File::ensureDirectoryExists(dirname($file['from']));
+			File::copy($to, $from);
 		}
+	}
+	
+	/**
+	 * @param $fileOne
+	 * @param $fileTwo
+	 *
+	 * @return bool
+	 */
+	private function fileIsEqual($fileOne, $fileTwo): bool
+	{
+		return (filesize($fileOne) == filesize($fileTwo) && md5_file($fileOne) == md5_file($fileTwo));
 	}
 }

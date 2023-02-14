@@ -1,6 +1,6 @@
 <?php
 
-namespace Wepa\Core\Http\Controllers\Api;
+namespace Wepa\Core\Http\Controllers\Api\V1;
 
 
 use App\Http\Controllers\Controller;
@@ -11,14 +11,9 @@ use Wepa\Core\Models\Menu;
 
 class MenuController extends Controller
 {
-	/**
-	 * @param string $app
-	 *
-	 * @return array
-	 */
-	public function getMenu(Request $request, string $app): array
+	public function getMenu(Request $request, string $app)
 	{
-		return self::buildMenu($app);
+		return response()->json(self::buildMenu($app));
 	}
 	
 	/**
