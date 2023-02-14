@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --color-primary-100       : 200, 200, 201;
+        --color-primary-200       : 162, 170, 172;
+        --color-primary-300       : 118, 127, 132;
+        --color-primary-400       : 73, 84, 91;
+        --color-primary-500       : 28, 40, 51;
+        --color-primary-600       : 23, 31, 40;
+        --color-primary-700       : 17, 23, 29;
+        --color-primary-800       : 11, 14, 19;
+        --color-primary-900       : 5, 6, 8;
+
+        --color-base              : 28, 40, 51;
+        --color-base-dark         : 248, 249, 249;
+        --color-muted             : 132, 145, 139;
+        --color-muted-dark        : 132, 145, 139;
+        --color-inverted          : 248, 249, 249;
+        --color-inverted-dark     : 28, 40, 51;
+        --color-fill              : 200, 200, 201;
+        --color-fill-dark         : 28, 40, 51;
+
+        --color-light             : 248, 249, 249;
+        --color-dark              : 28, 40, 51;
+
+        --color-accent            : 23, 31, 40;
+        --color-accent-dark       : 200, 200, 201;
+        --color-accent-hover      : 17, 23, 29;
+        --color-accent-hover-dark : 255, 255, 255;
+        --color-background        : 207, 211, 212;
+        --color-background-dark   : 17, 23, 29;
+
+        --color-success           : 35, 155, 86;
+        --color-info              : 52, 152, 219;
+        --color-warning           : 243, 156, 18;
+        --color-danger            : 192, 57, 43;
+    }
+
+    .admin-theme {
+        --color-primary-100     : 213, 178, 178;
+        --color-primary-200     : 218, 169, 177;
+        --color-primary-300     : 195, 132, 158;
+        --color-primary-400     : 169, 99, 145;
+        --color-primary-500     : 139, 69, 132;
+        --color-primary-600     : 116, 49, 117;
+        --color-primary-700     : 85, 32, 91;
+        --color-primary-800     : 53, 18, 62;
+        --color-primary-900     : 23, 7, 30;
+
+        --color-base            : 28, 40, 51;
+        --color-base-dark       : 248, 249, 249;
+        --color-muted           : 132, 145, 139;
+        --color-muted-dark      : 132, 145, 139;
+        --color-inverted        : 248, 249, 249;
+        --color-inverted-dark   : 28, 40, 51;
+        --color-fill            : 213, 178, 178;
+        --color-fill-dark       : 139, 69, 132;
+
+        --color-accent          : 213, 178, 178;
+        --color-accent-hover    : 218, 169, 177;
+        --color-background      : 231, 234, 234;
+        --color-background-dark : 17, 23, 29;
+
+        h1, h2, h3, h4, h5, h6{
+            @apply font-bold mb-2
+        }
+        h1 {
+            @apply text-2xl
+        }
+
+        h2 {
+            @apply text-xl
+        }
+
+        h3 {
+            @apply text-lg
+        }
+
+        h4 {
+            @apply text-base
+
+        }
+
+        h5 {
+            @apply text-sm
+
+        }
+
+        h6 {
+            @apply text-xs
+
+        }
+    }
+
+    body, button, h1, h2, h3, h4, h5, h6 {
+        @apply text-skin-base dark:text-skin-base-dark
+    }
+
+    h1 {
+        @apply text-5xl font-bold
+    }
+
+    h2 {
+        @apply text-4xl font-bold
+    }
+
+    h3 {
+        @apply text-3xl font-bold
+    }
+
+    h4 {
+        @apply text-2xl font-bold
+
+    }
+
+    h5 {
+        @apply text-xl font-bold
+
+    }
+
+    h6 {
+        @apply text-lg font-bold
+
+    }
+
+    .container-fluid {
+        @apply xl:container 2xl:container px-4 sm:px-6
+    }
+
+}
+
+@layer components {
+    .btn {
+        @apply tracking-wide uppercase inline-block text-xs px-4 py-2 rounded-md font-semibold border border-transparent focus:outline-none focus:ring disabled:opacity-25 transition
+    }
+
+    .btn-success {
+        @apply text-white bg-green-600 hover:bg-green-700 active:bg-green-900 focus:border-green-700 focus:ring-green-300
+    }
+
+    .btn-default {
+        @apply text-white bg-gray-400 dark:bg-gray-500 hover:bg-gray-500 hover:dark:bg-gray-700 active:bg-gray-900 focus:border-gray-700 focus:dark:border-gray-800 focus:ring-gray-300 focus:dark:ring-gray-500
+    }
+
+    .btn-info {
+        @apply text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-900 focus:border-blue-700 focus:ring-blue-300
+    }
+
+    .btn-warning {
+        @apply text-white bg-orange-600 hover:bg-orange-700 active:bg-orange-900 focus:border-orange-700 focus:ring-orange-300
+    }
+
+    .btn-danger {
+        @apply text-white bg-red-600 hover:bg-red-700 active:bg-red-900 focus:border-red-700 focus:ring-red-300
+    }
+
+    .btn-neutral {
+        @apply text-skin-base hover:text-white bg-transparent hover:bg-gray-400 hover:bg-opacity-50 hover:bg-opacity-50
+    }
+
+    .btn-primary {
+        @apply text-white bg-skin-primary-600 hover:bg-skin-primary-700 active:bg-skin-primary-900 focus:border-skin-primary-700 focus:ring-skin-primary-300
+    }
+
+    .btn-secondary {
+        @apply text-skin-base dark:text-skin-base-dark bg-transparent border-skin-muted dark:border-skin-muted-dark
+    }
+}

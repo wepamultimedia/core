@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Wepa\Core\Http\Controllers\Frontend\InertiaController;
+
+
+class MainController extends InertiaController
+{
+	public string $packageName = 'core';
+	
+	public function home()
+	{
+		$this->addSeo('home');
+		return $this->render('Home');
+	}
+}
