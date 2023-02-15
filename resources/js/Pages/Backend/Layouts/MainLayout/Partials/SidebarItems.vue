@@ -123,7 +123,7 @@ const show = computed(() => {
                         min-w-[200px] max-w-[300px]
                         text-sm">
                 <template v-for="subitem in item.submenu">
-                    <div class="block w-full" :class="[buttonClass]">
+                    <div class="block w-full relative" :class="[buttonClass]">
                         <span v-if="subitem.isActive"
                               class="absolute w-2 h-2 left-2 top-3 rounded-full bg-skin-base dark:bg-skin-base-dark"></span>
                         <button class="flex items-center justify-between w-full">

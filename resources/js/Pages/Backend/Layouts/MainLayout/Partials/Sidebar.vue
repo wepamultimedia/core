@@ -105,7 +105,7 @@ onMounted((app) => {
             <!--Menu items-->
             <template v-for="item in menu">
                 <div :class="{dark:dark}">
-                    <SidebarItems :item="item" button-class="text-white" @click="emit('update:showMobile', false)"
+                    <SidebarItems :item="item" :key="item.id" button-class="text-white" @click="emit('update:showMobile', false)"
                                   :minimized="minimized"/>
                 </div>
             </template>
