@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, toRefs, useAttrs, watch } from "vue";
+import { computed, reactive, ref, toRefs, useAttrs, watch } from "vue";
 import Dropdown from "@core/Components/Dropdown.vue";
 import { component as CKEditor } from "@ckeditor/ckeditor5-vue";
 import Editor from "wepa-ckeditor5-filemanager";
@@ -24,6 +24,15 @@ const props = defineProps({
         }
     },
     debug: Boolean
+});
+
+const proxyModelValue = computed({
+    get() {
+        return props.modelValue;
+    },
+    set(value) {
+        emit("update:modelValue", value);
+    }
 });
 
 const ckconfig = {
@@ -57,7 +66,6 @@ const emit = defineEmits(["update:modelValue", "update:locale"]);
 const {
           translation,
           errors,
-          modelValue,
           locale
       } = toRefs(props);
 
@@ -91,59 +99,56 @@ const buildInputValue = () => {
     } else if (attrs.name) {
         inputId.value = attrs.name + "-" + Math.floor(Math.random() * 1000);
     }
-    if (typeof modelValue.value === "object" && modelValue.value !== null) {
+    if (typeof proxyModelValue.value === "object" && proxyModelValue.value !== null) {
         if (translation.value) {
-            if (!modelValue.value["translations"]) {
-                modelValue.value["translations"] = {};
+            if (!proxyModelValue.value["translations"]) {
+                proxyModelValue.value["translations"] = {};
             }
 
-            modelValue.value["translations"] = Object.assign({}, modelValue.value["translations"]);
+            proxyModelValue.value["translations"] = Object.assign({}, proxyModelValue.value["translations"]);
 
-            if (modelValue.value["translations"][selectedLocale.value]) {
-                inputValue.value = modelValue.value["translations"][selectedLocale.value][attrs.name]
-                                   ? modelValue.value["translations"][selectedLocale.value][attrs.name] : "";
+            if (proxyModelValue.value["translations"][selectedLocale.value]) {
+                inputValue.value = proxyModelValue.value["translations"][selectedLocale.value][attrs.name]
+                                   ? proxyModelValue.value["translations"][selectedLocale.value][attrs.name] : "";
             } else {
                 inputValue.value = "";
             }
         } else {
-            inputValue.value = modelValue.value[attrs["name"]];
+            inputValue.value = proxyModelValue.value[attrs["name"]];
         }
     } else {
-        inputValue.value = modelValue.value;
+        inputValue.value = proxyModelValue.value;
     }
 };
 const setInputValue = (value) => {
-    if (typeof modelValue.value === "object" && modelValue.value) {
+    if (typeof proxyModelValue.value === "object" && proxyModelValue.value) {
         if (translation.value) {
             if (value) {
-                if (!modelValue.value["translations"].hasOwnProperty(selectedLocale.value)) {
-                    modelValue.value["translations"][selectedLocale.value] = {};
+                if (!proxyModelValue.value["translations"].hasOwnProperty(selectedLocale.value)) {
+                    proxyModelValue.value["translations"][selectedLocale.value] = {};
                 }
-                modelValue.value["translations"][selectedLocale.value][attrs["name"]] = value;
-            } else if(modelValue.value.translations.hasOwnProperty(selectedLocale.value)){
-                modelValue.value["translations"][selectedLocale.value][attrs["name"]] = value;
-                if (modelValue.value["translations"][selectedLocale.value].hasOwnProperty(attrs["name"])) {
-                    Object.keys(modelValue.value.translations).forEach(locale => {
+                proxyModelValue.value["translations"][selectedLocale.value][attrs["name"]] = value;
+            } else if (proxyModelValue.value.translations.hasOwnProperty(selectedLocale.value)) {
+                if (proxyModelValue.value["translations"][selectedLocale.value].hasOwnProperty(attrs["name"])) {
+                    proxyModelValue.value["translations"][selectedLocale.value][attrs["name"]] = null;
+                    Object.keys(proxyModelValue.value.translations).forEach(locale => {
                         let any = false;
-                        Object.keys(modelValue.value.translations[locale]).forEach(property => {
-                            if(modelValue.value.translations[locale][property]){
-                                any = true;
-                                return true;
+                        Object.keys(proxyModelValue.value.translations[locale]).forEach(property => {
+                            if (proxyModelValue.value.translations[locale][property]) {
+                                return any = true;
                             }
                         });
-                        if(!any){
-                            delete modelValue.value.translations[locale];
+                        if (!any) {
+                            delete proxyModelValue.value.translations[locale];
                         }
                     });
                 }
             }
         } else {
-            modelValue.value[attrs["name"]] = value;
+            proxyModelValue.value[attrs["name"]] = value;
         }
-
-        emit("update:modelValue", modelValue);
     } else {
-        emit("update:modelValue", value);
+        proxyModelValue.value = value;
     }
 };
 

@@ -1,6 +1,5 @@
 <script setup>
-import { rand } from "@vueuse/core";
-import { ref, toRef, useAttrs } from "vue";
+import { computed, ref, toRef, useAttrs } from "vue";
 
 const props = defineProps({
     modelValue: [Boolean, Number],
@@ -16,6 +15,16 @@ const props = defineProps({
         Array
     ]
 });
+
+const proxyModelValue = computed({
+    get() {
+        return props.modelValue;
+    },
+    set(value) {
+        emit("update:modelValue", value);
+    }
+});
+
 const attrs = useAttrs();
 const setId = () => {
     if (attrs.id) {
@@ -64,7 +73,7 @@ if (Array.isArray(icon.value)) {
 const emit = defineEmits(["update:modelValue"]);
 
 const toggle = (event) => {
-    emit("update:modelValue", event.target.checked);
+    //emit("update:modelValue", event.target.checked);
 };
 </script>
 <template>
@@ -74,25 +83,25 @@ const toggle = (event) => {
         <div class="relative">
             <!-- input -->
             <input type="checkbox"
-                   :checked="modelValue"
+                   :checked="proxyModelValue"
                    :id="id"
                    :name="name"
                    @change="toggle"
                    class="sr-only">
             <!-- line -->
             <div class="relative flex items-center w-[40px] h-[1.5rem]  rounded-full transition"
-                 :class="{'w-[60px] h-[2rem]': lg, 'bg-green-600 dark:bg-green-600': modelValue, 'bg-gray-400 dark:bg-gray-900': !modelValue}">
+                 :class="{'w-[60px] h-[2rem]': lg, 'bg-green-600 dark:bg-green-600': proxyModelValue, 'bg-gray-400 dark:bg-gray-900': !proxyModelValue}">
                 <!-- dot -->
                 <div class="bg-white translate-x-1 w-4 h-4 rounded-full transition duration-500"
                      :class="[
-                         {'translate-x-[20px]': modelValue && !lg, 'bg-skin-primary-0 ': modelValue},
-                         {'w-[1.5rem] h-[1.5rem]': lg, 'translate-x-[32px]': modelValue && lg}]"></div>
+                         {'translate-x-[20px]': proxyModelValue && !lg, 'bg-skin-primary-0 ': proxyModelValue},
+                         {'w-[1.5rem] h-[1.5rem]': lg, 'translate-x-[32px]': proxyModelValue && lg}]"></div>
             </div>
         </div>
         <!-- label On -->
         <div v-if="labelOn"
              class="ml-3 font-medium">
-            <span v-if="modelValue || !labelOff"> {{ labelOn }}</span>
+            <span v-if="proxyModelValue || !labelOff"> {{ labelOn }}</span>
             <span v-else> {{ labelOff }}</span>
         </div>
     </label>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, toRefs, watch } from "vue";
+import { computed } from "vue";
 
 const props = defineProps({
     label: {
@@ -19,16 +19,16 @@ const props = defineProps({
     name: String
 });
 
-const {modelValue} = toRefs(props);
+const proxyModelValue = computed({
+    get() {
+        return props.modelValue;
+    },
 
+    set(value) {
+        emit("update:modelValue", value);
+    }
+});
 const emit = defineEmits(["update:modelValue"]);
-
-const selectedValues = ref([]);
-
-watch(selectedValues, value => {
-    emit("update:modelValue", value);
-})
-
 </script>
 <template>
     <div v-bind="$attrs">
@@ -36,7 +36,7 @@ watch(selectedValues, value => {
              class="flex">
             <input :id="option[propertyValue]"
                    :value="option[propertyValue]"
-                   v-model="selectedValues"
+                   v-model="proxyModelValue"
                    class="h-4 w-4
                           border border-gray-300
                           rounded-sm
@@ -53,7 +53,6 @@ watch(selectedValues, value => {
                           mr-2
                           cursor-pointer"
                    type="checkbox">
-
             <label :for="option[propertyValue]"
                    class="form-check-label inline-block text-skin-base dark:text-skin-base-dark">
                 {{ option[label] }}
