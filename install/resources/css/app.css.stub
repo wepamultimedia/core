@@ -63,10 +63,11 @@
         --color-accent-hover    : 218, 169, 177;
         --color-background      : 231, 234, 234;
         --color-background-dark : 17, 23, 29;
+
     }
 
     body, button, h1, h2, h3, h4, h5, h6 {
-        @apply text-skin-base dark:text-skin-base-dark
+        /*@apply text-skin-base dark:text-skin-base-dark*/
     }
 
     h1 {

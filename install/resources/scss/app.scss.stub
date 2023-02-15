@@ -93,9 +93,12 @@
             @apply text-xs
 
         }
+
+
+        @apply text-skin-base dark:text-skin-base-dark
     }
 
-    body, button, h1, h2, h3, h4, h5, h6 {
+    body {
         @apply text-skin-base dark:text-skin-base-dark
     }
 
@@ -138,7 +141,7 @@
     }
 
     .btn-success {
-        @apply text-white bg-green-600 hover:bg-green-700 active:bg-green-900 focus:border-green-700 focus:ring-green-300
+        @apply text-white  bg-green-600 hover:bg-green-700 active:bg-green-900 focus:border-green-700 focus:ring-green-300
     }
 
     .btn-default {

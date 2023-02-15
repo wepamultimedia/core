@@ -6,10 +6,21 @@ export default {
 };
 </script>
 <script setup>
-import {ref} from "vue";
+import { onMounted, ref } from "vue";
 import { usePage } from "@inertiajs/inertia-vue3";
 
 const selectedLocale = ref(usePage().props.value.default.locale);
+
+function scrollTo(anchor){
+    const el = document.getElementById(anchor);
+    el.scrollIntoView(el);
+}
+
+onMounted(() => {
+    if(route().current('quienes-somos')){
+        scrollTo('about-us')
+    }
+})
 </script>
 <template>
 </template>

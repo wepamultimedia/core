@@ -5,6 +5,8 @@ use App\Http\Controllers\MainController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Wepa\Core\Http\Controllers\Frontend\InertiaController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +19,11 @@ use Inertia\Inertia;
 |
 */
 Route::middleware(['web', 'core.locale'])->group(function(){
+	// Add custom routes
+	
 	Route::get('/', [MainController::class, 'home']);
+	
+	Route::get('{slug}', [InertiaController::class, 'slugRedirect']);
 });
 
 Route::middleware([
