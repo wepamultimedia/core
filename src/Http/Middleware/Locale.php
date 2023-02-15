@@ -10,10 +10,6 @@ use Psr\Container\NotFoundExceptionInterface;
 class Locale
 {
     /**
-     * @param  Request  $request
-     * @param  Closure  $next
-     * @return mixed
-     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */

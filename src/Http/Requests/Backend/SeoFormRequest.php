@@ -26,9 +26,6 @@ class SeoFormRequest extends FormRequest
         return true;
     }
 
-    /**
-     * @return array
-     */
     public function messages(): array
     {
         $locale = app()->getLocale();

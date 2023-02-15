@@ -71,10 +71,6 @@ class Menu extends Model implements TranslatableContract
 
     protected $table = 'core_menu';
 
-    /**
-     * @param  string  $package
-     * @return void
-     */
     public static function loadPackageItems(string $package): void
     {
         Menu::where(['package' => $package])->delete();
@@ -90,13 +86,6 @@ class Menu extends Model implements TranslatableContract
             'backend');
     }
 
-    /**
-     * @param  array  $items
-     * @param  string  $package
-     * @param  string  $app
-     * @param  int|null  $parentId
-     * @return void
-     */
     public function addItems(array $items,
                              string $package,
                              string $app,
@@ -137,9 +126,6 @@ class Menu extends Model implements TranslatableContract
 
     /**
      * Le damos formato al array configurado en el archivos de configuración del modulo
-     *
-     * @param $items
-     * @return array
      */
     public function formatItems($items): array
     {
@@ -191,10 +177,6 @@ class Menu extends Model implements TranslatableContract
         return $formatedItems;
     }
 
-    /**
-     * @param  string  $package
-     * @return void
-     */
     public static function removePackageItems(string $package): void
     {
         self::where(['package' => $package])->delete();

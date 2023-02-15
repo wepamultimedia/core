@@ -127,9 +127,6 @@ class Seo extends Model implements TranslatableContract
         return $this;
     }
 
-    /**
-     * @return array|Collection
-     */
     public function toArray(): array|Collection
     {
         $collection = collect(parent::toArray())
@@ -143,9 +140,6 @@ class Seo extends Model implements TranslatableContract
         return $collection;
     }
 
-    /**
-     * @return Attribute
-     */
     public function site(): Attribute
     {
         return Attribute::make(

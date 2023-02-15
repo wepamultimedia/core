@@ -7,10 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 trait PositionModelTrait
 {
-    /**
-     * @param  array|null  $where
-     * @return mixed
-     */
     public function currentPosition(array $where = null): mixed
     {
         $currentPosition = $this->when($where, function ($query, $where) {
@@ -24,10 +20,6 @@ trait PositionModelTrait
         return 0;
     }
 
-    /**
-     * @param  array|null  $condition
-     * @return mixed
-     */
     public static function nextPosition(array $condition = null): mixed
     {
         if ($nextPosition = self::when($condition, function ($query, $condition) {
@@ -40,11 +32,6 @@ trait PositionModelTrait
         return 1;
     }
 
-    /**
-     * @param  Model  $model
-     * @param  array  $condition
-     * @return void
-     */
     public function placeInFirstPosition(Model $model,
                                          array $condition = []): void
     {
@@ -55,9 +42,6 @@ trait PositionModelTrait
 
     /**
      * @param  Model  $model
-     * @param  int  $newPosition
-     * @param  array  $condition
-     * @return void
      */
     public function updatePosition(int $newPosition,
                                    array $condition = []): void
@@ -78,10 +62,6 @@ trait PositionModelTrait
         }
     }
 
-    /**
-     * @param  array  $condition
-     * @return int
-     */
     public static function lastPosition(array $condition = []): int
     {
         $nextPosition = self::when($condition, function ($query, $condition) {
@@ -96,7 +76,6 @@ trait PositionModelTrait
     }
 
     /**
-     * @param  array  $condition
      * @return array|string|string[]|null
      */
     public function arrayToStringSqlCondition(array $condition): array|string|null
@@ -116,8 +95,6 @@ trait PositionModelTrait
 
     /**
      * @param  Model  $model
-     * @param  array  $condition
-     * @return void
      */
     public function placeInLastPosition(array $condition = []): void
     {

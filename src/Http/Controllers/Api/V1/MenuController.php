@@ -15,10 +15,8 @@ class MenuController extends Controller
     }
 
     /**
-     * @param  string  $app
      * @param  null  $items
      * @param  null  $parentId
-     * @return array
      */
     public static function buildMenu(string $app,
                                      array $items = null,

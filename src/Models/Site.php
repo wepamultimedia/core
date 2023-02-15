@@ -105,9 +105,6 @@ class Site extends Model
         return $this;
     }
 
-    /**
-     * @return HasOne
-     */
     public function seo(): HasOne
     {
         return $this->hasOne(Seo::class, 'id', 'seo_id');

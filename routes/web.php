@@ -10,14 +10,11 @@
 */
 
 use Illuminate\Support\Facades\Route;
-use Wepa\Core\Http\Controllers\Frontend\DashboardController;
-use Wepa\Core\Http\Controllers\Frontend\InertiaController;
 use Wepa\Core\Http\Controllers\LocaleController;
 
 require 'admin.php';
 
 Route::middleware(['web', 'auth:sanctum'])->group(function () {
-
 });
 
 Route::middleware('web')->group(function () {

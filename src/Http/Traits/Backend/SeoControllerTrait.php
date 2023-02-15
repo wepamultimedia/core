@@ -11,7 +11,6 @@ use Wepa\Core\Models\Seo;
 trait SeoControllerTrait
 {
     /**
-     * @param  int  $seoId
      * @return bool|mixed|null
      */
     protected function seoDestroy(int $seoId): mixed
@@ -20,10 +19,6 @@ trait SeoControllerTrait
     }
 
     /**
-     * @param  array  $params
-     * @param  callable|null  $callback
-     * @return int
-     *
      * @throws BindingResolutionException
      */
     protected function seoUpdateOrCreate(array $params = [], callable $callback = null): int
@@ -43,10 +38,6 @@ trait SeoControllerTrait
     }
 
     /**
-     * @param  int|null  $seoId
-     * @param  array  $params
-     * @return HigherOrderBuilderProxy|int|null
-     *
      * @throws BindingResolutionException
      */
     protected function seoUpdate(int $seoId = null,
@@ -80,8 +71,6 @@ trait SeoControllerTrait
     /**
      * @param  string  $controller
      * @param  string  $action
-     * @param  array  $params
-     * @return Seo
      *
      * @throws BindingResolutionException
      */

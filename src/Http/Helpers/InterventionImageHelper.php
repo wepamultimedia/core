@@ -42,17 +42,11 @@ class InterventionImageHelper
         return $this->image;
     }
 
-    /**
-     * @return string
-     */
     public function extension(): string
     {
         return $this->file->extension();
     }
 
-    /**
-     * @return string
-     */
     public function getRealPath(): string
     {
         if ($this->saved) {
@@ -77,9 +71,6 @@ class InterventionImageHelper
         return $this;
     }
 
-    /**
-     * @return void
-     */
     public function destroy(): void
     {
         if (file_exists($this->getRealPath())) {
@@ -108,7 +99,6 @@ class InterventionImageHelper
     }
 
     /**
-     * @param  int  $maxSize
      * @return $this
      */
     public function resize(int $maxSize): static
@@ -124,7 +114,6 @@ class InterventionImageHelper
     }
 
     /**
-     * @param  int  $maxSize
      * @return $this
      */
     public function fit(int $maxSize): static
@@ -138,7 +127,6 @@ class InterventionImageHelper
     }
 
     /**
-     * @param  int  $maxSize
      * @return $this
      */
     public function square(int $maxSize): static
@@ -151,9 +139,6 @@ class InterventionImageHelper
         return $this;
     }
 
-    /**
-     * @return File
-     */
     public function toStorage(): File
     {
         return new File($this->getRealPath());

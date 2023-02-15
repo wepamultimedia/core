@@ -50,17 +50,11 @@ class File extends Model
 
     protected $table = 'core_files';
 
-    /**
-     * @return HasOne
-     */
     public function type(): HasOne
     {
         return $this->hasOne(FileType::class, 'id', 'type_id');
     }
 
-    /**
-     * @return FileMangerFactory
-     */
     protected static function newFactory(): FileMangerFactory
     {
         return new FileMangerFactory();

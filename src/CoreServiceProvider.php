@@ -45,10 +45,6 @@ class CoreServiceProvider extends PackageServiceProvider
         ], ['core', 'core-install', 'core-js']);
     }
 
-    /**
-     * @param  array  $seeders
-     * @return void
-     */
     protected function hasSeeders(array $seeders): void
     {
         $this->callAfterResolving(DatabaseSeeder::class,
@@ -57,9 +53,6 @@ class CoreServiceProvider extends PackageServiceProvider
             });
     }
 
-    /**
-     * @return void
-     */
     public function registerViews(): void
     {
         Fortify::loginView(function () {

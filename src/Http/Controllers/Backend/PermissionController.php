@@ -18,7 +18,6 @@ class PermissionController extends InertiaController
 
     /**
      * @param  Role  $role
-     * @return Redirector|Application|RedirectResponse
      */
     public function destroy(Permission $permission): Redirector|Application|RedirectResponse
     {
@@ -27,10 +26,6 @@ class PermissionController extends InertiaController
         return redirect(route('admin.permissions.index'));
     }
 
-    /**
-     * @param  Permission  $permission
-     * @return Response
-     */
     public function edit(Permission $permission): Response
     {
         $translations = $permission->getTranslationsArray();
@@ -40,10 +35,6 @@ class PermissionController extends InertiaController
             compact(['translations', 'permission']));
     }
 
-    /**
-     * @param  Request  $request
-     * @return Response
-     */
     public function index(Request $request): Response
     {
         $permissions = Permission::when($request->search,
@@ -58,10 +49,6 @@ class PermissionController extends InertiaController
             compact(['permissions']));
     }
 
-    /**
-     * @param  PermissionFormRequest  $request
-     * @return Redirector|RedirectResponse|Application
-     */
     public function store(PermissionFormRequest $request): Redirector|RedirectResponse|Application
     {
         Permission::create(array_merge($request->all(),
@@ -71,9 +58,6 @@ class PermissionController extends InertiaController
         return redirect(route('admin.permissions.index'));
     }
 
-    /**
-     * @return Response
-     */
     public function create(): Response
     {
         return $this->render('Core/Backend/Permission/Create',
@@ -83,7 +67,6 @@ class PermissionController extends InertiaController
     /**
      * @param  RoleFormRequest  $request
      * @param  Role  $role
-     * @return Application|RedirectResponse|Redirector
      */
     public function update(PermissionFormRequest $request,
                            Permission $permission): Redirector|RedirectResponse|Application

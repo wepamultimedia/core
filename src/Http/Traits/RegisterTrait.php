@@ -8,10 +8,6 @@ use Wepa\Core\Http\Requests\RegisterRequest;
 
 trait RegisterTrait
 {
-    /**
-     * @param  RegisterRequest  $request
-     * @return void
-     */
     public function register(RegisterRequest $request): void
     {
         $user = User::create([

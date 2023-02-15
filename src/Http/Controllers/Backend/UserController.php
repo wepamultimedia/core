@@ -17,10 +17,6 @@ class UserController extends InertiaController
 {
     public string $packageName = 'core';
 
-    /**
-     * @param  User  $user
-     * @return RedirectResponse
-     */
     public function destroy(User $user): RedirectResponse
     {
         $user->delete();
@@ -28,10 +24,6 @@ class UserController extends InertiaController
         return redirect()->route('admin.users.index');
     }
 
-    /**
-     * @param  User  $user
-     * @return Response
-     */
     public function edit(User $user): Response
     {
         $roles = Role::all();
@@ -42,10 +34,6 @@ class UserController extends InertiaController
             compact(['user', 'roles', 'selectedRoles']));
     }
 
-    /**
-     * @param  Request  $request
-     * @return Response
-     */
     public function index(Request $request): Response
     {
         $users = User::when($request->search, function ($query, $search) {
@@ -61,20 +49,11 @@ class UserController extends InertiaController
         ]);
     }
 
-    /**
-     * @param  Request  $request
-     * @param  User  $user
-     * @return Application|RedirectResponse|Redirector
-     */
     public function show(Request $request, User $user): Application|RedirectResponse|Redirector
     {
         return redirect(route('admin.user.profile'));
     }
 
-    /**
-     * @param  UserCreateRequest  $request
-     * @return RedirectResponse
-     */
     public function store(UserCreateRequest $request): RedirectResponse
     {
         $user = [
@@ -88,9 +67,6 @@ class UserController extends InertiaController
         return redirect()->route('admin.users.index');
     }
 
-    /**
-     * @return Response
-     */
     public function create(): Response
     {
         $roles = Role::all();
@@ -100,11 +76,6 @@ class UserController extends InertiaController
             ['roles' => $roles]);
     }
 
-    /**
-     * @param  UserEditRequest  $request
-     * @param  User  $user
-     * @return RedirectResponse
-     */
     public function update(UserEditRequest $request,
                            User $user): RedirectResponse
     {

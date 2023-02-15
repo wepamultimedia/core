@@ -4,9 +4,6 @@ namespace Wepa\Core\Http\Traits;
 
 trait TranslationsTrait
 {
-    /**
-     * @return array
-     */
     public function languages(): array
     {
         $translations = $this->translations->toArray();

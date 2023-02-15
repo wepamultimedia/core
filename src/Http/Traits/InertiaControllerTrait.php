@@ -21,22 +21,11 @@ trait InertiaControllerTrait
 
     protected array $translations = [];
 
-    /**
-     * @param  array  $share
-     * @return void
-     */
     protected function addShare(array $share): void
     {
         $this->share = array_merge($this->share, $share);
     }
 
-    /**
-     * @param  Request  $request
-     * @param  string  $view
-     * @param  mixed  $tranlation
-     * @param  array  $props
-     * @return Response
-     */
     public function jetrender(Request $request,
                               string $view,
                               mixed $tranlation = [],
@@ -48,10 +37,7 @@ trait InertiaControllerTrait
     }
 
     /**
-     * @param  string  $view
-     * @param  mixed  $tranlation
      * @param  array  $share
-     * @return void
      */
     protected function buildRender(string &$view,
                                    mixed $tranlation = []): void
@@ -74,10 +60,6 @@ trait InertiaControllerTrait
         $this->publishShare();
     }
 
-    /**
-     * @param  string  $view
-     * @return void
-     */
     protected function buildViewPath(string &$view): void
     {
         $this->addThemeNameToViewPath($view);
@@ -86,10 +68,6 @@ trait InertiaControllerTrait
         }
     }
 
-    /**
-     * @param  string  $view
-     * @return void
-     */
     protected function addThemeNameToViewPath(string &$view): void
     {
         /*
@@ -102,10 +80,6 @@ trait InertiaControllerTrait
         */
     }
 
-    /**
-     * @param  string  $view
-     * @return bool
-     */
     protected function checkViewExist(string $view): bool
     {
         if (File::exists(resource_path('js/Pages/'.$view.'.vue'))) {
@@ -115,10 +89,6 @@ trait InertiaControllerTrait
         return false;
     }
 
-    /**
-     * @param $files
-     * @return array
-     */
     protected function translation($files = null): array
     {
         $locale = app()->getLocale();
@@ -150,10 +120,6 @@ trait InertiaControllerTrait
         return array_merge($this->defaultTranslation($locale), $translations);
     }
 
-    /**
-     * @param $locale
-     * @return array
-     */
     protected function defaultTranslation($locale): array
     {
         $translation = is_array($translation = Lang::get('core::default'))
@@ -169,20 +135,14 @@ trait InertiaControllerTrait
         return array_merge($translation, $packageTranslation);
     }
 
-    /**
-     * @return void
-     */
     protected function publishShare(): void
     {
         Inertia::share($this->share);
     }
 
     /**
-     * @param  string  $view
      * @param  mixed|null  $tranlation Translations files
-     * @param  array  $props
      * @param  array  $share
-     * @return Response
      */
     public function render(string $view,
                            mixed $tranlation = [],

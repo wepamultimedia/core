@@ -17,10 +17,6 @@ class FileManagerController extends Controller
 {
     use StorageControllerTrait;
 
-    /**
-     * @param  File  $file
-     * @return void
-     */
     public function destroy(File $file): void
     {
         $fileTypeName = strtolower($file->type->name);
@@ -40,9 +36,6 @@ class FileManagerController extends Controller
     }
 
     /**
-     * @param  Request  $request
-     * @return array
-     *
      * @throws ValidationException
      */
     public function folderStore(Request $request): array
@@ -56,11 +49,6 @@ class FileManagerController extends Controller
         return $this->index((new Request()), $file->id);
     }
 
-    /**
-     * @param  Request  $request
-     * @param  int|null  $parentId
-     * @return array
-     */
     public function index(Request $request, int $parentId = null): array
     {
         $files = File::when($request->search, function ($query, $search) {
@@ -78,12 +66,6 @@ class FileManagerController extends Controller
         return compact(['files', 'breadcrumb', 'parentId']);
     }
 
-    /**
-     * @param  int|null  $id
-     * @param  array  $parents
-     * @param  array  $files
-     * @return array
-     */
     public function breadcrumb(int $id = null,
                                array $parents = [],
                                array $files = []): array
@@ -120,10 +102,7 @@ class FileManagerController extends Controller
     }
 
     /**
-     * @param  Request  $request
-     * @param  File  $file
      * @param  string|null  $parentId
-     * @return array
      *
      * @throws ValidationException
      */
@@ -140,11 +119,6 @@ class FileManagerController extends Controller
         return $this->index((new Request()), $parentId);
     }
 
-    /**
-     * @param  FileManagerFileRequest  $request
-     * @param  File  $file
-     * @return array
-     */
     public function update(FileManagerFileRequest $request,
                            File $file): array
     {
@@ -153,9 +127,6 @@ class FileManagerController extends Controller
         return $this->index($request, $request->parent_id);
     }
 
-    /**
-     * @return string
-     */
     public function mimeTypes(): string
     {
         return FileType::select(['extension'])
@@ -168,7 +139,6 @@ class FileManagerController extends Controller
     }
 
     /**
-     * @param $id
      * @return void
      */
     public function show($id)
@@ -179,7 +149,6 @@ class FileManagerController extends Controller
     /**
      * @param  Request  $request
      * @param $parentId
-     * @return array|Application|ResponseFactory|Response
      *
      * @throws ValidationException
      */

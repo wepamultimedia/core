@@ -12,8 +12,6 @@ class SeederTest extends TestCase
 
     /**
      * Comprobamos si el usuario admin@admin.com fue creado
-     *
-     * @return void
      */
     public function test_super_admin_user(): void
     {

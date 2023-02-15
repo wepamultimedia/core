@@ -41,9 +41,6 @@ class CoreInstallCommand extends Command
         return self::SUCCESS;
     }
 
-    /**
-     * @return void
-     */
     public function copyFiles(): void
     {
         $files = CoreMakeInstallCommand::files();
@@ -60,11 +57,6 @@ class CoreInstallCommand extends Command
         }
     }
 
-    /**
-     * @param $fileOne
-     * @param $fileTwo
-     * @return bool
-     */
     private function fileIsEqual($fileOne, $fileTwo): bool
     {
         return filesize($fileOne) == filesize($fileTwo) && md5_file($fileOne) == md5_file($fileTwo);

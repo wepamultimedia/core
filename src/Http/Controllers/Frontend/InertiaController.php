@@ -16,10 +16,6 @@ class InertiaController extends \Wepa\Core\Http\Controllers\InertiaController
 {
     private static bool $seoLoaded = false;
 
-    /**
-     * @param  string  $view
-     * @return void
-     */
     protected function addThemeNameToViewPath(string &$view): void
     {
         if ($theme = config('core.theme.frontend') and $theme !== '') {
@@ -30,9 +26,6 @@ class InertiaController extends \Wepa\Core\Http\Controllers\InertiaController
         }
     }
 
-    /**
-     * @return void
-     */
     protected function beforeRender(): void
     {
         if (! self::$seoLoaded) {
@@ -40,10 +33,6 @@ class InertiaController extends \Wepa\Core\Http\Controllers\InertiaController
         }
     }
 
-    /**
-     * @param  string  $alias
-     * @return void
-     */
     public function addSeo(string $alias): void
     {
         self::$seoLoaded = true;
@@ -82,8 +71,6 @@ class InertiaController extends \Wepa\Core\Http\Controllers\InertiaController
     }
 
     /**
-     * @param  Request  $request
-     * @param  string  $slug
      * @return mixed|void
      *
      * @throws BindingResolutionException

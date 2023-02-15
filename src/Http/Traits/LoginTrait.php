@@ -8,9 +8,7 @@ use Wepa\Core\Http\Requests\LoginRequest;
 trait LoginTrait
 {
     /**
-     * @param  LoginRequest  $request
      * @param  string  $redirect
-     * @return bool
      */
     public function login(LoginRequest $request): bool
     {

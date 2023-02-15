@@ -15,10 +15,6 @@ class RoleController extends InertiaController
 {
     public string $packageName = 'core';
 
-    /**
-     * @param  Role  $role
-     * @return Redirector|Application|RedirectResponse
-     */
     public function destroy(Role $role): Redirector|Application|RedirectResponse
     {
         $role->delete();
@@ -26,10 +22,6 @@ class RoleController extends InertiaController
         return redirect(route('admin.roles.index'));
     }
 
-    /**
-     * @param  Role  $role
-     * @return Response
-     */
     public function edit(Role $role): Response
     {
         $permissions = Permission::all();
@@ -46,10 +38,6 @@ class RoleController extends InertiaController
             ]));
     }
 
-    /**
-     * @param  Request  $request
-     * @return Response
-     */
     public function index(Request $request): Response
     {
         $roles = Role::when($request->search, function ($query, $search) {
@@ -63,10 +51,6 @@ class RoleController extends InertiaController
             compact(['roles']));
     }
 
-    /**
-     * @param  RoleFormRequest  $request
-     * @return Application|Redirector|RedirectResponse
-     */
     public function store(RoleFormRequest $request): Redirector|RedirectResponse|Application
     {
         /* @var Role $role */
@@ -77,9 +61,6 @@ class RoleController extends InertiaController
         return redirect(route('admin.roles.index'));
     }
 
-    /**
-     * @return Response
-     */
     public function create(): Response
     {
         $permissions = Permission::all();
@@ -89,11 +70,6 @@ class RoleController extends InertiaController
             compact(['permissions']));
     }
 
-    /**
-     * @param  RoleFormRequest  $request
-     * @param  Role  $role
-     * @return Application|RedirectResponse|Redirector
-     */
     public function update(RoleFormRequest $request,
                            Role $role): Redirector|RedirectResponse|Application
     {

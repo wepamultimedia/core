@@ -4,10 +4,6 @@ namespace Wepa\Core\Http\Traits\Backend;
 
 trait SeoRequestTrait
 {
-    /**
-     * @param $rules
-     * @return array
-     */
     protected function addSeoRules($rules): array
     {
         $locale = config('app.locale');

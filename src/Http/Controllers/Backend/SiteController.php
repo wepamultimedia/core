@@ -25,15 +25,11 @@ class SiteController extends InertiaController
 
     /**
      * @param  Seo  $seo
-     * @return void
      */
     public function destroy(Site $site): void
     {
     }
 
-    /**
-     * @return Response
-     */
     public function edit(): Response
     {
         $seo = Seo::where(['alias' => 'home'])->first();
@@ -42,9 +38,6 @@ class SiteController extends InertiaController
         return $this->render('Core/Backend/Site/Edit', ['seo', 'backend/site'], compact(['site', 'seo']));
     }
 
-    /**
-     * @return Response
-     */
     public function editHome(): Response
     {
         $seo = Seo::where('alias', 'home')->first();
@@ -72,10 +65,6 @@ class SiteController extends InertiaController
         Storage::disk($this->fileSystemDisk())->put('icons/browserconfig.xml', $text, 'public');
     }
 
-    /**
-     * @param  Request  $request
-     * @return void
-     */
     public function generateIcons(Request $request): void
     {
         $file = $request->file('file');
@@ -94,10 +83,6 @@ class SiteController extends InertiaController
         $this->generateManifest($request);
     }
 
-    /**
-     * @param  Request  $request
-     * @return void
-     */
     public function generateManifest(Request $request): void
     {
         $sourceIcons = collect($request['sizes']['favicon'])
@@ -127,10 +112,6 @@ class SiteController extends InertiaController
         Storage::disk($this->fileSystemDisk())->put('icons/manifest.json', json_encode($manifest), 'public');
     }
 
-    /**
-     * @param  Request  $request
-     * @return Response
-     */
     public function index(Request $request): Response
     {
         $routes = Seo::when($request->search, function ($query, $search) {
@@ -144,10 +125,6 @@ class SiteController extends InertiaController
         return $this->render('Core/Backend/Seo/Index', 'seo', compact(['routes']));
     }
 
-    /**
-     * @param  SeoFormRequest  $request
-     * @return Redirector|Application|RedirectResponse
-     */
     public function store(SeoFormRequest $request): Redirector|Application|RedirectResponse
     {
         $excludeFilter = ['alias', 'canonical'];
@@ -169,18 +146,12 @@ class SiteController extends InertiaController
         return redirect(route('admin.seo.index'));
     }
 
-    /**
-     * @return Response
-     */
     public function create(): Response
     {
         return $this->render('Core/Backend/Seo/Create', 'seo');
     }
 
     /**
-     * @param  Request  $request
-     * @return void
-     *
      * @throws BindingResolutionException
      */
     public function update(Request $request): void

@@ -18,9 +18,7 @@ class UserProfileController extends \Laravel\Jetstream\Http\Controllers\Inertia\
     }
 
     /**
-     * @param  Request  $request
      * @param  User  $user
-     * @return Response
      */
     public function show(Request $request): Response
     {

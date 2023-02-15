@@ -7,11 +7,6 @@ use Illuminate\Http\Request;
 
 class LocaleController extends \App\Http\Controllers\Controller
 {
-    /**
-     * @param  Request  $request
-     * @param  string  $locale
-     * @return RedirectResponse
-     */
     public function switchLocale(Request $request, string $locale): RedirectResponse
     {
         $exist = false;

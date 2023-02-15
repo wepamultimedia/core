@@ -8,10 +8,6 @@ use Wepa\Core\Http\Helpers\InterventionImageHelper;
 
 trait StorageControllerTrait
 {
-    /**
-     * @param  string  $path
-     * @return string
-     */
     protected function basePath(string $path): string
     {
         $root = env('DO_ROOT', '');
@@ -21,11 +17,6 @@ trait StorageControllerTrait
         return $root.'/'.$path;
     }
 
-    /**
-     * @param  string  $path
-     * @param  string  $fileName
-     * @return bool
-     */
     protected function storageDelete(string $path, string $fileName): bool
     {
         $path = preg_replace(['/^\//', '/\/$/'], '', $path);
@@ -36,20 +27,12 @@ trait StorageControllerTrait
         return false;
     }
 
-    /**
-     * @return string
-     */
     protected function fileSystemDisk(): string
     {
         return config('filesystems.default', 'local');
     }
 
     /**
-     * @param  UploadedFile  $file
-     * @param  string  $path
-     * @param  string|null  $name
-     * @param  int  $maxSize
-     * @param  string  $options
      * @return array|false
      */
     protected function storageImage(UploadedFile $file,
@@ -89,10 +72,6 @@ trait StorageControllerTrait
     }
 
     /**
-     * @param  UploadedFile  $file
-     * @param  string  $path
-     * @param  string|null  $name
-     * @param  string  $options
      * @return array|false
      */
     protected function storageSave(UploadedFile $file,
