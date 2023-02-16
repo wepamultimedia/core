@@ -1,6 +1,7 @@
 {
     "Hello!": "Hello!",
     "Reset Password": "Reset Password",
+    "All rights reserved.": "All rights reserved.",
     "Reset Password Notification": "Reset Password Notification",
     "This password reset link will expire in :count minutes.": "This password reset link will expire in :count minutes.",
     "If you did not request a password reset, no further action is required.": "If you did not request a password reset, no further action is required.",

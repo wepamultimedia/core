@@ -1,6 +1,7 @@
 {
     "Hello!": "¡Hola!",
     "Reset Password": "Restablecer contraseña",
+    "All rights reserved.": "Todos los derechos reservados.",
     "Reset Password Notification": "Notificación de recuperación de contraseña",
     "This password reset link will expire in :count minutes.": "Este enlace para restablecer la contraseña expira en :count minutos.",
     "If you did not request a password reset, no further action is required.": "Si no ha solicitado el restablecimiento de la contraseña, no es necesario realizar ninguna otra acción.",
