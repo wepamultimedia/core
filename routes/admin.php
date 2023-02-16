@@ -20,7 +20,7 @@ use Wepa\Core\Http\Controllers\Backend\TranslationController;
 use Wepa\Core\Http\Controllers\Backend\UserController;
 use Wepa\Core\Http\Controllers\Backend\UserProfileController;
 
-Route::prefix('admin')->middleware(['web', 'auth:sanctum', 'core.https'])->group(function () {
+Route::prefix('admin')->middleware(['web', 'auth:sanctum'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     Route::get('user/profile', [UserProfileController::class, 'show'])->name('admin.user.profile');

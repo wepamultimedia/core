@@ -14,9 +14,9 @@ use Wepa\Core\Http\Controllers\LocaleController;
 
 require 'admin.php';
 
-Route::middleware(['web', 'auth:sanctum', 'core.https'])->group(function () {
+Route::middleware(['web', 'auth:sanctum'])->group(function () {
 });
 
-Route::middleware(['web', 'core.https'])->group(function () {
+Route::middleware('web')->group(function () {
     Route::get('/locale/{locale}', [LocaleController::class, 'switchLocale'])->name('locale');
 });

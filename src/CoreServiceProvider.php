@@ -18,7 +18,6 @@ use Wepa\Core\Commands\CoreUninstallCommand;
 use Wepa\Core\Database\seeders\DefaultSeeder;
 use Wepa\Core\Http\Middleware\Backend;
 use Wepa\Core\Http\Middleware\Frontend;
-use Wepa\Core\Http\Middleware\HttpsMiddleware;
 use Wepa\Core\Http\Middleware\Locale;
 use Wepa\Core\Models\Permission;
 
@@ -151,7 +150,6 @@ class CoreServiceProvider extends PackageServiceProvider
         // Configure middlewares
         app()['router']->aliasMiddleware('core.backend', Backend::class);
         app()['router']->aliasMiddleware('core.frontend', Frontend::class);
-        app()['router']->aliasMiddleware('core.https', HttpsMiddleware::class);
         app()['router']->aliasMiddleware('core.locale', Locale::class);
         app()['router']->prependMiddlewareToGroup('web', Locale::class);
 
