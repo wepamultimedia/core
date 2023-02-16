@@ -66,11 +66,11 @@ class CoreMakeInstallCommand extends Command
 			['from' => resource_path('views/emails/contact.blade.php'), 'to' => 'resources/views/emails.contact.blade.php.stub'],
 			[
 				'from' => resource_path('views/vendor/mail/html/themes/default.css'),
-				'to' => 'resources/views/vendor/mail/html/themes/default.css.stub',
+				'to' => 'resources/views/_vendor/mail/html/themes/default.css.stub',
 			],
 			[
 				'from' => resource_path('views/vendor/mail/html/header.blade.php'),
-				'to' => 'resources/views/vendor/mail/html/header.blade.php.stub',
+				'to' => 'resources/views/_vendor/mail/html/header.blade.php.stub',
 			],
 			
 			// Resources Lang
