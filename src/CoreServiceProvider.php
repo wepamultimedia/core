@@ -43,6 +43,16 @@ class CoreServiceProvider extends PackageServiceProvider
 			__DIR__ . '/../resources/js/Components' => resource_path('js/Core/Components'),
 			__DIR__ . '/../resources/js/Pages' => resource_path('js/Pages/Core'),
 		], ['core', 'js']);
+		
+		// JS Components
+		$this->publishes([
+			__DIR__ . '/../resources/js/Components' => resource_path('js/Core/Components'),
+		], ['core', 'components']);
+		
+		// JS Components
+		$this->publishes([
+			__DIR__ . '/../resources/js/Pages' => resource_path('js/Pages/Core'),
+		], ['core', 'pages']);
 	}
 	
 	protected function hasSeeders(array $seeders): void
