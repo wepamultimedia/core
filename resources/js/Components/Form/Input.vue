@@ -4,7 +4,7 @@ import Dropdown from "@core/Components/Dropdown.vue";
 import { usePage } from "@inertiajs/inertia-vue3";
 
 const props = defineProps({
-    modelValue: [String, Object],
+    modelValue: [String, Object, Number],
     legend: String,
     value: String,
     required: Boolean,
