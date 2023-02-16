@@ -39,9 +39,9 @@ const loadingSubmit = ref(false);
 const defaultProps = usePage().props.value.default;
 const store = useStore();
 // File
-const fileInput = ref();
+const fileInput = ref({});
 const isImage = () => {
-    if (fileInput.value?.files.length > 0) {
+    if (file.form.file) {
         let fileType = fileInput.value?.files[0]?.type;
         return (fileType?.indexOf("jpeg") !== -1 || fileType?.indexOf("jpg") !== -1 || fileType?.indexOf("png") !== -1);
     }
@@ -455,8 +455,22 @@ getMimeTypes();
                        :label="__('name')"
                        name="name"/>
                 <button :disabled="loading"
-                        class="btn btn-success justify-center"
-                        type="submit">{{ __("save") }}
+                        class="btn btn-success flex justify-center"
+                        type="submit">
+                    <span v-if="!loading">{{ __("save") }}</span>
+                    <span v-else>
+                        <svg aria-hidden="true"
+                             class="animate-spin w-5 h-5 "
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.5"
+                             viewBox="0 0 24 24"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"></path>
+                        </svg>
+                    </span>
                 </button>
                 <button class="btn btn-secondary justify-center"
                         @click.prevent="resetFolderFlap()">{{ __("close") }}
@@ -474,8 +488,22 @@ getMimeTypes();
                        :label="__('name')"
                        name="name"/>
                 <button :disabled="loading"
-                        class="btn btn-success justify-center"
-                        type="submit">{{ __("save") }}
+                        class="btn btn-success flex justify-center"
+                        type="submit">
+                    <span v-if="!loading">{{ __("save") }}</span>
+                    <span v-else>
+                        <svg aria-hidden="true"
+                             class="animate-spin w-5 h-5 "
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.5"
+                             viewBox="0 0 24 24"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"></path>
+                        </svg>
+                    </span>
                 </button>
                 <button class="btn btn-info justify-center"
                         type="button"
@@ -498,10 +526,24 @@ getMimeTypes();
                        :label="__('type_folder_name')"
                        name="name"/>
             </div>
-            <button :disabled="folder.form.name.toLowerCase() !== folder.confirmDeleteInput.toLocaleLowerCase()"
+            <button :disabled="(folder.form.name.toLowerCase() !== folder.confirmDeleteInput.toLocaleLowerCase() || loading)"
                     class="btn btn-danger justify-center"
                     type="button"
-                    @click="folder.deleteSubmit()">{{ __("delete") }}
+                    @click="folder.deleteSubmit()">
+                <span v-if="!loading">{{ __("delete") }}</span>
+                <span v-else>
+                    <svg aria-hidden="true"
+                         class="animate-spin w-5 h-5 "
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="1.5"
+                         viewBox="0 0 24 24"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"></path>
+                    </svg>
+                </span>
             </button>
         </div>
         <!-- / show folder -->
@@ -516,7 +558,7 @@ getMimeTypes();
         <div v-if="file.create"
              class="flex flex-col gap-4">
             <h2 class="pb-4">{{ __("upload_file") }}</h2>
-            <Input v-model="file.form.name"
+            <Input v-if="file.form.file" v-model="file.form.name"
                    :errors="errors"
                    :label="__('name')"
                    :legend="__('image_name_legend')"
@@ -575,10 +617,11 @@ getMimeTypes();
             </div>
             <button v-if="file.form.file !== ''"
                     class="btn btn-success justify-center flex items-center"
+                    :disabled="loading"
                     type="button"
                     @click.prevent="file.createSubmit()">
                 <span v-if="!loading">{{ __("upload") }}</span>
-                <span v-if="loading">
+                <span v-else>
                     <svg aria-hidden="true"
                          class="animate-spin w-5 h-5 "
                          fill="none"
@@ -629,9 +672,24 @@ getMimeTypes();
                           :legend="__('image_description_legend')"
                           name="description"></Textarea>
             </div>
-            <button class="btn btn-success justify-center"
+            <button class="btn btn-success justify-center flex items-center"
                     type="button"
-                    @click.prevent="file.updateSubmit()">{{ __("save") }}
+                    :disabled="loading"
+                    @click.prevent="file.updateSubmit()">
+                <span v-if="!loading">{{ __("save") }}</span>
+                <span v-else>
+                    <svg aria-hidden="true"
+                         class="animate-spin w-5 h-5 "
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="1.5"
+                         viewBox="0 0 24 24"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"></path>
+                    </svg>
+                </span>
             </button>
             <button class="btn btn-info justify-center"
                     type="button"
@@ -653,10 +711,24 @@ getMimeTypes();
                        :label="__('type_file_name')"
                        name="name"/>
             </div>
-            <button :disabled="file.form.name.toLowerCase() !== file.confirmDeleteInput.toLocaleLowerCase()"
+            <button :disabled="(file.form.name.toLowerCase() !== file.confirmDeleteInput.toLocaleLowerCase() || loading)"
                     class="btn btn-danger justify-center"
                     type="button"
-                    @click="file.deleteSubmit()">{{ __("delete") }}
+                    @click="file.deleteSubmit()">
+                <span v-if="!loading">{{ __("delete") }}</span>
+                <span v-else>
+                    <svg aria-hidden="true"
+                         class="animate-spin w-5 h-5 "
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="1.5"
+                         viewBox="0 0 24 24"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"></path>
+                    </svg>
+                </span>
             </button>
         </div>
     </Flap>

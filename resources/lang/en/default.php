@@ -43,4 +43,5 @@ return [
     'saved' => 'Saved',
     'copy_link' => 'Copy link',
     'link_copied' => 'Link copied',
+    'upload' => 'Upload',
 ];

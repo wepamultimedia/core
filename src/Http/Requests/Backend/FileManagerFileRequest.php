@@ -4,6 +4,7 @@ namespace Wepa\Core\Http\Requests\Backend;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Wepa\Core\Models\File;
 use Wepa\Core\Models\FileType;
 
 /**
@@ -39,24 +40,26 @@ class FileManagerFileRequest extends FormRequest
      */
     public function rules(): array
     {
-        $extension = $this->file('file')->extension();
-        $isImage = ($extension === 'jpg' or $extension === 'jpeg' or $extension === 'png');
-
-        $rules = [
-            'alt_name' => ['string', 'nullable', Rule::when($isImage, ['required'])],
-            'description' => 'string|nullable',
-        ];
-
-        $mimes = FileType::select(['extension'])
-            ->whereNotNull('mime')
-            ->where('extension', '<>', '.')
-            ->get()
-            ->map(function ($type) {
-                return $type->extension;
-            })->implode(',');
+        $rules = [];
 
         switch(request()->method) {
             case 'POST':
+	            $extension = $this->file('file')->extension();
+	            $isImage = ($extension === 'jpg' or $extension === 'jpeg' or $extension === 'png');
+	
+	            $rules = [
+		            'alt_name' => ['string', 'nullable', Rule::when($isImage, ['required'])],
+		            'description' => ['string', 'nullable'],
+	            ];
+	
+	            $mimes = FileType::select(['extension'])
+		            ->whereNotNull('mime')
+		            ->where('extension', '<>', '.')
+		            ->get()
+		            ->map(function ($type) {
+			            return $type->extension;
+		            })->implode(',');
+				
                 return array_merge($rules, [
                     'max_size' => [Rule::when($isImage, ['int'])],
                     'name' => [
@@ -70,6 +73,15 @@ class FileManagerFileRequest extends FormRequest
                     'file' => 'required|mimes:'.$mimes.'|max:4096',
                 ]);
             case 'PUT':
+				$file = File::find($this['id']);
+	            $extension = $file->type->extension;
+	            $isImage = ($extension === 'jpg' or $extension === 'jpeg' or $extension === 'png');
+	
+	            $rules = [
+		            'alt_name' => ['string', 'nullable', Rule::when($isImage, ['required'])],
+		            'description' => ['string', 'nullable'],
+	            ];
+				
                 return array_merge($rules, [
                     'name' => [
                         'string',

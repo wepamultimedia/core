@@ -41,4 +41,5 @@ return [
     'saved' => 'Guardado',
     'copy_link' => 'Copiar enlace',
     'link_copied' => 'Enlace copiado',
+    'upload' => 'Subir',
 ];
