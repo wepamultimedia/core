@@ -30,29 +30,35 @@ class CoreServiceProvider extends PackageServiceProvider
 		$this->hasSeeders([DefaultSeeder::class]);
 		$this->registerViews();
 		
-		$this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+		$this->publishes([
+			__DIR__ . '/../src/CoreServiceProvider.php' => app_path('Providers/CoreServiceProvider.php')
+		], ['core-provider']);
 		
+		// Migrations
+		$this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 		$this->publishes([
 			__DIR__ . '/../database/migrations/' => database_path('migrations'),
 		], 'core-migrations');
 		
-		// JS Install
+		// JS Components
+		$this->publishes([
+			__DIR__ . '/../resources/js/Components' => resource_path('js/Core/Components'),
+		], ['core', 'core-components']);
+		
+		// JS Mixins
 		$this->publishes([
 			__DIR__ . '/../resources/js/Mixins' => resource_path('js/Core/Mixins'),
+		], ['core', 'core-mixins']);
+		
+		// JS Store
+		$this->publishes([
 			__DIR__ . '/../resources/js/Store' => resource_path('js/Core/Store'),
-			__DIR__ . '/../resources/js/Components' => resource_path('js/Core/Components'),
-			__DIR__ . '/../resources/js/Pages' => resource_path('js/Pages/Core'),
-		], ['core', 'js']);
+		], ['core', 'core-store']);
 		
-		// JS Components
-		$this->publishes([
-			__DIR__ . '/../resources/js/Components' => resource_path('js/Core/Components'),
-		], ['core', 'components']);
-		
-		// JS Components
+		// JS Pages
 		$this->publishes([
 			__DIR__ . '/../resources/js/Pages' => resource_path('js/Pages/Core'),
-		], ['core', 'pages']);
+		], ['core', 'core-pages']);
 	}
 	
 	protected function hasSeeders(array $seeders): void
