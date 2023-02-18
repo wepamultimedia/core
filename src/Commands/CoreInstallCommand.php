@@ -52,12 +52,10 @@ class CoreInstallCommand extends Command
 			
 			File::ensureDirectoryExists(dirname($file['from']));
 			
-			if(!File::exists($from)) {
-				if($file['type'] === 'directory') {
-					File::copyDirectory($to, $from);
-				} else {
-					File::copy($to, $from);
-				}
+			if($file['type'] === 'directory') {
+				File::copyDirectory($to, $from);
+			} else {
+				File::copy($to, $from);
 			}
 		}
 	}
@@ -80,7 +78,7 @@ class CoreInstallCommand extends Command
 			],
 			[
 				'type' => 'file', 'from' => resource_path('js/Pages/Home.vue'),
-				'to' => 'resources/js/Pages/Home.vue',
+				'to' => __DIR__ . '/../../_resources/js/Pages/Home.vue',
 			],
 			['type' => 'directory', 'from' => resource_path('views'), 'to' => __DIR__ . '/../../_resources/views'],
 			
