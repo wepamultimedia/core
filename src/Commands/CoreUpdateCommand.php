@@ -29,7 +29,7 @@ class CoreUpdateCommand extends CoreInstallCommand
     public function handle(): int
     {
 	    $this->call('migrate');
-	    $this->call('vendor:publish', ['--tag' => 'core', '--force']);
+	    $this->call('vendor:publish', ['--tag' => 'core', '--force' => true]);
 		$this->copyFiles();
 
         $process = Process::fromShellCommandline('npm i vuex@next @vueuse/core vue-inline-svg@next vue-screen@next @inertiajs/progress sass');

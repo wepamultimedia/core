@@ -31,7 +31,7 @@ class CoreInstallCommand extends Command
 	public function handle(): int
 	{
 		$this->call('migrate');
-		$this->call('vendor:publish', ['--tag' => 'core', '--force']);
+		$this->call('vendor:publish', ['--tag' => 'core', '--force' => true]);
 		$this->copyFiles();
 		Menu::loadPackageItems('core');
 		$this->call('db:seed', ['class' => 'Wepa\Core\Database\seeders\DefaultSeeder']);
