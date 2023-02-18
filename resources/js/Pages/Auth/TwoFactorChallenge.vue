@@ -1,6 +1,6 @@
 <script setup>
 import { nextTick, ref } from "vue";
-import { Head, useForm } from "@inertiajs/inertia-vue3";
+import { Head, useForm } from "@inertiajs/vue3";
 import AuthenticationCard from "@/Core/Components/AuthenticationCard.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { useDark } from "@vueuse/core";

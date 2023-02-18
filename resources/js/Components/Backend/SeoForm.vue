@@ -6,7 +6,7 @@ import InputImage from "@core/Components/Form/InputImage.vue";
 import Icon from "@core/Components/Heroicon.vue";
 import Select from "@core/Components/Select.vue";
 import ToggleButton from "@core/Components/Form/ToggleButton.vue";
-import { useForm, usePage } from "@inertiajs/inertia-vue3";
+import { useForm, usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
     seo: Object,
@@ -337,9 +337,9 @@ onMounted(() => {
                            name="slug"
                            translation></Input>
                     <div class="mt-2">
-                        <a :href="usePage().props.value.default.baseUrl + '/' + values.slug"
+                        <a :href="usePage().props.default.baseUrl + '/' + values.slug"
                            class="text-sm"
-                           target="_blank">{{ usePage().props.value.default.baseUrl + "/" + values.slug }}
+                           target="_blank">{{ usePage().props.default.baseUrl + "/" + values.slug }}
                         </a>
                     </div>
                     <div class="py-4">

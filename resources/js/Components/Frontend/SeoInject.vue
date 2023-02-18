@@ -1,10 +1,10 @@
 <script setup>
-import { Head, usePage } from "@inertiajs/inertia-vue3";
+import { Head, usePage } from "@inertiajs/vue3";
 import IconSizes from "@/Core/Mixins/iconSizes";
 
 const props = defineProps(["title"]);
 
-const page = usePage().props.value;
+const page = usePage().props;
 const seo = page.seo;
 const title = seo?.title ? seo.title : props.title;
 const url = page.default.baseUrl + (seo?.slug ? `/${seo.slug}` : "");

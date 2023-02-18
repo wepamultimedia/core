@@ -13,7 +13,7 @@ import Checkbox from "@core/Components/Form/Checkbox.vue";
 import Input from "@core/Components/Form/Input.vue";
 import SaveFormButton from "@core/Components/Form/SaveFormButton.vue";
 import Modal from "@core/Components/Modal.vue";
-import { useForm } from "@inertiajs/inertia-vue3";
+import { useForm } from "@inertiajs/vue3";
 import { useStore } from "vuex";
 import { __ } from "@core/Mixins/translations";
 

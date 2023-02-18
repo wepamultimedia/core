@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link } from "@inertiajs/inertia-vue3";
+import { Head, Link } from "@inertiajs/vue3";
 import { Inertia } from "@inertiajs/inertia";
 import Sidebar from "@core/Pages/Backend/Layouts/MainLayout/Partials/Sidebar.vue";
 import Dropdown from "@/Core/Components/Dropdown.vue";

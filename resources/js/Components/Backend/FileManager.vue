@@ -5,7 +5,7 @@ import Pagination from "@/Core/Components/Pagination.vue";
 import Flap from "@/Core/Components/Flap.vue";
 import Input from "@/Core/Components/Form/Input.vue";
 import ToggleButton from "@/Core/Components/Form/ToggleButton.vue";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 import Textarea from "@core/Components/Form/Textarea.vue";
 import { useStore } from "vuex";
 import { __ } from "@core/Mixins/translations";
@@ -36,7 +36,7 @@ const search = _.throttle(value => {
 const mimeTypes = ref();
 const loading = ref(false);
 const loadingSubmit = ref(false);
-const defaultProps = usePage().props.value.default;
+const defaultProps = usePage().props.default;
 const store = useStore();
 // File
 const fileInput = ref({});

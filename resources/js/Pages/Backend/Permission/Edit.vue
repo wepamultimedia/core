@@ -18,7 +18,7 @@ export default {
 import { toRefs } from "vue";
 import Input from "@core/Components/Form/Input.vue";
 import Modal from "@core/Components/Modal.vue";
-import { useForm } from "@inertiajs/inertia-vue3";
+import { useForm } from "@inertiajs/vue3";
 import { __ } from "@core/Mixins/translations";
 import { useStore } from "vuex";
 import SaveFormButton from "@core/Components/Form/SaveFormButton.vue";

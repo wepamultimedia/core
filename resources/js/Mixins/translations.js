@@ -1,7 +1,7 @@
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 
 export const __ = (key, replace = {}) => {
-    let translation = usePage().props.value.default.translation[key] || key;
+    let translation = usePage().props.default.translation[key] || key;
 
     Object.keys(replace).forEach(function (key) {
         translation = translation.replace(":" + key, replace[key]);

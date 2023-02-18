@@ -17,7 +17,7 @@ export default {
 <script setup>
 import { onBeforeMount, onMounted, reactive, ref, toRefs, watch, watchEffect } from "vue";
 import { Inertia } from "@inertiajs/inertia";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 import Input from "@core/Components/Form/Input.vue";
 import Textarea from "@core/Components/Form/Textarea.vue";
 import Modal from "@core/Components/Modal.vue";
@@ -280,9 +280,9 @@ onMounted(() => {
                                    name="slug"
                                    translation></Input>
                             <div class="mt-2">
-                                <a :href="usePage().props.value.default.baseUrl + '/' + values.slug"
+                                <a :href="usePage().props.default.baseUrl + '/' + values.slug"
                                    class="text-sm"
-                                   target="_blank">{{ usePage().props.value.default.baseUrl + "/" + values.slug }}
+                                   target="_blank">{{ usePage().props.default.baseUrl + "/" + values.slug }}
                                 </a>
                             </div>
                             <div class="py-4">

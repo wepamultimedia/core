@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
-import { useForm, usePage } from "@inertiajs/inertia-vue3";
+import { useForm, usePage } from "@inertiajs/vue3";
 import ConfirmsPassword from "@core/Pages/Backend/User/Profile/Partials/ConfirmsPassword.vue";
 import Card from "@core/Components/Backend/Card.vue";
 import Input from "@core/Components/Form/Input.vue";
@@ -22,7 +22,7 @@ const confirmationForm = useForm({
     code: ""
 });
 
-const twoFactorEnabled = computed(() => !enabling.value && usePage().props.value.user?.two_factor_enabled);
+const twoFactorEnabled = computed(() => !enabling.value && usePage().props.user?.two_factor_enabled);
 
 watch(twoFactorEnabled, () => {
     if (!twoFactorEnabled.value) {

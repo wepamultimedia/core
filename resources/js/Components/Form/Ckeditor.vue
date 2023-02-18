@@ -5,7 +5,7 @@ import { component as CKEditor } from "@ckeditor/ckeditor5-vue";
 import Editor from "wepa-ckeditor5-filemanager";
 import Flap from "@/Core/Components/Flap.vue";
 import FileManager from "@/Core/Components/Backend/FileManager.vue";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
     modelValue: [String, Object],
@@ -59,7 +59,7 @@ const fileManager = reactive({
     }
 });
 const attrs = useAttrs();
-const selectedLocale = ref(usePage().props.value.default.locale);
+const selectedLocale = ref(usePage().props.default.locale);
 const inputValue = ref();
 const error = ref();
 const emit = defineEmits(["update:modelValue", "update:locale"]);

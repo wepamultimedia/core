@@ -10,7 +10,7 @@ export default {
 };
 </script>
 <script setup>
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/vue3";
 import UpdateProfileInformationForm from "@core/Pages/Backend/User/Profile/Partials/UpdateProfileInformationForm.vue";
 import UpdatePasswordForm from "@core/Pages/Backend/User/Profile/Partials/UpdatePasswordForm.vue";
 import TwoFactorAuthenticationForm from "@core/Pages/Backend/User/Profile/Partials/TwoFactorAuthenticationForm.vue";

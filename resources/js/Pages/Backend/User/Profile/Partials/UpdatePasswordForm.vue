@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { useForm } from "@inertiajs/inertia-vue3";
+import { useForm } from "@inertiajs/vue3";
 import FormSection from "@core/Components/Form/FormSection.vue";
 import ActionMessage from "@core/Components/ActionMessage.vue";
 import Input from "@core/Components/Form/Input.vue";

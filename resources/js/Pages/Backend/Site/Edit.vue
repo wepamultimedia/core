@@ -13,7 +13,7 @@ export default {
 </script>
 <script setup>
 import { reactive, ref, toRefs } from "vue";
-import { useForm, usePage, Head } from "@inertiajs/inertia-vue3";
+import { useForm, usePage, Head } from "@inertiajs/vue3";
 import Input from "@core/Components/Form/Input.vue";
 import SeoForm from "@core/Components/Backend/SeoForm.vue";
 import SaveFormButton from "@core/Components/Form/SaveFormButton.vue";
@@ -53,7 +53,7 @@ const formIcon = useForm({
 });
 const SeoFormComponent = ref();
 const submiting = ref(false);
-const defaultProps = usePage().props.value.default;
+const defaultProps = usePage().props.default;
 const sections = reactive({
     general: true,
     social: false

@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref, toRefs, watch } from "vue";
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/vue3";
 import Modal from "@core/Components/Modal.vue";
 import Pagination from "@core/Components/Pagination.vue";
 import _ from "lodash";

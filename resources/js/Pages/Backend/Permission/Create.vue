@@ -11,7 +11,7 @@ export default {
 </script>
 <script setup>
 import Input from "@core/Components/Form/Input.vue";
-import { useForm } from "@inertiajs/inertia-vue3";
+import { useForm } from "@inertiajs/vue3";
 import { __ } from "@core/Mixins/translations";
 import SaveFormButton from "@core/Components/Form/SaveFormButton.vue";
 import { useStore } from "vuex";

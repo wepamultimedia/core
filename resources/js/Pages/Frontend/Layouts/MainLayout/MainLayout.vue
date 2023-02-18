@@ -2,7 +2,7 @@
 import HorizontalNavbar from "@core/Pages/Frontend/Layouts/MainLayout/Partials/HorizontalNavbar/HorizontalNavbar.vue";
 import MenuButton from "@core/Components/Frontend/HorizontalNavbar/Partials/MenuButton.vue";
 import Dropdown from "@core/Components/Dropdown.vue";
-import { Head, Link, usePage } from "@inertiajs/inertia-vue3";
+import { Head, Link, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 import DarkModeToggle from "@/Core/Components/DarkModeToggle.vue";
 import SeoInject from "@core/Components/Frontend/SeoInject.vue";
@@ -10,7 +10,7 @@ import storeFrontend from "@core/Store/frontend";
 import SocialNetworks from "@core/Components/Frontend/SocialNetworks.vue"
 
 const props = defineProps(["title"]);
-const pageProps = usePage().props.value.default;
+const pageProps = usePage().props.default;
 const selectedLocale = ref(pageProps.locales.find(locale => locale.code === pageProps.locale));
 
 const site = computed(() => {

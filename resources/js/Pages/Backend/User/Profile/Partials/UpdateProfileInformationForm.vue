@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { Inertia } from "@inertiajs/inertia";
-import { Link, useForm } from "@inertiajs/inertia-vue3";
+import { Link, useForm } from "@inertiajs/vue3";
 import FormSection from "@core/Components/Form/FormSection.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";

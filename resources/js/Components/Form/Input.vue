@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, toRefs, useAttrs, watch } from "vue";
 import Dropdown from "@core/Components/Dropdown.vue";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
     modelValue: [String, Object, Number],
@@ -30,7 +30,7 @@ const proxyModelValue = computed({
 const input = ref(null);
 const attrs = useAttrs();
 const inputId = ref(null);
-const selectedLocale = ref(usePage().props.value.default.locale);
+const selectedLocale = ref(usePage().props.default.locale);
 const inputValue = ref("");
 const error = ref();
 const emit = defineEmits(["update:modelValue", "update:locale", "update:value"]);

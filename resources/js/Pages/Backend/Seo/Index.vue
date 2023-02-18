@@ -9,7 +9,7 @@ export default {
 };
 </script>
 <script setup>
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/vue3";
 import Table from "@core/Components/Table.vue";
 
 defineProps(["routes"]);

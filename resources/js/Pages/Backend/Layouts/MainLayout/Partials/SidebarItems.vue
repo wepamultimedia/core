@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, toRef } from "vue";
 import { useStore } from "vuex";
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link } from "@inertiajs/vue3";
 import { Inertia } from "@inertiajs/inertia";
 
 const props = defineProps({
