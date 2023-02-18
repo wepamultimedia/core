@@ -16,6 +16,7 @@ use Wepa\Core\Commands\CoreInstallCommand;
 use Wepa\Core\Commands\CoreMakeInstallCommand;
 use Wepa\Core\Commands\CoreSymlinkCommand;
 use Wepa\Core\Commands\CoreUninstallCommand;
+use Wepa\Core\Commands\CoreUpdateCommand;
 use Wepa\Core\Database\seeders\DefaultSeeder;
 use Wepa\Core\Http\Middleware\Backend;
 use Wepa\Core\Http\Middleware\Frontend;
@@ -148,6 +149,7 @@ class CoreServiceProvider extends PackageServiceProvider
 			->hasCommands([
 				CoreSymlinkCommand::class,
 				CoreInstallCommand::class,
+				CoreUpdateCommand::class,
 				CoreUninstallCommand::class,
 				CoreMakeInstallCommand::class,
 			]);
@@ -175,31 +177,5 @@ class CoreServiceProvider extends PackageServiceProvider
 		// Configure translatable
 		config()->set('translatable.use_fallback', true);
 		config()->set('translatable.fallback_locale', config('app.locale'));
-		
-		// Configure Diditalocean spaces
-		if(!config('filesystem.disks.do')) {
-			$key = env('DO_ACCESS_KEY_ID');
-			$secret = env('DO_SECRET_ACCESS_KEY');
-			$region = env('DO_DEFAULT_REGION');
-			$bucket = env('DO_BUCKET');
-			$root = env('DO_ROOT');
-			$endpoint = env('DO_ENDPOINT');
-			
-			if($key and $secret and $region and $bucket and $endpoint and $root) {
-				Config::set('filesystems.disks.do', [
-					'driver' => 's3',
-					'key' => $key,
-					'secret' => $secret,
-					'region' => $region,
-					'bucket' => $bucket,
-					'root' => $root,
-					'directory_separator' => '/',
-					'endpoint' => $endpoint,
-					'throw' => true,
-				]);
-				
-				config()->set('filesystems.default', 'do');
-			}
-		}
 	}
 }
