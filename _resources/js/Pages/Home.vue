@@ -1,0 +1,22 @@
+<script>
+import MainLayout from "@pages/Core/Frontend/Layouts/MainLayout/MainLayout.vue";
+
+export default {
+    layout: (h, page) => h(MainLayout, { title: 'home'}, () => page)
+};
+</script>
+<script setup>
+import { ref } from "vue";
+import { usePage } from "@inertiajs/vue3";
+
+const selectedLocale = ref(usePage().props.default.locale);
+
+function scrollTo(anchor){
+    const el = document.getElementById(anchor);
+    el.scrollIntoView();
+}
+
+</script>
+<template>
+</template>
+<style scoped></style>
