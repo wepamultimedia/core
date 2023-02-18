@@ -36,9 +36,9 @@ class CoreInstallCommand extends Command
 		Menu::loadPackageItems('core');
 		$this->call('db:seed', ['class' => 'Wepa\Core\Database\seeders\DefaultSeeder']);
 		
-//		$process = Process::fromShellCommandline('npm i vuex@next @vueuse/core vue-inline-svg@next vue-screen@next @inertiajs/progress sass');
-//		$process->run();
-//		$this->info($process->getOutput());
+		$process = Process::fromShellCommandline('npm i -D vuex@next @vueuse/core vue-inline-svg@next vue-screen@next @inertiajs/progress sass');
+		$process->run();
+		$this->info($process->getOutput());
 		
 		return self::SUCCESS;
 	}
@@ -52,10 +52,12 @@ class CoreInstallCommand extends Command
 			
 			File::ensureDirectoryExists(dirname($file['from']));
 			
-			if($file['type'] === 'directory') {
-				File::copyDirectory($to, $from);
-			} else {
-				File::copy($to, $from);
+			if(!File::exists($from)) {
+				if($file['type'] === 'directory') {
+					File::copyDirectory($to, $from);
+				} else {
+					File::copy($to, $from);
+				}
 			}
 		}
 	}
