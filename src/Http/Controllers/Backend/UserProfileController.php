@@ -27,7 +27,7 @@ class UserProfileController extends \Laravel\Jetstream\Http\Controllers\Inertia\
         $this->validateTwoFactorAuthenticationState($request);
 		
         return $this->jetrender($request,
-            'Core/Backend/User/Profile/Show',
+            'Vendor/Core/Backend/User/Profile/Show',
             'backend/user',
             [
                 'confirmsTwoFactorAuthentication' => Features::optionEnabled(Features::twoFactorAuthentication(),

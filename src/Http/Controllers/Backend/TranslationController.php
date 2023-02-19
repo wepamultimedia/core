@@ -8,6 +8,6 @@ class TranslationController extends InertiaController
 
     public function index()
     {
-        return $this->render('Core/Backend/Translation/Index');
+        return $this->render('Vendor/Core/Backend/Translation/Index');
     }
 }

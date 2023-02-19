@@ -26,7 +26,7 @@ class SeoController extends InertiaController
 
     public function edit(Seo $seo): Response
     {
-        return $this->render('Core/Backend/Seo/Edit', 'seo', compact(['seo']));
+        return $this->render('Vendor/Core/Backend/Seo/Edit', 'seo', compact(['seo']));
     }
 
     public function index(Request $request): Response
@@ -39,7 +39,7 @@ class SeoController extends InertiaController
             ->orWhereNull('alias')
             ->paginate();
 
-        return $this->render('Core/Backend/Seo/Index', 'seo', compact(['routes']));
+        return $this->render('Vendor/Core/Backend/Seo/Index', 'seo', compact(['routes']));
     }
 
     public function store(SeoFormRequest $request): Redirector|Application|RedirectResponse
@@ -65,7 +65,7 @@ class SeoController extends InertiaController
 
     public function create(): Response
     {
-        return $this->render('Core/Backend/Seo/Create', 'seo');
+        return $this->render('Vendor/Core/Backend/Seo/Create', 'seo');
     }
 
     public function update(SeoFormRequest $request, Seo $seo): Redirector|RedirectResponse|Application

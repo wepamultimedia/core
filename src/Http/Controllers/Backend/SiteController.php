@@ -35,7 +35,7 @@ class SiteController extends InertiaController
         $seo = Seo::where(['alias' => 'home'])->first();
         $site = Site::find(1)->attrsToArray(['seo']);
 
-        return $this->render('Core/Backend/Site/Edit', ['seo', 'backend/site'], compact(['site', 'seo']));
+        return $this->render('Vendor/Core/Backend/Site/Edit', ['seo', 'backend/site'], compact(['site', 'seo']));
     }
 
     public function generateBrowserConfigFile(Request $request)
@@ -115,7 +115,7 @@ class SiteController extends InertiaController
             ->orWhereNull('alias')
             ->paginate();
 
-        return $this->render('Core/Backend/Seo/Index', 'seo', compact(['routes']));
+        return $this->render('Vendor/Core/Backend/Seo/Index', 'seo', compact(['routes']));
     }
 
     public function store(SeoFormRequest $request): Redirector|Application|RedirectResponse
@@ -141,7 +141,7 @@ class SiteController extends InertiaController
 
     public function create(): Response
     {
-        return $this->render('Core/Backend/Seo/Create', 'seo');
+        return $this->render('Vendor/Core/Backend/Seo/Create', 'seo');
     }
 
     /**

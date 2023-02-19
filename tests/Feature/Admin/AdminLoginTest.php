@@ -21,7 +21,7 @@ class AdminLoginTest extends TestCase
         $this->get(route('admin.login'))
             ->assertOk()
             ->assertInertia(fn (Assert $page) => $page
-                ->component('Core/Mixed/Auth/Login')
+                ->component('Vendor/Core/Mixed/Auth/Login')
                 ->where('admin', true)
             );
     }

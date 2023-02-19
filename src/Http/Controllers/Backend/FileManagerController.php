@@ -10,6 +10,6 @@ class FileManagerController extends InertiaController
 
     public function index(int $parentId = null): Response
     {
-        return $this->render('Core/Backend/Files/Index', 'backend/files');
+        return $this->render('Vendor/Core/Backend/Files/Index', 'backend/files');
     }
 }

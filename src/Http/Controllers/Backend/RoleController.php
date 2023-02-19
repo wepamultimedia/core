@@ -28,7 +28,7 @@ class RoleController extends InertiaController
         $selectedPermissions = $role->getPermissionNames()->all();
         $translations = $role->getTranslationsArray();
 
-        return $this->render('Core/Backend/Role/Edit',
+        return $this->render('Vendor/Core/Backend/Role/Edit',
             'backend/role',
             compact([
                 'role',
@@ -46,7 +46,7 @@ class RoleController extends InertiaController
             ->orderBy('name')
             ->paginate();
 
-        return $this->render('Core/Backend/Role/Index',
+        return $this->render('Vendor/Core/Backend/Role/Index',
             'backend/role',
             compact(['roles']));
     }
@@ -65,7 +65,7 @@ class RoleController extends InertiaController
     {
         $permissions = Permission::all();
 
-        return $this->render('Core/Backend/Role/Create',
+        return $this->render('Vendor/Core/Backend/Role/Create',
             'backend/role',
             compact(['permissions']));
     }

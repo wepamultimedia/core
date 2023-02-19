@@ -43,22 +43,22 @@ class CoreServiceProvider extends PackageServiceProvider
 		
 		// JS Components
 		$this->publishes([
-			__DIR__ . '/../resources/js/Components' => resource_path('js/Core/Components'),
+			__DIR__ . '/../resources/js/Components' => resource_path('js/Vendor/Core/Components'),
 		], ['core', 'core-components']);
 		
 		// JS Mixins
 		$this->publishes([
-			__DIR__ . '/../resources/js/Mixins' => resource_path('js/Core/Mixins'),
+			__DIR__ . '/../resources/js/Mixins' => resource_path('js/Vendor/Core/Mixins'),
 		], ['core', 'core-mixins']);
 		
 		// JS Store
 		$this->publishes([
-			__DIR__ . '/../resources/js/Store' => resource_path('js/Core/Store'),
+			__DIR__ . '/../resources/js/Store' => resource_path('js/Vendor/Core/Store'),
 		], ['core', 'core-store']);
 		
 		// JS Pages
 		$this->publishes([
-			__DIR__ . '/../resources/js/Pages' => resource_path('js/Pages/Core'),
+			__DIR__ . '/../resources/js/Pages' => resource_path('js/Pages/Vendor/Core'),
 		], ['core', 'core-pages']);
 	}
 	
@@ -76,7 +76,7 @@ class CoreServiceProvider extends PackageServiceProvider
 			$translation = Lang::get('core::auth');
 			Inertia::share(['default' => ['translation' => $translation]]);
 			
-			return Inertia::render('Core/Auth/Login', [
+			return Inertia::render('Vendor/Core/Auth/Login', [
 				'canResetPassword' => Route::has('password.request'),
 				'status' => session('status'),
 			]);
@@ -86,7 +86,7 @@ class CoreServiceProvider extends PackageServiceProvider
 			$translation = Lang::get('core::auth');
 			Inertia::share(['default' => ['translation' => $translation]]);
 			
-			return Inertia::render('Core/Auth/ForgotPassword', [
+			return Inertia::render('Vendor/Core/Auth/ForgotPassword', [
 				'status' => session('status'),
 			]);
 		});
@@ -95,7 +95,7 @@ class CoreServiceProvider extends PackageServiceProvider
 			$translation = Lang::get('core::auth');
 			Inertia::share(['default' => ['translation' => $translation]]);
 			
-			return Inertia::render('Core/Auth/ResetPassword', [
+			return Inertia::render('Vendor/Core/Auth/ResetPassword', [
 				'email' => $request->input('email'),
 				'token' => $request->route('token'),
 			]);
@@ -105,14 +105,14 @@ class CoreServiceProvider extends PackageServiceProvider
 			$translation = Lang::get('core::auth');
 			Inertia::share(['default' => ['translation' => $translation]]);
 			
-			return Inertia::render('Core/Auth/Register');
+			return Inertia::render('Vendor/Core/Auth/Register');
 		});
 		
 		Fortify::verifyEmailView(function() {
 			$translation = Lang::get('core::auth');
 			Inertia::share(['default' => ['translation' => $translation]]);
 			
-			return Inertia::render('Core/Auth/VerifyEmail', [
+			return Inertia::render('Vendor/Core/Auth/VerifyEmail', [
 				'status' => session('status'),
 			]);
 		});
@@ -121,14 +121,14 @@ class CoreServiceProvider extends PackageServiceProvider
 			$translation = Lang::get('core::auth');
 			Inertia::share(['default' => ['translation' => $translation]]);
 			
-			return Inertia::render('Core/Auth/TwoFactorChallenge');
+			return Inertia::render('Vendor/Core/Auth/TwoFactorChallenge');
 		});
 		
 		Fortify::confirmPasswordView(function() {
 			$translation = Lang::get('core::auth');
 			Inertia::share(['default' => ['translation' => $translation]]);
 			
-			return Inertia::render('Core/Auth/ConfirmPassword');
+			return Inertia::render('Vendor/Core/Auth/ConfirmPassword');
 		});
 	}
 	

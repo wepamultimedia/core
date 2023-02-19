@@ -30,7 +30,7 @@ class PermissionController extends InertiaController
     {
         $translations = $permission->getTranslationsArray();
 
-        return $this->render('Core/Backend/Permission/Edit',
+        return $this->render('Vendor/Core/Backend/Permission/Edit',
             'backend/permission',
             compact(['translations', 'permission']));
     }
@@ -44,7 +44,7 @@ class PermissionController extends InertiaController
             ->orderBy('name')
             ->paginate();
 
-        return $this->render('Core/Backend/Permission/Index',
+        return $this->render('Vendor/Core/Backend/Permission/Index',
             'backend/permission',
             compact(['permissions']));
     }
@@ -60,7 +60,7 @@ class PermissionController extends InertiaController
 
     public function create(): Response
     {
-        return $this->render('Core/Backend/Permission/Create',
+        return $this->render('Vendor/Core/Backend/Permission/Create',
             'backend/permission');
     }
 
