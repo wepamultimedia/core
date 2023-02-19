@@ -1,5 +1,5 @@
 <script setup>
-import HorizontalNavbar from "@core/Pages/Frontend/Layouts/MainLayout/Partials/HorizontalNavbar/HorizontalNavbar.vue";
+import HorizontalNavbar from "@pages/Core/Frontend/Layouts/MainLayout/Partials/HorizontalNavbar/HorizontalNavbar.vue";
 import MenuButton from "@core/Components/Frontend/HorizontalNavbar/Partials/MenuButton.vue";
 import Dropdown from "@core/Components/Dropdown.vue";
 import { Head, Link, usePage } from "@inertiajs/vue3";

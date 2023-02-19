@@ -1,10 +1,8 @@
 <script setup>
 import { onMounted, ref, toRefs, watch } from "vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 import Modal from "@core/Components/Modal.vue";
 import Pagination from "@core/Components/Pagination.vue";
-import _ from "lodash";
-import { Inertia } from "@inertiajs/inertia";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 
 const props = defineProps({
@@ -50,21 +48,23 @@ const countColumns = () => {
     }
 };
 
-const search = _.throttle(value => {
+const search = window._.throttle(value => {
     if (searchRoute.value) {
         if (value.length > 0) {
-            Inertia.get(route(searchRoute.value), {search: value}, {preserveState: true});
+            router.get(route(searchRoute.value), {search: value}, {preserveState: true});
         } else {
-            Inertia.get(route(searchRoute.value), {}, {preserveState: true});
+            router.get(route(searchRoute.value), {}, {preserveState: true});
         }
     }
-}, 1500);
+}, 1200);
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 
 watch(searchInput, value => {
     if (searchRoute.value) {
-        search(value);
+        if(!value){
+            search(value);
+        }
     }
 });
 
@@ -109,6 +109,7 @@ onMounted(() => {
                     <td :colspan="countColumns()">
                         <div class="mx-4 my-2">
                             <input v-model="searchInput"
+                                   @keyup.enter="search(searchInput)"
                                    :placeholder="__('search')"
                                    class="w-full text-sm sm:w-1/2 dark:bg-inherit border-gray-200 dark:border-gray-600 text-skin-base dark:text-skin-base-dark focus:border-gray-200 focus:ring focus:ring-gray-200 focus:ring-opacity-50 rounded-md shadow-sm"
                                    type="text">

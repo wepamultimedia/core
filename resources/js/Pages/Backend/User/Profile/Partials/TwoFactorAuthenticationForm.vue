@@ -2,7 +2,7 @@
 import { computed, ref, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import { useForm, usePage } from "@inertiajs/vue3";
-import ConfirmsPassword from "@core/Pages/Backend/User/Profile/Partials/ConfirmsPassword.vue";
+import ConfirmsPassword from "@pages/Core/Backend/User/Profile/Partials/ConfirmsPassword.vue";
 import Card from "@core/Components/Backend/Card.vue";
 import Input from "@core/Components/Form/Input.vue";
 

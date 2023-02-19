@@ -1,16 +1,15 @@
 <script setup>
-import { onMounted, ref, toRefs, watch } from "vue";
-import ActionMessage from "@/Components/ActionMessage.vue";
+import { toRefs } from "vue";
 
-const props = defineProps(["form", "submiting"]);
+const props = defineProps(["form", "loading"]);
 
 const { form } = toRefs(props)
 </script>
 <template>
     <button class="btn btn-success flex items-center gap-2"
-            :disabled="form.processing"
+            :disabled="form.processing || loading"
             type="submit">
-        <span v-if="form.processing || submiting">
+        <span v-if="form.processing || loading">
             <svg aria-hidden="true"
                  class="animate-spin w-4 h-4"
                  fill="none"

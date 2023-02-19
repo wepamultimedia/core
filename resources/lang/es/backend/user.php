@@ -47,5 +47,6 @@ return [
     'delete_account_summary' => 'Borrado permanente de la cuenta de usuario',
     'delete_account_legend' => 'Una vez eliminada su cuenta, todos sus recursos y datos se borrarán permanentemente. Antes de eliminar su cuenta, descargue los datos o la información que desee conservar.',
     'delete_account' => 'Borrar cuenta',
+    'delete_title' => 'Borrar cuenta',
     'delete_account_question' => '¿Está seguro de que desea eliminar su cuenta? Una vez eliminada su cuenta, todos sus recursos y datos se borrarán permanentemente. Introduzca su contraseña para confirmar que desea eliminar definitivamente su cuenta.',
 ];

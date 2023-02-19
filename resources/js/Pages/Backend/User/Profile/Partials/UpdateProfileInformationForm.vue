@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { Inertia } from "@inertiajs/inertia";
-import { Link, useForm } from "@inertiajs/vue3";
+import { Link, useForm, router } from "@inertiajs/vue3";
 import FormSection from "@core/Components/Form/FormSection.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
@@ -13,6 +12,7 @@ const props = defineProps({
 });
 
 const form = useForm({
+    _method: "PUT",
     name: props.user.name,
     email: props.user.email,
     photo: null
@@ -27,7 +27,7 @@ const updateProfileInformation = () => {
         form.photo = photoInput.value.files[0];
     }
 
-    form.put(route("user-profile-information.update"), {
+    form.post(route("user-profile-information.update"), {
         errorBag: "updateProfileInformation",
         preserveScroll: true,
         onSuccess: () => clearPhotoFileInput()
@@ -57,7 +57,7 @@ const updatePhotoPreview = () => {
 };
 
 const deletePhoto = () => {
-    Inertia.delete(route("current-user-photo.destroy"), {
+    router.delete(route("current-user-photo.destroy"), {
         preserveScroll: true,
         onSuccess: () => {
             photoPreview.value = null;
@@ -99,14 +99,14 @@ const clearPhotoFileInput = () => {
                               class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center"/>
                     </div>
                     <button class="btn btn-info mt-2 mr-2"
-                                     type="button"
-                                     @click.prevent="selectNewPhoto">
+                            type="button"
+                            @click.prevent="selectNewPhoto">
                         {{ __("select_new_photo") }}
                     </button>
                     <button v-if="user.profile_photo_path"
-                                     class="btn btn-secondary mt-2"
-                                     type="button"
-                                     @click.prevent="deletePhoto">
+                            class="btn btn-secondary mt-2"
+                            type="button"
+                            @click.prevent="deletePhoto">
                         {{ __("remove_photo") }}
                     </button>
                     <InputError :message="form.errors.photo"
@@ -149,7 +149,7 @@ const clearPhotoFileInput = () => {
             </div>
         </template>
         <template #actions>
-            <SaveFormButton :form="form" />
+            <SaveFormButton :form="form"/>
         </template>
     </FormSection>
 </template>

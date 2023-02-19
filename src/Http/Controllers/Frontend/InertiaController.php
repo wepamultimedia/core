@@ -78,7 +78,7 @@ class InertiaController extends \Wepa\Core\Http\Controllers\InertiaController
      */
     protected function slugRedirect(Request $request, string $slug)
     {
-        if ($seo = Seo::whereTranslation('slug', $slug)->first()) {
+        if ($seo = Seo::with('translations')->where('translations.slug', '<>', null)->where('translations.slug', $slug)->first()) {
             self::$seoLoaded = true;
 
             Inertia::share('seo', $seo);

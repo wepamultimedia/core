@@ -76,6 +76,6 @@ return [
     |
     */
 
-    'profile_photo_disk' => 'do',
+    'profile_photo_disk' => env('FILESYSTEM_DISK', 'local') === 'local' ? 'public' : env('FILESYSTEM_DISK'),
 
 ];

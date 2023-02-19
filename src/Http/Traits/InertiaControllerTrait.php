@@ -35,7 +35,7 @@ trait InertiaControllerTrait
 
         return Jetstream::inertia()->render($request, $view, $props);
     }
-	
+
 	/**
 	 * @param string $view
 	 * @param mixed $tranlation

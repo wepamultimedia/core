@@ -7,6 +7,7 @@ return [
     'edit_title' => 'Permission edit',
     'edit_summary' => 'Fill in the form to edit the existing permission, remember that these permissions are created for specific tasks that are then assigned to roles.',
     'delete_permission' => 'Delete permission',
+    'delete_title' => 'Delete permission',
     'permissions' => 'Permissions',
     'permissions_list' => 'Permissions list',
     'roles_permissions' => 'Roles and permissions',

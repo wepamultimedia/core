@@ -1,7 +1,7 @@
 <script setup>
 import { Head, Link } from "@inertiajs/vue3";
 import { Inertia } from "@inertiajs/inertia";
-import Sidebar from "@core/Pages/Backend/Layouts/MainLayout/Partials/Sidebar.vue";
+import Sidebar from "@pages/Core/Backend/Layouts/MainLayout/Partials/Sidebar.vue";
 import Dropdown from "@/Core/Components/Dropdown.vue";
 import FlashAlertQueue from "@/Core/Components/FlashAlert/FlashAlertQueue.vue";
 import DarkModeToggle from "@/Core/Components/DarkModeToggle.vue";
@@ -84,10 +84,10 @@ const logout = () => {
                             <template #button="{open}">
                                 <button v-if="$page.props.jetstream.managesProfilePhotos"
                                         class="flex items-center text-skin-base dark:text-skin-base-dark text-sm rounded-full transition pr-2">
-                                    <img :alt="$page.props.user.name"
-                                         :src="$page.props.user.profile_photo_url"
+                                    <img :alt="$page.props.auth.user.name"
+                                         :src="$page.props.auth.user.profile_photo_url"
                                          class="h-8 w-8 rounded-full object-cover mr-2">
-                                    <span class="hidden md:block">{{ $page.props.user.name }}</span>
+                                    <span class="hidden md:block">{{ $page.props.auth.user.name }}</span>
                                     <inline-svg :class="{'rotate-180': open}"
                                                 class="transition-all duration-200 ease-out fill-skin-dark dark:fill-skin-light grow ml-2"
                                                 src="/vendor/core/icons/solid/chevron-down.svg"/>

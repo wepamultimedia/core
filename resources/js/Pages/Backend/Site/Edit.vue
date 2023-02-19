@@ -13,7 +13,7 @@ export default {
 </script>
 <script setup>
 import { reactive, ref, toRefs } from "vue";
-import { useForm, usePage, Head } from "@inertiajs/vue3";
+import { useForm, usePage, router } from "@inertiajs/vue3";
 import Input from "@core/Components/Form/Input.vue";
 import SeoForm from "@core/Components/Backend/SeoForm.vue";
 import SaveFormButton from "@core/Components/Form/SaveFormButton.vue";
@@ -23,7 +23,7 @@ import iconSizes from "@core/Mixins/iconSizes";
 
 const props = defineProps(["site", "errors", "seo"]);
 const store = useStore();
-const {site, seo} = toRefs(props);
+const {site, seo, errors} = toRefs(props);
 
 const form = reactive({
     id: site.value.id,
@@ -72,44 +72,20 @@ function checkIcons() {
 
 function submit() {
     submiting.value = true;
-    axios.put(route("admin.site.update"), form, {
+    router.put(route("admin.site.update"), form, {
         preserveScroll: true,
-        preserveState: true
-    }).then(() => {
-        store.dispatch("addAlert", {type: "success", message: __("saved")});
-        submiting.value = false;
-    }).catch(() => {
-        store.dispatch("addAlert", {type: "error", message: errors.value});
-
-        submiting.value = false;
+        preserveState: true,
+        onSuccess() {
+            store.dispatch("addAlert", {type: "success", message: __("saved")});
+            submiting.value = false;
+        },
+        onError(){
+            store.dispatch("addAlert", {type: "error", message: errors.value?.seo});
+        },
+        onFinish(){
+            submiting.value = false;
+        }
     });
-
-
-    // form.put(route("admin.site.update"), {
-    //     preserveScroll: true,
-    //     preserveState: true,
-    //     onSuccess: () => {
-    //         store.dispatch("addAlert", {type: "success", message: __("saved")});
-    //         form.clearErrors();
-    //     },
-    //     onError: () => {
-    //         store.dispatch("addAlert", {type: "error", message: form.errors});
-    //     },
-    //     onFinish: () => {
-    //         submiting.value = false;
-    //     }
-    // });
-    // SeoFormComponent.value.submit({
-    //     onSuccess: () => {
-    //     },
-    //     onError: errors => {
-    //         store.dispatch("addAlert", {
-    //             type: "error",
-    //             message: errors
-    //         });
-    //         submiting.value = false;
-    //     }
-    // });
 }
 
 function submitIcon() {
@@ -124,11 +100,6 @@ function submitIcon() {
         });
     }
 }
-
-function setPlace(place) {
-    console.log(place);
-}
-
 function activeSeccion(section) {
     Object.keys(sections).forEach(function (key) {
         sections[key] = false;
@@ -327,7 +298,7 @@ checkIcons();
                         <div class="rounded-b-lg overflow-hidden">
                             <div class="p-3 bg-gray-200 dark:bg-gray-500 flex justify-end items-center">
                                 <SaveFormButton :form="form"
-                                                :submiting="submiting"/>
+                                                :loading="submiting"/>
                             </div>
                         </div>
                     </div>
@@ -336,7 +307,8 @@ checkIcons();
             <!-- SEO -->
             <div class="pb-8">
                 <h2 class="uppercase">{{ __("seo") }}</h2>
-                <SeoForm v-model:seo="form.seo"/>
+                <SeoForm v-model:seo="form.seo"
+                         :errors="errors.seo"/>
             </div>
             <!-- Icons -->
             <div class="pb-8">
@@ -425,7 +397,7 @@ checkIcons();
                     <div class="rounded-b-lg overflow-hidden">
                         <div class="p-3 bg-gray-200 dark:bg-gray-500 flex justify-end items-center">
                             <SaveFormButton :form="form"
-                                            :submiting="submiting"/>
+                                            :loading="submiting"/>
                         </div>
                     </div>
                 </div>

@@ -9,6 +9,7 @@ return [
     'edit_title' => 'Edit role',
     'edit_summary' => 'Fill in the form to edit the existing role, be sure to assign the correct permissions to the role.',
     'delete_role' => 'Delete role',
+    'delete_title' => 'Delete role',
     'select_permissions' => 'Select permissions',
     'permissions' => 'Permissions',
     'roles_list' => 'Roles List',

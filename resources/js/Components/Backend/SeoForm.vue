@@ -6,7 +6,7 @@ import InputImage from "@core/Components/Form/InputImage.vue";
 import Icon from "@core/Components/Heroicon.vue";
 import Select from "@core/Components/Select.vue";
 import ToggleButton from "@core/Components/Form/ToggleButton.vue";
-import { useForm, usePage } from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
     seo: Object,
@@ -31,8 +31,7 @@ const {
           description,
           robots,
           pageType,
-          articleType,
-          errors
+          articleType
       } = toRefs(props);
 
 
@@ -53,7 +52,6 @@ const form = reactive({
     autocomplete: autocomplete.value,
     translations: {}
 });
-const formErrors = ref();
 const sections = reactive({
     general: true,
     schema: false,
@@ -187,41 +185,12 @@ function generateSlug(text) {
     .replace(/\-$/g, "");
 }
 
-// function submit(conf = {}) {
-//     conf = {
-//         onSuccess: () => {
-//         },
-//         onFinish: () => {
-//         },
-//         onError: () => {
-//         },
-//         ...conf
-//     };
-//     form.put(route("admin.seo.update", {seo: form.id}), {
-//         preserveState: true,
-//         preserveScroll: true,
-//         onSuccess: () => {
-//             conf.onSuccess();
-//             form.clearErrors();
-//         },
-//         onFinish: conf.onFinish(),
-//         onError: () => {
-//             formErrors.value = form.errors;
-//             conf.onError(form.errors);
-//         }
-//     });
-// }
-//
-// defineExpose({submit});
-
 onBeforeMount(() => {
     Object.keys(seo.value).filter(key => key in form).forEach(key => form[key] = seo.value[key]);
+    emit('update:seo', form)
 });
 
 onMounted(() => {
-    watch(errors, value => {
-        formErrors.value = value;
-    })
     watch(locale, value => {
         if (selected_locale.value !== value) {
             selected_locale.value = value;
@@ -332,7 +301,7 @@ onMounted(() => {
                     <Input v-model="form"
                            v-model:locale="selected_locale"
                            v-model:value="values.slug"
-                           :errors="formErrors"
+                           :errors="errors"
                            :label="__('slug')"
                            name="slug"
                            translation></Input>
@@ -350,7 +319,7 @@ onMounted(() => {
                 <div class="mb-4">
                     <Input v-model="form"
                            v-model:locale="selected_locale"
-                           :errors="formErrors"
+                           :errors="errors"
                            :label="__('keyword')"
                            name="keyword"
                            translation></Input>
@@ -359,7 +328,7 @@ onMounted(() => {
                     <Input v-model="form"
                            v-model:locale="selected_locale"
                            v-model:value="values.title"
-                           :errors="formErrors"
+                           :errors="errors"
                            :label="__('seo_title')"
                            name="title"
                            translation></Input>
@@ -369,7 +338,7 @@ onMounted(() => {
                               v-model:locale="selected_locale"
                               v-model:value="values.description"
                               :autoresize="false"
-                              :errors="formErrors"
+                              :errors="errors"
                               :label="__('description')"
                               name="description"
                               rows="4"
@@ -380,7 +349,7 @@ onMounted(() => {
                 <div class="sm:w-1/2 lg:w-3/4 xl:w-1/2">
                     <InputImage v-model="form.image"
                                 v-model:image="values.image"
-                                :errors="formErrors"
+                                :errors="errors"
                                 :label="__('cover_image')"
                                 name="image"/>
                 </div>
@@ -388,7 +357,7 @@ onMounted(() => {
                     <Input v-model="form"
                            v-model:locale="selected_locale"
                            v-model:value="values.image_title"
-                           :errors="formErrors"
+                           :errors="errors"
                            :label="__('cover_title')"
                            name="facebook_image_title"
                            translation/>
@@ -398,7 +367,7 @@ onMounted(() => {
                               v-model:locale="selected_locale"
                               v-model:value="values.image_alt"
                               :autoresize="false"
-                              :errors="formErrors"
+                              :errors="errors"
                               :label="__('cover_alt')"
                               name="image_alt"
                               translation/>
@@ -435,7 +404,7 @@ onMounted(() => {
                         <Input v-model="form"
                                v-model:locale="selected_locale"
                                v-model:value="values.facebook_title"
-                               :errors="formErrors"
+                               :errors="errors"
                                :label="__('facebook_title')"
                                name="facebook_title"
                                translation></Input>
@@ -445,7 +414,7 @@ onMounted(() => {
                                   v-model:locale="selected_locale"
                                   v-model:value="values.facebook_description"
                                   :autoresize="false"
-                                  :errors="formErrors"
+                                  :errors="errors"
                                   :label="__('facebook_description')"
                                   name="facebook_description"
                                   rows="4"
@@ -464,7 +433,7 @@ onMounted(() => {
                             <Input v-model="form"
                                    v-model:locale="selected_locale"
                                    v-model:value="values.facebook_image_title"
-                                   :errors="formErrors"
+                                   :errors="errors"
                                    :label="__('cover_title')"
                                    name="facebook_image_title"
                                    translation/>
@@ -474,7 +443,7 @@ onMounted(() => {
                                       v-model:locale="selected_locale"
                                       v-model:value="values.facebook_image_alt"
                                       :autoresize="false"
-                                      :errors="formErrors"
+                                      :errors="errors"
                                       :label="__('cover_alt')"
                                       name="facebook_image_alt"
                                       translation/>
@@ -489,7 +458,7 @@ onMounted(() => {
                         <Input v-model="form"
                                v-model:locale="selected_locale"
                                v-model:value="values.twitter_title"
-                               :errors="formErrors"
+                               :errors="errors"
                                :label="__('twitter_title')"
                                name="twitter_title"
                                translation></Input>
@@ -499,7 +468,7 @@ onMounted(() => {
                                   v-model:locale="selected_locale"
                                   v-model:value="values.twitter_description"
                                   :autoresize="false"
-                                  :errors="formErrors"
+                                  :errors="errors"
                                   :label="__('twitter_description')"
                                   name="twitter_description"
                                   rows="4"
@@ -518,7 +487,7 @@ onMounted(() => {
                             <Input v-model="form"
                                    v-model:locale="selected_locale"
                                    v-model:value="values.twitter_image_title"
-                                   :errors="formErrors"
+                                   :errors="errors"
                                    :label="__('cover_title')"
                                    name="twitter_image_title"
                                    translation/>
@@ -528,7 +497,7 @@ onMounted(() => {
                                       v-model:locale="selected_locale"
                                       v-model:value="values.twitter_image_alt"
                                       :autoresize="false"
-                                      :errors="formErrors"
+                                      :errors="errors"
                                       :label="__('cover_alt')"
                                       name="twitter_image_alt"
                                       translation/>

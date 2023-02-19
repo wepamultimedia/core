@@ -16,14 +16,16 @@ class UserProfileController extends \Laravel\Jetstream\Http\Controllers\Inertia\
     {
         $this->packageName = 'core';
     }
-
-    /**
-     * @param  User  $user
-     */
+	
+	/**
+	 * @param Request $request
+	 *
+	 * @return Response
+	 */
     public function show(Request $request): Response
     {
         $this->validateTwoFactorAuthenticationState($request);
-
+		
         return $this->jetrender($request,
             'Core/Backend/User/Profile/Show',
             'backend/user',

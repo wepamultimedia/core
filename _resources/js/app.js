@@ -14,24 +14,19 @@ import store from "@core/Store/index";
 const appName = window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
 
 createInertiaApp({
-    title: (title) => `${title}`,
+    title: (title) => `${title} - ${appName}`,
     resolve: (name) => {
         return resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob("./Pages/**/*.vue"));
     },
-    setup({
-              el,
-              app,
-              props,
-              plugin
-          }) {
-        return createApp({render: () => h(app, props)})
-        .use(plugin)
-        .use(store)
-        .component("inline-svg", InlineSvg)
-        .component("icon", Heroicon)
-        .use(ZiggyVue, Ziggy)
-        .mixin(translations)
-        .mount(el);
+    setup({el, App, props, plugin}) {
+        return createApp({render: () => h(App, props)})
+            .use(plugin)
+            .use(store)
+            .component("inline-svg", InlineSvg)
+            .component("icon", Heroicon)
+            .use(ZiggyVue, Ziggy)
+            .mixin(translations)
+            .mount(el);
     }
 });
 

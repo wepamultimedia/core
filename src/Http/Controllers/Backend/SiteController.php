@@ -38,13 +38,6 @@ class SiteController extends InertiaController
         return $this->render('Core/Backend/Site/Edit', ['seo', 'backend/site'], compact(['site', 'seo']));
     }
 
-    public function editHome(): Response
-    {
-        $seo = Seo::where('alias', 'home')->first();
-
-        return $this->render('Core/Backend/Seo/Edit', 'seo', compact(['seo']));
-    }
-
     public function generateBrowserConfigFile(Request $request)
     {
         $microsoft = $request->sizes['microsoft'];

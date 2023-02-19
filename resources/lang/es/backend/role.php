@@ -9,6 +9,7 @@ return [
     'edit_title' => 'Editar rol',
     'edit_summary' => 'Rellene el formulario para editar el rol existente, asegurese de asignar los permisos correctos al rol',
     'delete_role' => 'Borrar rol',
+    'delete_title' => 'Borrar rol',
     'select_permissions' => 'Seleccionar permisos',
     'permissions' => 'Permisos',
     'roles_list' => 'Lista de roles',

@@ -42,13 +42,6 @@ class SeoController extends InertiaController
         return $this->render('Core/Backend/Seo/Index', 'seo', compact(['routes']));
     }
 
-    public function editHome(): Response
-    {
-        $seo = Seo::where('alias', 'home')->first();
-
-        return $this->render('Core/Backend/Seo/Edit', 'seo', compact(['seo']));
-    }
-
     public function store(SeoFormRequest $request): Redirector|Application|RedirectResponse
     {
         $excludeFilter = ['alias', 'canonical'];

@@ -62,4 +62,6 @@ return [
     'create_title' => 'Crear ruta SEO',
     'create_summary' => 'Rellene los campos obligatorios para crear una ruta optimizada para los buscadores.',
     'delete_seo_route' => 'Eliminar ruta SEO',
+	'advanced' => 'Avanzado',
+	'delete_title' => 'Borrar elemento SEO'
 ];

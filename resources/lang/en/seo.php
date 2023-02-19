@@ -62,4 +62,6 @@ return [
     'create_title' => 'Create SEO route',
     'create_summary' => 'Fill in the required fields to create a search engine optimized path.',
     'delete_seo_route' => 'Delete SEO route',
+	'advanced' => 'Advanced',
+	'delete_title' => 'Delete SEO item'
 ];

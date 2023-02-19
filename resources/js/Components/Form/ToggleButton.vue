@@ -73,7 +73,7 @@ if (Array.isArray(icon.value)) {
 const emit = defineEmits(["update:modelValue"]);
 
 const toggle = (event) => {
-    //emit("update:modelValue", event.target.checked);
+    emit("update:modelValue", event.target.checked);
 };
 </script>
 <template>

@@ -11,15 +11,14 @@ export default {
 </script>
 <script setup>
 import { Link } from "@inertiajs/vue3";
-import UpdateProfileInformationForm from "@core/Pages/Backend/User/Profile/Partials/UpdateProfileInformationForm.vue";
-import UpdatePasswordForm from "@core/Pages/Backend/User/Profile/Partials/UpdatePasswordForm.vue";
-import TwoFactorAuthenticationForm from "@core/Pages/Backend/User/Profile/Partials/TwoFactorAuthenticationForm.vue";
-import LogoutOtherBrowserSessionsForm from "@core/Pages/Backend/User/Profile/Partials/LogoutOtherBrowserSessionsForm.vue";
-import DeleteUserForm from "@core/Pages/Backend/User/Profile/Partials/DeleteUserForm.vue";
+import UpdateProfileInformationForm from "@pages/Core/Backend/User/Profile/Partials/UpdateProfileInformationForm.vue";
+import UpdatePasswordForm from "@pages/Core/Backend/User/Profile/Partials/UpdatePasswordForm.vue";
+import TwoFactorAuthenticationForm from "@pages/Core/Backend/User/Profile/Partials/TwoFactorAuthenticationForm.vue";
+import LogoutOtherBrowserSessionsForm from "@pages/Core/Backend/User/Profile/Partials/LogoutOtherBrowserSessionsForm.vue";
+import DeleteUserForm from "@pages/Core/Backend/User/Profile/Partials/DeleteUserForm.vue";
 import Card from "@core/Components/Backend/Card.vue";
 
 defineProps({
-    user: Object,
     confirmsTwoFactorAuthentication: Boolean,
     sessions: Array
 });
@@ -35,7 +34,7 @@ defineProps({
             <p class="text-sm">{{ __("information_summary") }}</p>
         </div>
         <Card class="col-span-2">
-            <UpdateProfileInformationForm :user="user"/>
+            <UpdateProfileInformationForm :user="$page.props.auth.user"/>
         </Card>
     </div>
     <hr class="border-gray-300 dark:border-gray-800 my-10">
