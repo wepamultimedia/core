@@ -1,10 +1,10 @@
 <script setup>
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
-import FormSection from "@core/Components/Form/FormSection.vue";
-import ActionMessage from "@core/Components/ActionMessage.vue";
-import Input from "@core/Components/Form/Input.vue";
-import SaveFormButton from "@core/Components/Form/SaveFormButton.vue";
+import FormSection from "@/Vendor/Core/Components/Form/FormSection.vue";
+import ActionMessage from "@/Vendor/Core/Components/ActionMessage.vue";
+import Input from "@/Vendor/Core/Components/Form/Input.vue";
+import SaveFormButton from "@/Vendor/Core/Components/Form/SaveFormButton.vue";
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);

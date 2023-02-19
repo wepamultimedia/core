@@ -1,5 +1,5 @@
 <script>
-import MainLayout from "@pages/Core/Backend/Layouts/MainLayout/MainLayout.vue";
+import MainLayout from "@pages/Vendor/Core/Backend/Layouts/MainLayout/MainLayout.vue";
 
 export default {
     layout: (h, page) => h(MainLayout, {
@@ -10,7 +10,7 @@ export default {
 </script>
 <script setup>
 import { Link } from "@inertiajs/vue3";
-import Table from "@core/Components/Table.vue";
+import Table from "@/Vendor/Core/Components/Table.vue";
 
 defineProps(["routes"]);
 </script>

@@ -1,14 +1,14 @@
 <script setup>
 import { reactive, ref, watch } from "vue";
 import _ from "lodash";
-import Pagination from "@/Core/Components/Pagination.vue";
-import Flap from "@/Core/Components/Flap.vue";
-import Input from "@/Core/Components/Form/Input.vue";
-import ToggleButton from "@/Core/Components/Form/ToggleButton.vue";
+import Pagination from "@/Vendor/Core/Components/Pagination.vue";
+import Flap from "@/Vendor/Core/Components/Flap.vue";
+import Input from "@/Vendor/Core/Components/Form/Input.vue";
+import ToggleButton from "@/Vendor/Core/Components/Form/ToggleButton.vue";
 import { usePage } from "@inertiajs/vue3";
-import Textarea from "@core/Components/Form/Textarea.vue";
+import Textarea from "@/Vendor/Core/Components/Form/Textarea.vue";
 import { useStore } from "vuex";
-import { __ } from "@core/Mixins/translations";
+import { __ } from "@/Vendor/Core/Mixins/translations";
 
 const props = defineProps({
     errors: String,

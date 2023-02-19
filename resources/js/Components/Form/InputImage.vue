@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref, toRefs, useAttrs, watch } from "vue";
-import Flap from "@/Core/Components/Flap.vue";
-import FileManager from "@/Core/Components/Backend/FileManager.vue";
+import Flap from "@/Vendor/Core/Components/Flap.vue";
+import FileManager from "@/Vendor/Core/Components/Backend/FileManager.vue";
 
 const props = defineProps({
     showImage: {

@@ -1,11 +1,11 @@
 <script setup>
 import { Head, Link, useForm } from "@inertiajs/vue3";
-import AuthenticationCard from "@/Core/Components/AuthenticationCard.vue";
+import AuthenticationCard from "@/Vendor/Core/Components/AuthenticationCard.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import Checkbox from "@/Components/Checkbox.vue";
-import AuthenticationCardLogo from "@/Core/Components/AuthenticationCardLogo.vue";
+import AuthenticationCardLogo from "@/Vendor/Core/Components/AuthenticationCardLogo.vue";
 import { useDark } from "@vueuse/core";
-import Input from "@core/Components/Form/Input.vue";
+import Input from "@/Vendor/Core/Components/Form/Input.vue";
 
 const isDark = useDark();
 

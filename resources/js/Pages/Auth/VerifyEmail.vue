@@ -2,8 +2,8 @@
 import { computed } from "vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import AuthenticationCard from "@/Core/Components/AuthenticationCard.vue";
-import AuthenticationCardLogo from "@/Core/Components/AuthenticationCardLogo.vue";
+import AuthenticationCard from "@/Vendor/Core/Components/AuthenticationCard.vue";
+import AuthenticationCardLogo from "@/Vendor/Core/Components/AuthenticationCardLogo.vue";
 import { useDark } from "@vueuse/core";
 
 const isDark = useDark();

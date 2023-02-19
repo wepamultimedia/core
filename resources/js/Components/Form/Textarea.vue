@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, toRefs, useAttrs, watch } from "vue";
-import Dropdown from "@core/Components/Dropdown.vue";
+import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
 import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({

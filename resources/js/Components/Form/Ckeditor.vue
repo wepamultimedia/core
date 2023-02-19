@@ -1,10 +1,10 @@
 <script setup>
 import { computed, reactive, ref, toRefs, useAttrs, watch } from "vue";
-import Dropdown from "@core/Components/Dropdown.vue";
+import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
 import { component as CKEditor } from "@ckeditor/ckeditor5-vue";
 import Editor from "wepa-ckeditor5-filemanager";
-import Flap from "@/Core/Components/Flap.vue";
-import FileManager from "@/Core/Components/Backend/FileManager.vue";
+import Flap from "@/Vendor/Core/Components/Flap.vue";
+import FileManager from "@/Vendor/Core/Components/Backend/FileManager.vue";
 import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({

@@ -1,13 +1,13 @@
 <script setup>
-import HorizontalNavbar from "@pages/Core/Frontend/Layouts/MainLayout/Partials/HorizontalNavbar/HorizontalNavbar.vue";
-import MenuButton from "@core/Components/Frontend/HorizontalNavbar/Partials/MenuButton.vue";
-import Dropdown from "@core/Components/Dropdown.vue";
+import HorizontalNavbar from "@pages/Vendor/Core/Frontend/Layouts/MainLayout/Partials/HorizontalNavbar/HorizontalNavbar.vue";
+import MenuButton from "@/Vendor/Core/Components/Frontend/HorizontalNavbar/Partials/MenuButton.vue";
+import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
 import { Head, Link, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
-import DarkModeToggle from "@/Core/Components/DarkModeToggle.vue";
-import SeoInject from "@core/Components/Frontend/SeoInject.vue";
-import storeFrontend from "@core/Store/frontend";
-import SocialNetworks from "@core/Components/Frontend/SocialNetworks.vue"
+import DarkModeToggle from "@/Vendor/Core/Components/DarkModeToggle.vue";
+import SeoInject from "@/Vendor/Core/Components/Frontend/SeoInject.vue";
+import storeFrontend from "@/Vendor/Core/Store/frontend";
+import SocialNetworks from "@/Vendor/Core/Components/Frontend/SocialNetworks.vue"
 
 const props = defineProps(["title"]);
 const pageProps = usePage().props.default;

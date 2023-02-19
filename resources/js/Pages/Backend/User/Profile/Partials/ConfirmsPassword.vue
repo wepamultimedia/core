@@ -1,7 +1,7 @@
 <script setup>
 import { nextTick, reactive, ref } from "vue";
-import Flap from "@core/Components/Flap.vue";
-import Input from "@core/Components/Form/Input.vue";
+import Flap from "@/Vendor/Core/Components/Flap.vue";
+import Input from "@/Vendor/Core/Components/Form/Input.vue";
 
 const emit = defineEmits(["confirmed"]);
 

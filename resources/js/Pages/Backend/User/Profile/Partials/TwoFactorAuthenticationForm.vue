@@ -2,9 +2,9 @@
 import { computed, ref, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import { useForm, usePage } from "@inertiajs/vue3";
-import ConfirmsPassword from "@pages/Core/Backend/User/Profile/Partials/ConfirmsPassword.vue";
-import Card from "@core/Components/Backend/Card.vue";
-import Input from "@core/Components/Form/Input.vue";
+import ConfirmsPassword from "@pages/Vendor/Core/Backend/User/Profile/Partials/ConfirmsPassword.vue";
+import Card from "@/Vendor/Core/Components/Backend/Card.vue";
+import Input from "@/Vendor/Core/Components/Form/Input.vue";
 
 
 const props = defineProps({

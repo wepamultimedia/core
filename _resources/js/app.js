@@ -6,10 +6,10 @@ import { createInertiaApp } from "@inertiajs/vue3";
 import { InertiaProgress } from "@inertiajs/progress";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
-import { translations } from "@core/Mixins/translations";
-import Heroicon from "@core/Components/Heroicon.vue";
+import { translations } from "@/Vendor/Core/Mixins/translations";
+import Heroicon from "@/Vendor/Core/Components/Heroicon.vue";
 import InlineSvg from "vue-inline-svg";
-import store from "@core/Store/index";
+import store from "@/Vendor/Core/Store/index";
 
 const appName = window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
 

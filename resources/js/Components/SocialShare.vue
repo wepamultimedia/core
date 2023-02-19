@@ -9,7 +9,7 @@ let $url = window.location.href;
 </script>
 <script setup>
 import { ref, toRefs } from "vue";
-import Icon from "@core/Components/Heroicon.vue";
+import Icon from "@/Vendor/Core/Components/Heroicon.vue";
 import InlineSvg from "vue-inline-svg";
 
 

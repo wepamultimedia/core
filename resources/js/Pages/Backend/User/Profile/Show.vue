@@ -1,5 +1,5 @@
 <script>
-import MainLayout from "@/Pages/Core/Backend/Layouts/MainLayout/MainLayout.vue";
+import MainLayout from "@pages/Vendor/Core/Backend/Layouts/MainLayout/MainLayout.vue";
 
 export default {
     layout: (h, page) => h(MainLayout, {
@@ -11,12 +11,12 @@ export default {
 </script>
 <script setup>
 import { Link } from "@inertiajs/vue3";
-import UpdateProfileInformationForm from "@pages/Core/Backend/User/Profile/Partials/UpdateProfileInformationForm.vue";
-import UpdatePasswordForm from "@pages/Core/Backend/User/Profile/Partials/UpdatePasswordForm.vue";
-import TwoFactorAuthenticationForm from "@pages/Core/Backend/User/Profile/Partials/TwoFactorAuthenticationForm.vue";
-import LogoutOtherBrowserSessionsForm from "@pages/Core/Backend/User/Profile/Partials/LogoutOtherBrowserSessionsForm.vue";
-import DeleteUserForm from "@pages/Core/Backend/User/Profile/Partials/DeleteUserForm.vue";
-import Card from "@core/Components/Backend/Card.vue";
+import UpdateProfileInformationForm from "@pages/Vendor/Core/Backend/User/Profile/Partials/UpdateProfileInformationForm.vue";
+import UpdatePasswordForm from "@pages/Vendor/Core/Backend/User/Profile/Partials/UpdatePasswordForm.vue";
+import TwoFactorAuthenticationForm from "@pages/Vendor/Core/Backend/User/Profile/Partials/TwoFactorAuthenticationForm.vue";
+import LogoutOtherBrowserSessionsForm from "@pages/Vendor/Core/Backend/User/Profile/Partials/LogoutOtherBrowserSessionsForm.vue";
+import DeleteUserForm from "@pages/Vendor/Core/Backend/User/Profile/Partials/DeleteUserForm.vue";
+import Card from "@/Vendor/Core/Components/Backend/Card.vue";
 
 defineProps({
     confirmsTwoFactorAuthentication: Boolean,

@@ -1,5 +1,5 @@
 <script>
-import MainLayout from "@pages/Core/Backend/Layouts/MainLayout/MainLayout.vue";
+import MainLayout from "@pages/Vendor/Core/Backend/Layouts/MainLayout/MainLayout.vue";
 
 export default {
     layout: (h, page) => h(MainLayout, {
@@ -10,10 +10,10 @@ export default {
 };
 </script>
 <script setup>
-import Input from "@core/Components/Form/Input.vue";
+import Input from "@/Vendor/Core/Components/Form/Input.vue";
 import { useForm } from "@inertiajs/vue3";
-import { __ } from "@core/Mixins/translations";
-import SaveFormButton from "@core/Components/Form/SaveFormButton.vue";
+import { __ } from "@/Vendor/Core/Mixins/translations";
+import SaveFormButton from "@/Vendor/Core/Components/Form/SaveFormButton.vue";
 import { useStore } from "vuex";
 
 const props = defineProps({

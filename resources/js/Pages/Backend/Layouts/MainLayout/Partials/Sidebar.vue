@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, toRefs, watch } from "vue";
-import SidebarItems from "@pages/Core/Backend/Layouts/MainLayout/Partials/SidebarItems.vue";
+import SidebarItems from "@pages/Vendor/Core/Backend/Layouts/MainLayout/Partials/SidebarItems.vue";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { useStore } from "vuex";
 

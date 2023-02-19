@@ -1,5 +1,5 @@
 <script setup>
-import storeFrontend from "@core/Store/frontend";
+import storeFrontend from "@/Vendor/Core/Store/frontend";
 import { computed, onBeforeMount, ref } from "vue";
 
 const props = defineProps(["iconClass"]);

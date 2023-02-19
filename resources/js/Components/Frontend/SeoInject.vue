@@ -1,6 +1,6 @@
 <script setup>
 import { Head, usePage } from "@inertiajs/vue3";
-import IconSizes from "@/Core/Mixins/iconSizes";
+import IconSizes from "@/Vendor/Core/Mixins/iconSizes";
 
 const props = defineProps(["title"]);
 

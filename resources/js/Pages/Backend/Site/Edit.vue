@@ -1,5 +1,5 @@
 <script>
-import MainLayout from "@pages/Core/Backend/Layouts/MainLayout/MainLayout.vue";
+import MainLayout from "@pages/Vendor/Core/Backend/Layouts/MainLayout/MainLayout.vue";
 
 export default {
     layout: (h, page) => h(MainLayout, {
@@ -14,12 +14,12 @@ export default {
 <script setup>
 import { reactive, ref, toRefs } from "vue";
 import { useForm, usePage, router } from "@inertiajs/vue3";
-import Input from "@core/Components/Form/Input.vue";
-import SeoForm from "@core/Components/Backend/SeoForm.vue";
-import SaveFormButton from "@core/Components/Form/SaveFormButton.vue";
+import Input from "@/Vendor/Core/Components/Form/Input.vue";
+import SeoForm from "@/Vendor/Core/Components/Backend/SeoForm.vue";
+import SaveFormButton from "@/Vendor/Core/Components/Form/SaveFormButton.vue";
 import { useStore } from "vuex";
-import { __ } from "@core/Mixins/translations";
-import iconSizes from "@core/Mixins/iconSizes";
+import { __ } from "@/Vendor/Core/Mixins/translations";
+import iconSizes from "@/Vendor/Core/Mixins/iconSizes";
 
 const props = defineProps(["site", "errors", "seo"]);
 const store = useStore();

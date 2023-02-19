@@ -1,8 +1,8 @@
 <script setup>
 import { onMounted, ref, toRefs, watch } from "vue";
 import { Link, router } from "@inertiajs/vue3";
-import Modal from "@core/Components/Modal.vue";
-import Pagination from "@core/Components/Pagination.vue";
+import Modal from "@/Vendor/Core/Components/Modal.vue";
+import Pagination from "@/Vendor/Core/Components/Pagination.vue";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 
 const props = defineProps({

@@ -1,6 +1,6 @@
 <script setup>
 import { toRefs, watch } from "vue";
-import Alert from "@core/Components/FlashAlert/Partials/Alert.vue"
+import Alert from "@/Vendor/Core/Components/FlashAlert/Partials/Alert.vue"
 
 const props = defineProps({
     modelValue: Boolean,

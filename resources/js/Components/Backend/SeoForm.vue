@@ -1,11 +1,11 @@
 <script setup>
 import { onBeforeMount, onMounted, reactive, ref, toRefs, watch } from "vue";
-import Textarea from "@core/Components/Form/Textarea.vue";
-import Input from "@core/Components/Form/Input.vue";
-import InputImage from "@core/Components/Form/InputImage.vue";
-import Icon from "@core/Components/Heroicon.vue";
-import Select from "@core/Components/Select.vue";
-import ToggleButton from "@core/Components/Form/ToggleButton.vue";
+import Textarea from "@/Vendor/Core/Components/Form/Textarea.vue";
+import Input from "@/Vendor/Core/Components/Form/Input.vue";
+import InputImage from "@/Vendor/Core/Components/Form/InputImage.vue";
+import Icon from "@/Vendor/Core/Components/Heroicon.vue";
+import Select from "@/Vendor/Core/Components/Select.vue";
+import ToggleButton from "@/Vendor/Core/Components/Form/ToggleButton.vue";
 import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({

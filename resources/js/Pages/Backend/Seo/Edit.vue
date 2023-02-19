@@ -1,5 +1,5 @@
 <script>
-import MainLayout from "@pages/Core/Backend/Layouts/MainLayout/MainLayout.vue";
+import MainLayout from "@pages/Vendor/Core/Backend/Layouts/MainLayout/MainLayout.vue";
 
 export default {
     layout: (h, page) => h(MainLayout, {
@@ -17,10 +17,10 @@ export default {
 <script setup>
 import { onBeforeMount, ref, toRefs } from "vue";
 import { router } from "@inertiajs/vue3";
-import Input from "@core/Components/Form/Input.vue";
-import Modal from "@core/Components/Modal.vue";
-import SeoForm from "@core/Components/Backend/SeoForm.vue";
-import SaveFormButton from "@core/Components/Form/SaveFormButton.vue";
+import Input from "@/Vendor/Core/Components/Form/Input.vue";
+import Modal from "@/Vendor/Core/Components/Modal.vue";
+import SeoForm from "@/Vendor/Core/Components/Backend/SeoForm.vue";
+import SaveFormButton from "@/Vendor/Core/Components/Form/SaveFormButton.vue";
 
 const props = defineProps(["seo", "errors"]);
 

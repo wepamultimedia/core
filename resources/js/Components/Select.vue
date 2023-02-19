@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount, ref, toRefs, watch } from "vue";
-import Icon from "@/Core/Components/Heroicon.vue";
+import Icon from "@/Vendor/Core/Components/Heroicon.vue";
 
 const props = defineProps({
     options: Array,

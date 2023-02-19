@@ -1,5 +1,5 @@
 <script>
-import MainLayout from "@pages/Core/Backend/Layouts/MainLayout/MainLayout.vue";
+import MainLayout from "@pages/Vendor/Core/Backend/Layouts/MainLayout/MainLayout.vue";
 
 export default {
     layout: (h, page) => h(MainLayout, {
@@ -17,12 +17,12 @@ export default {
 </script>
 <script setup>
 import {ref} from "vue";
-import Checkbox from "@core/Components/Form/Checkbox.vue";
-import Input from "@core/Components/Form/Input.vue";
-import SaveFormButton from "@core/Components/Form/SaveFormButton.vue";
+import Checkbox from "@/Vendor/Core/Components/Form/Checkbox.vue";
+import Input from "@/Vendor/Core/Components/Form/Input.vue";
+import SaveFormButton from "@/Vendor/Core/Components/Form/SaveFormButton.vue";
 import { useForm } from "@inertiajs/vue3";
 import { useStore } from "vuex";
-import { __ } from "@/Core/Mixins/translations";
+import { __ } from "@/Vendor/Core/Mixins/translations";
 
 defineProps({
     roles: Array,

@@ -1,11 +1,11 @@
 <script setup>
 import { ref } from "vue";
 import { Link, useForm, router } from "@inertiajs/vue3";
-import FormSection from "@core/Components/Form/FormSection.vue";
+import FormSection from "@/Vendor/Core/Components/Form/FormSection.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import Input from "@core/Components/Form/Input.vue";
-import SaveFormButton from "@core/Components/Form/SaveFormButton.vue";
+import Input from "@/Vendor/Core/Components/Form/Input.vue";
+import SaveFormButton from "@/Vendor/Core/Components/Form/SaveFormButton.vue";
 
 const props = defineProps({
     user: Object

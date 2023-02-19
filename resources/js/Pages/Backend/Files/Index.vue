@@ -1,5 +1,5 @@
 <script>
-import MainLayout from "@pages/Core/Backend/Layouts/MainLayout/MainLayout.vue";
+import MainLayout from "@pages/Vendor/Core/Backend/Layouts/MainLayout/MainLayout.vue";
 
 export default {
     layout: (h, page) => h(MainLayout, {
@@ -10,7 +10,7 @@ export default {
 };
 </script>
 <script setup>
-import FileManager from "@/Core/Components/Backend/FileManager.vue";
+import FileManager from "@/Vendor/Core/Components/Backend/FileManager.vue";
 import { ref } from "vue";
 
 const selectedFile = ref("");

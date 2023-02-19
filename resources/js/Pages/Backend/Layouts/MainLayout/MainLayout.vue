@@ -1,10 +1,10 @@
 <script setup>
 import { Head, Link } from "@inertiajs/vue3";
 import { Inertia } from "@inertiajs/inertia";
-import Sidebar from "@pages/Core/Backend/Layouts/MainLayout/Partials/Sidebar.vue";
-import Dropdown from "@/Core/Components/Dropdown.vue";
-import FlashAlertQueue from "@/Core/Components/FlashAlert/FlashAlertQueue.vue";
-import DarkModeToggle from "@/Core/Components/DarkModeToggle.vue";
+import Sidebar from "@pages/Vendor/Core/Backend/Layouts/MainLayout/Partials/Sidebar.vue";
+import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
+import FlashAlertQueue from "@/Vendor/Core/Components/FlashAlert/FlashAlertQueue.vue";
+import DarkModeToggle from "@/Vendor/Core/Components/DarkModeToggle.vue";
 import { computed, onMounted, ref } from "vue";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { useStore } from "vuex";

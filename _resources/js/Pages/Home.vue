@@ -1,5 +1,5 @@
 <script>
-import MainLayout from "@pages/Core/Frontend/Layouts/MainLayout/MainLayout.vue";
+import MainLayout from "@pages/Vendor/Core/Frontend/Layouts/MainLayout/MainLayout.vue";
 
 export default {
     layout: (h, page) => h(MainLayout, { title: 'home'}, () => page)

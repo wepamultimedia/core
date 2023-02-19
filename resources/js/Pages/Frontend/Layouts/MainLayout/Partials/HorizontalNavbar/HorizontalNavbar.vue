@@ -1,7 +1,7 @@
 <script setup>
 import { nextTick, onBeforeUnmount, onMounted, ref, toRefs } from "vue";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
-import HamburguerButton from "@/Core/Components/HamburguerButton.vue";
+import HamburguerButton from "@/Vendor/Core/Components/HamburguerButton.vue";
 
 const props = defineProps({
     logoSrc: String,

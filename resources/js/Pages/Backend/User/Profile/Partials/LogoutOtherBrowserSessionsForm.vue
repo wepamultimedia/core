@@ -3,8 +3,8 @@ import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import ActionMessage from "@/Components/ActionMessage.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import Flap from "@core/Components/Flap.vue";
-import Input from "@core/Components/Form/Input.vue";
+import Flap from "@/Vendor/Core/Components/Flap.vue";
+import Input from "@/Vendor/Core/Components/Form/Input.vue";
 
 defineProps({
     sessions: Array

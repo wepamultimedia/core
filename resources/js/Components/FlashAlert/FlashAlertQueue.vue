@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, toRefs } from "vue";
-import Alert from "@core/Components/FlashAlert/Partials/Alert.vue";
+import Alert from "@/Vendor/Core/Components/FlashAlert/Partials/Alert.vue";
 import { useStore } from "vuex";
 
 const store = useStore();
