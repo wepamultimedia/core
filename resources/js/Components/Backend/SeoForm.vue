@@ -289,14 +289,14 @@ onMounted(() => {
         </button>
     </div>
     <div class="bg-white dark:bg-gray-600 border border-t-0 border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-t-none overflow-y-auto overflow-x-hidden">
-        <div class="p-4 border-b border-gray-300 dark:border-gray-700">
+        <div class="p-6 border-b border-gray-300 dark:border-gray-700">
             <ToggleButton v-model="form.autocomplete"
                           :label="__('autocomplete')"/>
         </div>
         <!-- general -->
         <div v-show="sections.general"
              class="flex flex-col lg:flex-row divide-y lg:divide-x lg:divide-y-0 divice-gray-300 dark:divide-gray-700">
-            <div class="lg:w-1/2 p-4">
+            <div class="lg:w-1/2 p-6">
                 <div class="">
                     <Input v-model="form"
                            v-model:locale="selected_locale"
@@ -345,7 +345,7 @@ onMounted(() => {
                               translation></Textarea>
                 </div>
             </div>
-            <div class="lg:w-1/2 p-4">
+            <div class="lg:w-1/2 p-6">
                 <div class="sm:w-1/2 lg:w-3/4 xl:w-1/2">
                     <InputImage v-model="form.image"
                                 v-model:image="values.image"
@@ -376,7 +376,7 @@ onMounted(() => {
         </div>
         <!-- schema -->
         <div v-show="sections.schema"
-             class="flex flex-col lg:flex-row gap-4 p-4">
+             class="flex flex-col lg:flex-row gap-4 p-6">
             <div class="lg:w-1/2">
                 <div class="mb-4">
                     <Select v-model="form.page_type"
@@ -399,7 +399,7 @@ onMounted(() => {
         <div v-show="sections.social">
             <div class="grid lg:grid-cols-2 divide-y  lg:divide-y-0 divide-gray-300 dark:divide-gray-700">
                 <h3 class="lg:col-span-full p-4 lg:border-b border-gray-300 dark:border-gray-700">Facebook</h3>
-                <div class="p-4">
+                <div class="p-6">
                     <div class="mt-4">
                         <Input v-model="form"
                                v-model:locale="selected_locale"
@@ -421,7 +421,7 @@ onMounted(() => {
                                   translation></Textarea>
                     </div>
                 </div>
-                <div class="p-4">
+                <div class="p-6">
                     <div class="mb-4">
                         <div class="sm:w-1/2 lg:w-3/4 xl:w-1/2">
                             <InputImage v-model="form.facebook_image"
@@ -453,7 +453,7 @@ onMounted(() => {
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 border-gray-300 dark:border-gray-700 divide-y  lg:divide-y-0 divide-gray-300 dark:divide-gray-700">
                 <h3 class="lg:col-span-full p-4 lg:border-b border-gray-300 dark:border-gray-700">Twitter</h3>
-                <div class="p-4">
+                <div class="p-6">
                     <div class="mt-4">
                         <Input v-model="form"
                                v-model:locale="selected_locale"
@@ -475,7 +475,7 @@ onMounted(() => {
                                   translation></Textarea>
                     </div>
                 </div>
-                <div class="p-4">
+                <div class="p-6">
                     <div class="mb-4">
                         <div class="sm:w-1/2 lg:w-3/4 xl:w-1/2">
                             <InputImage v-model="form.twitter_image"
@@ -508,7 +508,7 @@ onMounted(() => {
         </div>
         <!-- advanced -->
         <div v-show="sections.advanced">
-            <div class="grid grid-cols-1 gap-4 px-4 py-8">
+            <div class="grid grid-cols-1 gap-4 p-6">
                 <h3>{{ __("search_engine") }}</h3>
                 <div class="mb-4">
                     <Select v-model="form.robots"

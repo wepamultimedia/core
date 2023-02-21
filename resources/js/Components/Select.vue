@@ -17,6 +17,7 @@ const props = defineProps({
         default: true
     },
     searcheable: Boolean,
+    required: Boolean,
     debug: Boolean,
     closeOnSelect: {
         type: Boolean,
@@ -146,7 +147,7 @@ document.body.addEventListener("click", () => {
         <label v-if="label"
                class="text-sm"
                @click.stop="open = !open">
-            {{ label }}
+            {{ label }} <span v-if="required">*</span>
         </label>
         <div class="mt-1 bg-white dark:bg-gray-600 w-full p-2 flex justify-between items-center border rounded-lg border-gray-300 dark:border-gray-700 min-w-max cursor-pointer"
              @click.stop="openClick()">

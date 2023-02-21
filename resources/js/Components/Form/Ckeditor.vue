@@ -1,11 +1,12 @@
 <script setup>
-import { computed, reactive, ref, toRefs, useAttrs, watch } from "vue";
+import { computed, defineAsyncComponent, onMounted, reactive, ref, toRefs, useAttrs, watch } from "vue";
 import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
 import { component as CKEditor } from "@ckeditor/ckeditor5-vue";
 import Editor from "wepa-ckeditor5-filemanager";
 import Flap from "@/Vendor/Core/Components/Flap.vue";
 import FileManager from "@/Vendor/Core/Components/Backend/FileManager.vue";
 import { usePage } from "@inertiajs/vue3";
+
 
 const props = defineProps({
     modelValue: [String, Object],
@@ -35,8 +36,110 @@ const proxyModelValue = computed({
     }
 });
 
+const defaultLocale = usePage().props.default.locale;
+
+switch (defaultLocale){
+    case "es":
+        import("wepa-ckeditor5-filemanager/build/translations/es.js");
+        break;
+}
+
 const ckconfig = {
     ...props.config,
+    language: 'es',
+    "fontSize": {
+        options: [
+            {
+                title: "xs",
+                model: "text-xs",
+                view: {
+                    name: 'span',
+                    classes: ['text-xs']
+                }
+            },
+            {
+                title: "small",
+                model: "text-sm",
+                view: {
+                    name: 'span',
+                    classes: ['text-sm']
+                }
+            },
+            {
+                title: "default",
+                model: "text-md",
+                view: {
+                    name: 'span',
+                    classes: ['text-xs']
+                }
+            },
+            {
+                title: "Large",
+                model: "text-lg",
+                view: {
+                    name: 'span',
+                    classes: ['text-lg']
+                }
+            },
+            {
+                title: "Extra large",
+                model: "text-xl",
+                view: {
+                    name: 'span',
+                    classes: ['text-xl']
+                }
+            },
+            {
+                title: "2 Extra large",
+                model: "text-2xl",
+                view: {
+                    name: 'span',
+                    classes: ['text-2xl']
+                }
+            },
+            {
+                title: "3 Extra large",
+                model: "text-3xl",
+                view: {
+                    name: 'span',
+                    classes: ['text-3xl']
+                }
+            },
+            {
+                title: "4 Extra large",
+                model: "text-4xl",
+                view: {
+                    name: 'span',
+                    classes: ['text-4xl']
+                }
+            },
+        ],
+    },
+    toolbar: {
+        items: [
+            "undo",
+            "redo",
+            "|",
+            "heading",
+            "|",
+            "fontSize",
+            "bold",
+            "italic",
+            "link",
+            "bulletedList",
+            "numberedList",
+            "|",
+            "outdent",
+            "indent",
+            "|",
+            "filemanager",
+            "blockQuote",
+            "insertTable",
+            "mediaEmbed",
+
+            "sourceEditing"
+        ]
+    },
     filemanager: editor => {
         fileManager.instance = editor;
         fileManager.open = true;
@@ -70,12 +173,12 @@ const {
       } = toRefs(props);
 
 watch(locale, value => {
-    if(selectedLocale.value !== value) {
+    if (selectedLocale.value !== value) {
         selectedLocale.value = value;
     }
 });
 watch(selectedLocale, value => {
-    if(selectedLocale.value !== locale.value) {
+    if (selectedLocale.value !== locale.value) {
         emit("update:locale", value);
     }
     buildInputValue();
@@ -152,6 +255,9 @@ const setInputValue = (value) => {
     }
 };
 
+
+
+
 buildInputValue();
 </script>
 <template>
@@ -163,17 +269,17 @@ buildInputValue();
                   class="px-1">*
             </span>
         </label>
-        <div class="mt-1 text-gray-800"
+        <div class="mt-1 text-gray-800 "
              style="--ck-border-radius: 0.40rem">
-            <CKEditor v-model="inputValue"
-                      :id="inputId"
+            <CKEditor :id="inputId"
+                      v-model="inputValue"
                       :config="ckconfig"
                       :editor="Editor"></CKEditor>
             <div class="flex justify-end mt-2">
                 <Dropdown v-if="$page.props.default.locales.length > 1"
                           class="w-full">
                     <template #button="{open}">
-                        <button class=" w-full py-2.5 px-4 bg-white dark:bg-gray-500 border border rounded-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
+                        <button class="w-full py-2.5 px-4 bg-white dark:bg-gray-500 border border rounded-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
                                 type="button">
                             {{ selectedLocale }}
                         </button>
@@ -203,5 +309,29 @@ buildInputValue();
 <style scoped>
 .ck-editor__editable {
     @apply min-h-[260px]
+}
+
+.ck-content .text-xs {
+    font-size : 0.7em;
+}
+
+.ck-content .text-sm {
+    font-size : 0.85em;
+}
+
+.ck-content .text-md {
+    font-size : 1.4em;
+}
+
+.ck-content .text-lg {
+    font-size : 1.8em;
+}
+
+.ck-content .text-xl {
+    font-size : 2.0em;
+}
+
+.ck-content .text-2xl {
+    font-size : 2.2em;
 }
 </style>

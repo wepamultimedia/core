@@ -31,6 +31,11 @@ class CoreServiceProvider extends PackageServiceProvider
 		$this->hasSeeders([DefaultSeeder::class]);
 		$this->registerViews();
 		
+		// Assets
+		$this->publishes([
+			$this->package->basePath('/../resources/dist') => public_path("vendor/{$this->package->shortName()}"),
+		], ['core', 'core-assets']);
+		
 		$this->publishes([
 			__DIR__ . '/../src/CoreServiceProvider.php' => app_path('Providers/CoreServiceProvider.php')
 		], ['core-provider']);

@@ -74,7 +74,7 @@ const fileManager = reactive({
              :src="modelValue"
              class="rounded-lg">
     </figure>
-    <button class="btn btn-default w-full justify-center"
+    <button class="btn btn-secondary w-full justify-center mt-1"
             v-bind="$attrs"
             @click.prevent="fileManager.open = true">
         {{ buttonLabel ? buttonLabel : __("select_image") }}
