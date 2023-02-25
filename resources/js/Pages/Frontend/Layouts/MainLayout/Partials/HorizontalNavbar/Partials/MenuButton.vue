@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref } from "vue";
+import { ref } from "vue";
 import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
