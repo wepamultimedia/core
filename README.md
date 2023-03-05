@@ -19,14 +19,15 @@ php artisan core:install
 ### NPM dependencies (Required)
 
 ```
-npm install vuex@next
-npm install @vueuse/core
-npm install vue-inline-svg@next
-npm install vue-screen@next
-npm install @inertiajs/progress
-npm install sass
+npm install -D vuex@next
+npm install -D @vueuse/core
+npm install -D vue-inline-svg@next
+npm install -D vue-screen@next
+npm install -D @inertiajs/progress
+npm install -D tailwind-scrollbar,
+npm install -D sass
 
-npm i vuex@next @vueuse/core vue-inline-svg@next vue-screen@next @inertiajs/progress sass
+npm i -D vuex@next @vueuse/core vue-inline-svg@next vue-screen@next @inertiajs/progress tailwind-scrollbar sass
 ```
 
 ### Vendor Publish

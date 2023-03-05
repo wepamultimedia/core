@@ -83,7 +83,7 @@ const clearPhotoFileInput = () => {
                            type="file"
                            @change="updatePhotoPreview"/>
                     <InputLabel :value="__('photo')"
-                                class="text-skin-base dark:text-skin-base-dark"
+                                class="text-skin-base "
                                 for="photo"/>
                     <!-- Current Profile Photo -->
                     <div v-show="!photoPreview"

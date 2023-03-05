@@ -44,4 +44,7 @@ return [
     'copy_link' => 'Copy link',
     'link_copied' => 'Link copied',
     'upload' => 'Upload',
+    'select_image' => 'Select image',
+    'image' => 'Image',
+    'image_alt' => 'Alternative text image'
 ];

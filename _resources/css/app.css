@@ -67,7 +67,7 @@
     }
 
     body, button, h1, h2, h3, h4, h5, h6 {
-        /*@apply text-skin-base dark:text-skin-base-dark*/
+        /*@apply text-skin-base*/
     }
 
     h1 {
@@ -137,6 +137,6 @@
     }
 
     .btn-secondary {
-        @apply text-skin-base dark:text-skin-base-dark bg-transparent border-skin-muted dark:border-skin-muted-dark
+        @apply text-skin-base  bg-transparent border-skin-muted
     }
 }

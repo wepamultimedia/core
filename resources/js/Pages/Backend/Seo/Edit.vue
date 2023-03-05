@@ -64,7 +64,7 @@ onBeforeMount(() => {
         <span class="dark:text-light font-medium text-xl">{{ __("edit_title") }}</span>
     </div>
     <form @submit.prevent="submit">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 text-skin-base dark:text-skin-base-dark mb-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 text-skin-base  mb-8">
             <div class="col-span-1">
                 <p class="text-sm">{{ __("edit_summary") }}</p>
             </div>

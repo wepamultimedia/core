@@ -35,7 +35,7 @@ storeFrontend.dispatch("loadSite");
             <template #header>
                <div class="h-8 flex items-center border-b border-gray-300 dark:border-gray-600">
                    <div class="container-fluid flex items-center">
-                        <SocialNetworks class="px-1 fill-skin-base dark:fill-skin-base-dark" />
+                        <SocialNetworks class="px-1 fill-skin-base " />
                    </div>
                </div>
             </template>
@@ -77,7 +77,7 @@ storeFrontend.dispatch("loadSite");
                     <div class="grid divide-y divide-gray-200 dark:divide-gray-700">
                         <Link v-for="locale in $page.props.default.locales"
                               :href="route('locale', {locale: locale.code})"
-                              class="px-4 py-2 text-sm text-skin-base dark:text-skin-base-dark"
+                              class="px-4 py-2 text-sm text-skin-base "
                               type="button"
                               @click="selectedLocale=locale">
                             {{ locale.name }}

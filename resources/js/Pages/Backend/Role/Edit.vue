@@ -59,7 +59,7 @@ function submit(){
     </div>
     <form @submit.prevent="submit">
         <div class="max-w-7xl">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 text-skin-base dark:text-skin-base-dark">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 text-skin-base ">
                 <div class="col-span-1">
                     <p class="text-sm">{{ __("edit_summary") }}</p>
                 </div>

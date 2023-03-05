@@ -342,7 +342,7 @@ getMimeTypes();
             <div>
                 <input v-model="searchInput"
                        :placeholder="__('search')"
-                       class="w-full text-sm dark:bg-inherit border-gray-200 dark:border-gray-600 text-skin-base dark:text-skin-base-dark focus:border-gray-200 focus:ring focus:ring-gray-200 focus:ring-opacity-50 rounded-md shadow-sm"
+                       class="w-full text-sm dark:bg-inherit border-gray-200 dark:border-gray-600 text-skin-base  focus:border-gray-200 focus:ring focus:ring-gray-200 focus:ring-opacity-50 rounded-md shadow-sm"
                        type="text">
             </div>
             <!-- / search input -->

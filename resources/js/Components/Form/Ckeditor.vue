@@ -1,12 +1,11 @@
 <script setup>
-import { computed, defineAsyncComponent, onMounted, reactive, ref, toRefs, useAttrs, watch } from "vue";
+import { computed, reactive, ref, toRefs, useAttrs, watch } from "vue";
 import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
 import { component as CKEditor } from "@ckeditor/ckeditor5-vue";
 import Editor from "wepa-ckeditor5-filemanager";
 import Flap from "@/Vendor/Core/Components/Flap.vue";
 import FileManager from "@/Vendor/Core/Components/Backend/FileManager.vue";
 import { usePage } from "@inertiajs/vue3";
-
 
 const props = defineProps({
     modelValue: [String, Object],
@@ -255,9 +254,6 @@ const setInputValue = (value) => {
     }
 };
 
-
-
-
 buildInputValue();
 </script>
 <template>
@@ -269,10 +265,10 @@ buildInputValue();
                   class="px-1">*
             </span>
         </label>
-        <div class="mt-1 text-gray-800 "
+        <div class="mt-1 text-gray-800"
              style="--ck-border-radius: 0.40rem">
-            <CKEditor :id="inputId"
-                      v-model="inputValue"
+            <CKEditor v-model="inputValue"
+                      :id="inputId"
                       :config="ckconfig"
                       :editor="Editor"></CKEditor>
             <div class="flex justify-end mt-2">
@@ -309,29 +305,5 @@ buildInputValue();
 <style scoped>
 .ck-editor__editable {
     @apply min-h-[260px]
-}
-
-.ck-content .text-xs {
-    font-size : 0.7em;
-}
-
-.ck-content .text-sm {
-    font-size : 0.85em;
-}
-
-.ck-content .text-md {
-    font-size : 1.4em;
-}
-
-.ck-content .text-lg {
-    font-size : 1.8em;
-}
-
-.ck-content .text-xl {
-    font-size : 2.0em;
-}
-
-.ck-content .text-2xl {
-    font-size : 2.2em;
 }
 </style>

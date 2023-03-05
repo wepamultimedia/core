@@ -38,12 +38,12 @@ trait InertiaControllerTrait
 
 	/**
 	 * @param string $view
-	 * @param mixed $tranlation
+	 * @param mixed $translation
 	 *
 	 * @return void
 	 */
     protected function buildRender(string &$view,
-                                   mixed $tranlation = []): void
+                                   mixed $translation = []): void
     {
         $this->buildViewPath($view);
 
@@ -54,7 +54,7 @@ trait InertiaControllerTrait
                 'locales' => config('core.locales'),
                 'appName' => config('app.name'),
                 'baseUrl' => request()->root(),
-                'translation' => $this->translation($tranlation),
+                'translation' => $this->translation($translation),
                 'storageUrl' => preg_replace('/\/$/', '', Storage::disk(config('filesystems.default'))->url('')),
             ],
         ];
@@ -142,17 +142,20 @@ trait InertiaControllerTrait
     {
         Inertia::share($this->share);
     }
-
+    
     /**
-     * @param  mixed|null  $tranlation Translations files
-     * @param  array  $share
+     * @param  string  $view
+     * @param  mixed  $translation
+     * @param  array  $props
+     *
+     * @return Response
      */
     public function render(string $view,
-                           mixed $tranlation = [],
+                           mixed $translation = [],
                            array $props = []): Response
     {
         $this->beforeRender();
-        $this->buildRender($view, $tranlation);
+        $this->buildRender($view, $translation);
 
         return Inertia::render($view, $props);
     }

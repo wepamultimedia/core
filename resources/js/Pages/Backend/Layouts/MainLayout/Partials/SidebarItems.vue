@@ -70,7 +70,7 @@ const show = computed(() => {
             <div class="flex items-center w-full">
                 <icon v-if="item.icon"
                       :icon="item.icon"
-                      class="mr-2 w-5 h-5 min-w-max fill-skin-base dark:fill-skin-base-dark"/>
+                      class="mr-2 w-5 h-5 min-w-max fill-skin-base "/>
                 <span v-if="item.submenu && !minimized"
                       :class="{'opacity-0': minimized}"
                       class="min-w-max text-sm">
@@ -106,7 +106,7 @@ const show = computed(() => {
             </div>
             <icon v-if="item.submenu"
                   :class="[{'-rotate-0': open, '-rotate-90': !open, 'opacity-0':minimized}]"
-                  class="ml-2 absolute right-0 transition-all duration-200 ease-in-out fill-skin-base dark:fill-skin-base-dark"
+                  class="ml-2 absolute right-0 transition-all duration-200 ease-in-out fill-skin-base "
                   icon="chevron-down"/>
         </button>
         <!--dropdown menu-->
@@ -125,7 +125,7 @@ const show = computed(() => {
                 <template v-for="subitem in item.submenu">
                     <div class="block w-full relative" :class="[buttonClass]">
                         <span v-if="subitem.isActive"
-                              class="absolute w-2 h-2 left-2 top-3 rounded-full bg-skin-base dark:bg-skin-base-dark"></span>
+                              class="absolute w-2 h-2 left-2 top-3 rounded-full bg-skin-base "></span>
                         <button class="flex items-center justify-between w-full">
                             <Link :class="[{'font-bold': subitem.isActive}]"
                                   :disabled="loading || subitem.isActive"

@@ -3,6 +3,9 @@
 namespace Wepa\Core\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+
 
 class BaseSymlinkCommand extends Command
 {
@@ -15,7 +18,7 @@ class BaseSymlinkCommand extends Command
     protected array $paths = [
         'pages' => [],
         'public' => [],
-        'js' => [],
+        'components' => [],
         'unit' => [],
         'feature' => [],
     ];
@@ -42,12 +45,12 @@ class BaseSymlinkCommand extends Command
 
     protected function definePaths()
     {
-        $packageName = ucfirst($this->package);
+        $packageName = ucfirst(Str::camel($this->package));
         $vendorPackageName = strtolower($this->package);
 
         $this->paths['pages'] = [
             'source' => base_path("vendor\\$this->developer\\$vendorPackageName\\resources\\js\\Pages"),
-            'target' => resource_path("js\\Pages\\$packageName"),
+            'target' => resource_path("js\\Pages\\Vendor\\$packageName"),
         ];
 
         $this->paths['public'] = [
@@ -55,9 +58,9 @@ class BaseSymlinkCommand extends Command
             'target' => public_path('vendor\\'.strtolower($packageName)),
         ];
 
-        $this->paths['js'] = [
-            'source' => base_path("vendor\\$this->developer\\$vendorPackageName\\resources\\js"),
-            'target' => resource_path("js\\$packageName"),
+        $this->paths['components'] = [
+            'source' => base_path("vendor\\$this->developer\\$vendorPackageName\\resources\\js\\Components"),
+            'target' => resource_path("js\\Vendor\\$packageName\\Components"),
         ];
 
         $this->paths['unit'] = [
@@ -76,6 +79,7 @@ class BaseSymlinkCommand extends Command
         $commands = [];
         foreach ($this->paths as $index => $path) {
             if (! file_exists($path['target']) and file_exists($path['source'])) {
+                File::ensureDirectoryExists(dirname($path['target']));
                 $commands[] = [
                     'command' => "mklink /D {$path['target']} {$path['source']}",
                     'info' => str_replace(base_path(), '', $path['target']),

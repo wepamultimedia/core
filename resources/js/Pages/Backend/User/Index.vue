@@ -17,7 +17,7 @@ defineProps(["users"]);
 </script>
 <template>
     <div class="flex justify-between my-0 items-center h-14 rounded-lg overflow-hidden my-6">
-        <span class="text-skin-base dark:text-skin-base-dark font-medium text-xl">{{ __("users_list") }}</span>
+        <span class="text-skin-base  font-medium text-xl">{{ __("users_list") }}</span>
         <Link :href="route('admin.users.create')"
               as="button"
               class="btn btn-success text-sm"
@@ -28,7 +28,7 @@ defineProps(["users"]);
                     bg-white dark:bg-gray-700
                     overflow-hidden
                     shadow
-                    text-skin-base dark:text-skin-base-dark
+                    text-skin-base
                     rounded-lg
                     mb-20">
         <Table :columns="['name', {name: 'email', show: 'lg'}, {name: 'roles', show: 'md'}]"
@@ -40,7 +40,7 @@ defineProps(["users"]);
                search-route="admin.users.index">
             <template #col-content-roles="{item}">
                 <span v-for="role in item.roles"
-                      class="text-xs font-bold leading-sm uppercase px-3 py-1 rounded-full bg-gray-100 dark:border-gray-600 dark:bg-gray-600 text-skin-muted dark:text-skin-muted-dark border mx-0.5">
+                      class="text-xs font-bold leading-sm uppercase px-3 py-1 rounded-full bg-gray-100 dark:border-gray-600 dark:bg-gray-600 text-skin-muted  border mx-0.5">
                     {{ role.name }}
                 </span>
             </template>

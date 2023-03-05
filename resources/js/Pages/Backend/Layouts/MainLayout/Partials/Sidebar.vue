@@ -93,9 +93,7 @@ onMounted((app) => {
                     class="h-6 w-6 ease-in-out duration-500"
                     @click="emit('update:showMobile', !showMobile)">
                 <icon :class="[{'stroke-skin-light': showMobile}]"
-                      class="stroke-skin-base
-                             dark:stroke-skin-base-dark
-                             w-6 h-6"
+                      class="stroke-skin-base w-6 h-6"
                       icon="menu"
                       outline></icon>
             </button>

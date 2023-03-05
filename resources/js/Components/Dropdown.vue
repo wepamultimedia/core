@@ -79,7 +79,6 @@ const open = ref(false);
                         text-sm
                         text-skin-base
                         bg-skin-light
-                        dark:bg-skin-dark
                         dark:border-gray-600"
                  @click="open=false"
                  @mouseleave="onHover ? open = false : ''">

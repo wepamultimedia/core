@@ -1,9 +1,11 @@
 <script setup>
 import { onBeforeMount, ref, toRefs, watch } from "vue";
 import Icon from "@/Vendor/Core/Components/Heroicon.vue";
+import { __ } from "@core/Mixins/translations";
 
 const props = defineProps({
     options: Array,
+    defaultValue: [String, Number],
     placeholder: String,
     multiSelect: Boolean,
     translateLabel: Boolean,
@@ -29,8 +31,8 @@ const props = defineProps({
         default: "label"
     }
 });
-const emit = defineEmits(["update:modelValue"]);
 
+const emit = defineEmits(["update:modelValue"]);
 const {
           optionLabel,
           height,
@@ -70,12 +72,16 @@ const buildSelect = () => {
             selectOption(options.value.find(option => option.id === modelValue.value.id));
         }
     }
-}
+};
 
 watch(search, value => {
     if (value !== "" || value) {
         const re = new RegExp(value, "i");
-        optionsFiltered.value = options.value.filter(option => re.test(option[optionLabel.value]));
+        if(props.translateLabel){
+            optionsFiltered.value = options.value.filter(option => re.test(__(option[optionLabel.value])));
+        } else {
+            optionsFiltered.value = options.value.filter(option => re.test(option[optionLabel.value]));
+        }
     } else {
         optionsFiltered.value = options.value;
     }
@@ -108,38 +114,28 @@ const selectOption = option => {
                 emit("update:modelValue", null);
             }
         } else {
-            if (selectedOption.value !== null && selectedOption.value.hasOwnProperty("id") && selectedOption.value.id === option.id) {
-                selectedOption.value = {};
-                if (reduce.value) {
-                    emit("update:modelValue", null);
+            selectedOption.value = option ? option : {};
+            if (reduce.value) {
+                if (typeof option === "object" && option !== null && option.hasOwnProperty("id")) {
+                    emit("update:modelValue", option.id);
                 } else {
                     emit("update:modelValue", null);
                 }
             } else {
-                selectedOption.value = option ? option : {};
-                if (reduce.value) {
-                    if (typeof option === "object" && option !== null && option.hasOwnProperty("id")) {
-                        emit("update:modelValue", option.id);
-                    } else {
-                        emit("update:modelValue", null);
-                    }
-                } else {
-                    emit("update:modelValue", selectedOption.value);
-                }
+                emit("update:modelValue", selectedOption.value);
             }
         }
     }
-}
+};
 const openClick = () => {
     let oldValue = open.value;
     document.body.click();
     open.value = !oldValue;
-}
+};
 
 document.body.addEventListener("click", () => {
     open.value = false;
 });
-
 </script>
 <template>
     <div class="font-medium relative"
@@ -147,16 +143,17 @@ document.body.addEventListener("click", () => {
         <label v-if="label"
                class="text-sm"
                @click.stop="open = !open">
-            {{ label }} <span v-if="required">*</span>
+            {{ label }}
+            <span v-if="required">*</span>
         </label>
-        <div class="mt-1 bg-white dark:bg-gray-600 w-full p-2 flex justify-between items-center border rounded-lg border-gray-300 dark:border-gray-700 min-w-max cursor-pointer"
+        <div class="mt-1 bg-white dark:bg-gray-600 w-full px-4 py-2 flex justify-between items-center border rounded-lg border-gray-300 dark:border-gray-700 min-w-max cursor-pointer"
              @click.stop="openClick()">
             <div v-if="multiSelect"
                  class="flex flex-wrap gap-1">
                 <span v-if="selectedOption.length < 1">{{ placeholder }}</span>
                 <span v-for="so in selectedOption"
                       :key="so.id"
-                      class="border border-gray-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 px-2 py-1 justify-between rounded flex items-center gap-1">
+                      class="border border-gray-300 dark:border-gray-700 bg-gray-200 dark:bg-gray-700 px-2 py-1 justify-between rounded flex items-center gap-1">
                     <span v-if="translateLabel">{{ __(so[optionLabel]) }}</span>
                     <span v-else>{{ so[optionLabel] }}</span>
                     <Icon class="fill-gray-600 dark:fill-gray-800 min-w-max cursor-pointer"
@@ -183,12 +180,13 @@ document.body.addEventListener("click", () => {
                       fill-rule="evenodd"/>
             </svg>
         </div>
-        <div :class="{'max-h-60 shadow border': open, 'max-h-0': !open}"
-             class="w-full absolute bg-white dark:bg-gray-600 mt-2 rounded-lg overflow-hidden overflow-y-auto z-50 min-w-[200px]"
+        <div v-if="open"
+             :class="{'max-h-60 drop-shadow': open}"
+             class=" w-full absolute bg-white border dark:border-gray-700 dark:bg-gray-600 mt-1 overflow-hidden z-50 min-w-[200px] scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 overflow-hidden overflow-y-scroll"
              v-bind="$attrs">
             <div v-if="searcheable"
-                 class="flex items-center px-2 sticky top-0 bg-white">
-                <svg class="fill-gray-600"
+                 class="flex items-center px-2 sticky top-0 bg-white dark:bg-gray-600" @click.stop="">
+                <svg class="fill-gray-600 dark:fill-gray-300"
                      fill="none"
                      height="20"
                      viewBox="0 0 20 20"
@@ -200,13 +198,13 @@ document.body.addEventListener("click", () => {
                 </svg>
                 <input v-model="search"
                        :placeholder="__('search')"
-                       class="w-full border-transparent focus:border-transparent focus:ring-0"
+                       class="w-full border-transparent bg-transparent !border-0 !ring-0"
                        type="text">
             </div>
             <ul>
                 <li v-for="option in optionsFiltered"
-                    :class="{'bg-gray-200 dark:bg-gray-800': (selectedOption && option.id === selectedOption.id) || (multiSelect && selectedOption.length && selectedOption.find(o => o.id === option.id))}"
-                    class="flex items-center justify-between hover:bg-skin-primary hover:text-skin-inverted p-2 text-sm cursor-pointer fill-gray-600 hover:fill-white"
+                    :class="{'': (selectedOption && option.id === selectedOption.id) || (multiSelect && selectedOption.length && selectedOption.find(o => o.id === option.id))}"
+                    class="flex items-center justify-between hover:bg-skin-accent hover:text-skin-inverted p-2 text-sm cursor-pointer fill-gray-600 hover:fill-white"
                     @click.stop="selectOption(option); closeOnSelect ? open = false : null; search = ''">
                     <slot name="option"
                           v-bind="{option}">

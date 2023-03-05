@@ -40,7 +40,7 @@ const submit = () => {
              class="mb-4 font-medium text-sm text-green-600">
             {{ status }}
         </div>
-        <form class="text-skin-base dark:text-skin-base-dark"
+        <form class="text-skin-base "
               @submit.prevent="submit">
             <div class="my-4">
                 <Input v-model="form.email"

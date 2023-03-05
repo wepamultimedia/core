@@ -32,7 +32,7 @@ class CoreUpdateCommand extends CoreInstallCommand
 	    $this->call('vendor:publish', ['--tag' => 'core', '--force' => true]);
 		$this->updateFiles();
 
-        $process = Process::fromShellCommandline('npm i vuex@next @vueuse/core vue-inline-svg@next vue-screen@next @inertiajs/progress sass');
+        $process = Process::fromShellCommandline('npm i -D vuex@next @vueuse/core vue-inline-svg@next vue-screen@next @inertiajs/progress tailwind-scrollbar sass');
         $process->run();
         $this->info($process->getOutput());
 

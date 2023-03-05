@@ -47,7 +47,7 @@ function submit() {
 }
 </script>
 <template>
-    <form class="mb-14 text-skin-base dark:text-skin-base-dark"
+    <form class="mb-14 text-skin-base "
           @submit.prevent="submit">
         <div class="max-w-7xl">
             <!--Title-->

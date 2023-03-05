@@ -173,22 +173,6 @@ buildInputValue();
                                {'rounded-r-none': translation && $page.props.default.locales.length > 1},
                                {'rounded-l-none': $slots.icon}
                                ]"
-                           class="px-3 py-2
-                                  placeholder-gray-300 dark:placeholder-gray-500
-                                  bg-white dark:bg-inherit
-                                  outline-transparent
-                                  border border-gray-300 dark:border-gray-700
-                                  dark:text-light
-                                  focus:border-gray-300 focus:dark:border-gray-700
-                                  focus:ring
-                                  focus:outline-none
-                                  focus:ring-gray-300 focus:dark:ring-gray-700
-                                  focus:ring-opacity-50
-                                  disabled:opacity-60
-                                  rounded-md
-                                  shadow-sm
-                                  block
-                                  w-full"
                            type="text"
                            v-bind="$attrs">
                     <div v-if="legend"

@@ -48,7 +48,7 @@ const logout = () => {
 <template>
     <Head :title="`${__(title)} | ${$page.props.default.appName}`"/>
     <FlashAlertQueue/>
-    <div class="flex flex-col justify-between min-h-screen admin-theme bg-skin-background dark:bg-skin-background-dark">
+    <div class="flex flex-col justify-between min-h-screen admin-theme bg-skin-background ">
         <!--Header-->
         <div class="h-max flex md:items-center px-4 py-4 flex-col md:flex-row">
             <div class="flex items-center justify-between md:min-w-[256px]">
@@ -60,7 +60,7 @@ const logout = () => {
                 <button :class="{'-rotate-90' : !showDesktop}"
                         class="h-6 w-6 ease-in-out duration-500 hidden md:block"
                         @click="showDesktop = !showDesktop">
-                    <icon class="w-6 stroke-skin-base dark:stroke-skin-base-dark fill-skin-base dark:fill-skin-base-dark"
+                    <icon class="w-6 stroke-skin-base  fill-skin-base "
                           icon="menu"
                           outline/>
                 </button>
@@ -69,7 +69,7 @@ const logout = () => {
                         v-show="!showMobile"
                         class="h-6 w-6 ease-in-out duration-500 md:hidden"
                         @click="showMobile = !showMobile">
-                    <icon class="w-6 stroke-skin-base dark:stroke-skin-base-dark fill-skin-base dark:fill-skin-base-dark"
+                    <icon class="w-6 stroke-skin-base  fill-skin-base "
                           icon="menu"
                           outline/>
                 </button>
@@ -83,17 +83,17 @@ const logout = () => {
                                   shadow>
                             <template #button="{open}">
                                 <button v-if="$page.props.jetstream.managesProfilePhotos"
-                                        class="flex items-center text-skin-base dark:text-skin-base-dark text-sm rounded-full transition pr-2">
+                                        class="flex items-center text-skin-base  text-sm rounded-full transition pr-2">
                                     <img :alt="$page.props.auth.user.name"
                                          :src="$page.props.auth.user.profile_photo_url"
                                          class="h-8 w-8 rounded-full object-cover mr-2">
                                     <span class="hidden md:block">{{ $page.props.auth.user.name }}</span>
                                     <inline-svg :class="{'rotate-180': open}"
-                                                class="transition-all duration-200 ease-out fill-skin-dark dark:fill-skin-light grow ml-2"
+                                                class="transition-all duration-200 ease-out  dark:fill-skin-light grow ml-2"
                                                 src="/vendor/core/icons/solid/chevron-down.svg"/>
                                 </button>
                             </template>
-                            <div class="flex flex-col min-w-[200px] divide-y divide-gray-200 dark:divide-gray-700 text-skin-base dark:text-skin-base-dark">
+                            <div class="flex flex-col min-w-[200px] divide-y divide-gray-200 dark:divide-gray-700 text-skin-base ">
                                 <button class="px-4 py-4 text-left">
                                     <a :href="route('admin.user.profile')">
                                         {{ __("profile") }}
@@ -122,7 +122,7 @@ const logout = () => {
             <div v-show="!loading"
                  class="flex-auto mx-4">
                 <!-- Breadcrumb -->
-                <div class="text-md bg-skin-inverted dark:bg-skin-inverted-dark shadow text-skin-base dark:text-skin-base-dark rounded-lg py-2 px-4 mb-4">
+                <div class="text-md bg-skin-inverted  shadow text-skin-base  rounded-lg py-2 px-4 mb-4">
                     <Link :href="route('admin.dashboard')">{{ __("dashboard") }}</Link>
                     <template v-if="bc.length">
                         <span class="px-1">/</span>

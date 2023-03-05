@@ -4,7 +4,7 @@
     <div class="bg-white dark:bg-gray-600
                 shadow
                 overflow-hidden
-                text-skin-base dark:text-skin-base-dark
+                text-skin-base
                 rounded-lg">
         <slot></slot>
     </div>

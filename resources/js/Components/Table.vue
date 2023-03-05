@@ -19,6 +19,7 @@ const props = defineProps({
     divideX: Boolean,
     divideY: Boolean
 });
+
 const searchInput = ref("");
 const {
           data,
@@ -62,7 +63,7 @@ const breakpoints = useBreakpoints(breakpointsTailwind);
 
 watch(searchInput, value => {
     if (searchRoute.value) {
-        if(!value){
+        if (!value) {
             search(value);
         }
     }
@@ -83,107 +84,102 @@ onMounted(() => {
 });
 </script>
 <template>
-    <div class="w-full
-                overflow-hidden
-                shadow-lg
-                rounded-lg">
-        <table class="table
-                      table-auto
-                      w-full
-                      text-left">
-            <thead class="uppercase tracking-wider text-xs font-semibold">
-                <tr>
-                    <th v-for="col in columns"
-                        v-show="col.show ? showSizes[col.show] : true"
-                        class="uppercase bg-skin-inverted dark:bg-skin-inverted-dark px-5 py-3">
-                        {{ col.label ? col.label : col.name ? __(col.name) : __(col) }}
-                    </th>
-                    <th v-if="showActions()"
-                        class="bg-skin-inverted dark:bg-skin-inverted-dark px-5 py-3 text-center min-w-max">
-                        {{ __("actions") }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody class="text-sm">
-                <tr v-if="searchRoute">
-                    <td :colspan="countColumns()">
-                        <div class="mx-4 my-2">
-                            <input v-model="searchInput"
-                                   @keyup.enter="search(searchInput)"
-                                   :placeholder="__('search')"
-                                   class="w-full text-sm sm:w-1/2 dark:bg-inherit border-gray-200 dark:border-gray-600 text-skin-base dark:text-skin-base-dark focus:border-gray-200 focus:ring focus:ring-gray-200 focus:ring-opacity-50 rounded-md shadow-sm"
-                                   type="text">
-                        </div>
-                    </td>
-                </tr>
-                <template v-for="item in data.data ? data.data : data"
-                          :key="item.id + '-row'">
-                    <slot name="row">
-                        <tr :class="{'even:bg-skin-light even:dark:bg-skin-dark': even, 'border-b border-gray-300 dark:border-gray-700 last:border-b-0' : divideX || divide}">
-                            <slot :item="item"
-                                  name="row-content">
-                                <template v-for="col in columns" :key="item.id + '-col'">
-                                    <slot :item="item"
-                                          :name="col.name ? 'col-' + col.name : 'col-' + col">
-                                        <td v-show="col.show ? showSizes[col.show] : true"
-                                            :class="{'border-r border-gray-300 dark:border-gray-700 last:border-r-0' : divideY || divide}"
-                                            class="px-5 py-3">
-                                            <slot :item="item"
-                                                  :name="col.name ? 'col-content-' + col.name : 'col-content-' + col">
-                                                {{
-                                                    (item[col.name ? col.name : col] && (typeof item[col.name ? col.name
-                                                                                                              : col] !== "array" && typeof item[col.name
-                                                                                                                                                ? col.name
-                                                                                                                                                : col] !== "object"))
-                                                    ? item[col.name ? col.name : col] : "..."
-                                                }}
-                                            </slot>
-                                        </td>
-                                    </slot>
-                                </template>
-                                <td v-if="showActions()"
-                                    :class="{'border-r border-gray-300 dark:border-gray-700 last:border-r-0' : divideY || divide}"
-                                    class="px-2 py-3 text-center">
-                                    <slot :item="item"
-                                          name="action">
-                                        <Link v-if="viewRoute"
-                                              :href="route(viewRoute, {id:item.id})"
-                                              as="button"
-                                              class="p-1 w-8 h-6">
-                                            <icon class="fill-skin-base dark:fill-skin-base-dark w-5 h-5"
-                                                  icon="eye"></icon>
-                                        </Link>
-                                        <Link v-if="editRoute"
-                                              :href="route(editRoute, {id:item.id})"
-                                              as="button"
-                                              class="p-1 w-8 h-6">
-                                            <icon class="fill-skin-base dark:fill-skin-base-dark w-5 h-5"
-                                                  icon="pencil-alt"></icon>
-                                        </Link>
-                                        <Modal v-if="deleteRoute"
-                                               :href="route(deleteRoute, {id:item.id})"
-                                               :message="deleteMessage ? deleteMessage : __('delete_message')"
-                                               :title="deleteTitle ? deleteTitle : __('delete_title')"
-                                               danger
-                                               method="delete">
-                                            <template #button="{open}">
-                                                <button class="p-1 w-8 h-6"
-                                                        @click="open">
-                                                    <icon class="fill-skin-base dark:fill-skin-base-dark w-5 h-5"
-                                                          icon="trash"></icon>
-                                                </button>
-                                            </template>
-                                        </Modal>
-                                    </slot>
-                                </td>
-                            </slot>
-                        </tr>
-                    </slot>
-                </template>
-            </tbody>
-        </table>
-        <Pagination :links="data.links"
-                    class="m-4"/>
-    </div>
+    <table class="table
+                  table-auto
+                  w-full
+                  text-left">
+        <thead class="uppercase tracking-wider text-xs font-semibold">
+            <tr>
+                <th v-for="col in columns"
+                    v-show="col.show ? showSizes[col.show] : true"
+                    :class="[col.class, col.thClass]"
+                    class="uppercase bg-skin-background px-5 py-3">
+                    {{ col.label ? col.label : col.name ? __(col.name) : __(col) }}
+                </th>
+                <th v-if="showActions()"
+                    class="bg-skin-background px-5 py-3 text-center min-w-max">
+                    {{ __("actions") }}
+                </th>
+            </tr>
+        </thead>
+        <tbody class="text-sm">
+            <tr v-if="searchRoute">
+                <td :colspan="countColumns()">
+                    <input v-model="searchInput"
+                           :placeholder="__('search')"
+                           class="w-full text-sm sm:w-1/2 !rounded-none !border-none"
+                           type="text"
+                           @keyup.enter="search(searchInput)">
+                </td>
+            </tr>
+            <template v-for="item in data.data ? data.data : data"
+                      :key="item.id + '-row'">
+                <slot name="row">
+                    <tr :class="{'even:even ': even, 'div-y' : divideX || divide}">
+                        <slot :item="item"
+                              name="row-content">
+                            <template v-for="col in columns"
+                                      :key="item.id + '-col'">
+                                <slot :item="item"
+                                      :name="col.name ? 'col-' + col.name : 'col-' + col">
+                                    <td v-show="col.show ? showSizes[col.show] : true"
+                                        :class="[col.class, col.tdClass, {'div-x' : divideY || divide}]"
+                                        class="px-4 py-2">
+                                        <slot :item="item"
+                                              :name="col.name ? 'col-content-' + col.name : 'col-content-' + col">
+                                            {{
+                                                (item[col.name ? col.name : col] && (typeof item[col.name ? col.name
+                                                                                                          : col] !== "array" && typeof item[col.name
+                                                                                                                                            ? col.name
+                                                                                                                                            : col] !== "object"))
+                                                ? item[col.name ? col.name : col] : "..."
+                                            }}
+                                        </slot>
+                                    </td>
+                                </slot>
+                            </template>
+                            <td v-if="showActions()"
+                                :class="{'div-y' : divideY || divide}"
+                                class="px-2 py-3 text-center">
+                                <slot :item="item"
+                                      name="action">
+                                    <Link v-if="viewRoute"
+                                          :href="route(viewRoute, {id:item.id})"
+                                          as="button"
+                                          class="p-1 w-8 h-6">
+                                        <icon class="fill-skin-base  w-5 h-5"
+                                              icon="eye"></icon>
+                                    </Link>
+                                    <Link v-if="editRoute"
+                                          :href="route(editRoute, {id:item.id})"
+                                          as="button"
+                                          class="p-1 w-8 h-6">
+                                        <icon class="fill-skin-base  w-5 h-5"
+                                              icon="pencil-alt"></icon>
+                                    </Link>
+                                    <Modal v-if="deleteRoute"
+                                           :href="route(deleteRoute, {id:item.id})"
+                                           :message="deleteMessage ? deleteMessage : __('delete_message')"
+                                           :title="deleteTitle ? deleteTitle : __('delete_title')"
+                                           danger
+                                           method="delete">
+                                        <template #button="{open}">
+                                            <button class="p-1 w-8 h-6"
+                                                    @click="open">
+                                                <icon class="fill-skin-base  w-5 h-5"
+                                                      icon="trash"></icon>
+                                            </button>
+                                        </template>
+                                    </Modal>
+                                </slot>
+                            </td>
+                        </slot>
+                    </tr>
+                </slot>
+            </template>
+        </tbody>
+    </table>
+    <Pagination :links="data.links"
+                class="m-4"/>
 </template>
 <style scoped></style>

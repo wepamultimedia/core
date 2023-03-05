@@ -9,7 +9,7 @@ const hasActions = computed(() => !!useSlots().actions);
         <div class="p-6">
             <slot name="form"></slot>
         </div>
-        <div class="flex items-center p-3 text-skin-base dark:text-skint-base-dark justify-end bg-gray-200 dark:bg-gray-500 ">
+        <div class="flex items-center p-3 text-skin-base  justify-end bg-gray-200 dark:bg-gray-500 ">
             <slot name="actions">
                 <button class="btn btn-success"
                         type="submit">

@@ -28,7 +28,7 @@ defineProps({
     <div v-if="$page.props.jetstream.canUpdateProfileInformation"
          class="grid grid-cols-1 lg:grid-cols-3 gap-4 dark:text-light mt-8">
         <div class="col-span-1">
-            <div class="pb-4 text-skin-base dark:text-skin-base-dark font-medium text-xl">
+            <div class="pb-4 text-skin-base  font-medium text-xl">
                 {{ __("information_title") }}
             </div>
             <p class="text-sm">{{ __("information_summary") }}</p>
@@ -42,7 +42,7 @@ defineProps({
     <div v-if="$page.props.jetstream.canUpdatePassword"
          class="grid grid-cols-1 lg:grid-cols-3 gap-4 dark:text-light">
         <div class="col-span-1">
-            <div class="pb-4 text-skin-base dark:text-skin-base-dark font-medium text-xl">
+            <div class="pb-4 text-skin-base  font-medium text-xl">
                 {{ __("password_title") }}
             </div>
             <p class="text-sm">{{ __("password_summary") }}</p>
@@ -56,7 +56,7 @@ defineProps({
     <div v-if="$page.props.jetstream.canManageTwoFactorAuthentication"
          class="grid grid-cols-1 lg:grid-cols-3 gap-4 dark:text-light">
         <div class="col-span-1">
-            <div class="pb-4 text-skin-base dark:text-skin-base-dark font-medium text-xl">
+            <div class="pb-4 text-skin-base  font-medium text-xl">
                 {{ __("two_factor_title") }}
             </div>
             <p class="text-sm">{{ __("two_factor_summary") }}</p>
@@ -65,7 +65,7 @@ defineProps({
                 bg-white dark:bg-gray-700
                 overflow-hidden
                 shadow
-                text-skin-base dark:text-skin-base-dark
+                text-skin-base
                 rounded-lg">
             <TwoFactorAuthenticationForm :requires-confirmation="confirmsTwoFactorAuthentication"/>
         </div>
@@ -75,7 +75,7 @@ defineProps({
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 dark:text-light">
         <div class="col-span-1">
-            <div class="pb-4 text-skin-base dark:text-skin-base-dark font-medium text-xl">
+            <div class="pb-4 text-skin-base  font-medium text-xl">
                 {{ __("browser_sessions_title") }}
             </div>
             <p class="text-sm">{{ __("browser_sessions_summary") }}</p>
@@ -84,7 +84,7 @@ defineProps({
                 bg-white dark:bg-gray-700
                 overflow-hidden
                 shadow
-                text-skin-base dark:text-skin-base-dark
+                text-skin-base
                 rounded-lg">
             <LogoutOtherBrowserSessionsForm :sessions="sessions" class="mt-10 sm:mt-0" />
         </div>
@@ -95,7 +95,7 @@ defineProps({
     <template v-if="$page.props.jetstream.hasAccountDeletionFeatures">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 dark:text-light mb-10">
             <div class="col-span-1">
-                <div class="pb-4 text-skin-base dark:text-skin-base-dark font-medium text-xl">
+                <div class="pb-4 text-skin-base  font-medium text-xl">
                     {{ __("delete_account_title") }}
                 </div>
                 <p class="text-sm">{{ __("delete_account_summary") }}</p>
@@ -104,7 +104,7 @@ defineProps({
                     bg-white dark:bg-gray-700
                     overflow-hidden
                     shadow
-                    text-skin-base dark:text-skin-base-dark
+                    text-skin-base
                     rounded-lg">
                 <DeleteUserForm class="mt-10 sm:mt-0" />
             </div>

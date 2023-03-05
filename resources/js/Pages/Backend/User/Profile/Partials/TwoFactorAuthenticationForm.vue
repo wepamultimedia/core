@@ -96,7 +96,7 @@ const disableTwoFactorAuthentication = () => {
 };
 </script>
 <template>
-    <Card class="p-6 text-skin-base dark:text-skin-base-dark">
+    <Card class="p-6 text-skin-base ">
         <h3 v-if="twoFactorEnabled && !confirming"
             class="text-lg font-medium">
             {{ __('two_factor_enabled') }}

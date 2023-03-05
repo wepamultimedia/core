@@ -36,7 +36,7 @@ class CoreInstallCommand extends Command
 		Menu::loadPackageItems('core');
 		$this->call('db:seed', ['class' => 'Wepa\Core\Database\seeders\DefaultSeeder']);
 		
-		$process = Process::fromShellCommandline('npm i -D vuex@next @vueuse/core vue-inline-svg@next vue-screen@next @inertiajs/progress sass');
+		$process = Process::fromShellCommandline('npm i -D vuex@next @vueuse/core vue-inline-svg@next vue-screen@next tailwind-scrollbar @inertiajs/progress sass');
 		$process->run();
 		$this->info($process->getOutput());
 		

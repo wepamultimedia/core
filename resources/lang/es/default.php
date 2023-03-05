@@ -42,4 +42,8 @@ return [
     'copy_link' => 'Copiar enlace',
     'link_copied' => 'Enlace copiado',
     'upload' => 'Subir',
+    'select_image' => 'Seleccionar imágen',
+    'image' => 'Imágen',
+    'image_alt' => 'Texto alternativo de imágen',
+
 ];

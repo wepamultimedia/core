@@ -4,69 +4,81 @@
 
 @layer base {
     :root {
-        --color-primary-100       : 200, 200, 201;
-        --color-primary-200       : 162, 170, 172;
-        --color-primary-300       : 118, 127, 132;
-        --color-primary-400       : 73, 84, 91;
-        --color-primary-500       : 28, 40, 51;
-        --color-primary-600       : 23, 31, 40;
-        --color-primary-700       : 17, 23, 29;
-        --color-primary-800       : 11, 14, 19;
-        --color-primary-900       : 5, 6, 8;
+        --color-primary-100: 200, 200, 201;
+        --color-primary-200: 162, 170, 172;
+        --color-primary-300: 118, 127, 132;
+        --color-primary-400: 73, 84, 91;
+        --color-primary-500: 28, 40, 51;
+        --color-primary-600: 23, 31, 40;
+        --color-primary-700: 17, 23, 29;
+        --color-primary-800: 11, 14, 19;
+        --color-primary-900: 5, 6, 8;
 
-        --color-base              : 28, 40, 51;
-        --color-base-dark         : 248, 249, 249;
-        --color-muted             : 132, 145, 139;
-        --color-muted-dark        : 132, 145, 139;
-        --color-inverted          : 248, 249, 249;
-        --color-inverted-dark     : 28, 40, 51;
-        --color-fill              : 200, 200, 201;
-        --color-fill-dark         : 28, 40, 51;
+        --color-base: #1c2833;
+        --color-base-dark: #f8f9f9;
+        --color-muted: #84918b;
+        --color-inverted: #f8f9f9;
+        --color-fill: #c8c8c9;
 
-        --color-light             : 248, 249, 249;
-        --color-dark              : 28, 40, 51;
+        --color-light: #f8f9f9;
+        --color-dark: #1c2833;
 
-        --color-accent            : 23, 31, 40;
-        --color-accent-dark       : 200, 200, 201;
-        --color-accent-hover      : 17, 23, 29;
-        --color-accent-hover-dark : 255, 255, 255;
-        --color-background        : 207, 211, 212;
-        --color-background-dark   : 17, 23, 29;
+        --color-accent: #171f28;
+        --color-accent-hover: #11171d;
+        --color-background: #cfd3d4;
 
-        --color-success           : 35, 155, 86;
-        --color-info              : 52, 152, 219;
-        --color-warning           : 243, 156, 18;
-        --color-danger            : 192, 57, 43;
+        --color-success: #239b56;
+        --color-info: #3498db;
+        --color-warning: #f39c12;
+        --color-danger: #c0392b;
+    }
+
+    .dark {
+        --color-base: #f8f9f9;
+        --color-muted: #84918b;
+        --color-inverted: #2d2d2d;
+        --color-fill: #1c1c1c;
+        --color-accent: #c8c8c9;
+        --color-accent-hover: #ffffff;
+        --color-background: #11171d;
+
+        .admin-theme {
+            --color-base: #f8f9f9;
+            --color-muted: #84918b;
+            --color-inverted: #1c2833;
+            --color-fill: #8b4584;
+            --color-accent: #c8c8c9;
+            --color-accent-hover: #ffffff;
+            --color-background: #11171d;
+            --color-foreground: #4B5563;
+        }
     }
 
     .admin-theme {
-        --color-primary-100     : 213, 178, 178;
-        --color-primary-200     : 218, 169, 177;
-        --color-primary-300     : 195, 132, 158;
-        --color-primary-400     : 169, 99, 145;
-        --color-primary-500     : 139, 69, 132;
-        --color-primary-600     : 116, 49, 117;
-        --color-primary-700     : 85, 32, 91;
-        --color-primary-800     : 53, 18, 62;
-        --color-primary-900     : 23, 7, 30;
+        --color-primary-100: 213, 178, 178;
+        --color-primary-200: 218, 169, 177;
+        --color-primary-300: 195, 132, 158;
+        --color-primary-400: 169, 99, 145;
+        --color-primary-500: 139, 69, 132;
+        --color-primary-600: 116, 49, 117;
+        --color-primary-700: 85, 32, 91;
+        --color-primary-800: 53, 18, 62;
+        --color-primary-900: 23, 7, 30;
 
-        --color-base            : 28, 40, 51;
-        --color-base-dark       : 248, 249, 249;
-        --color-muted           : 132, 145, 139;
-        --color-muted-dark      : 132, 145, 139;
-        --color-inverted        : 248, 249, 249;
-        --color-inverted-dark   : 28, 40, 51;
-        --color-fill            : 213, 178, 178;
-        --color-fill-dark       : 139, 69, 132;
+        --color-base: #1c2833;
+        --color-muted: #84918b;
+        --color-inverted: #f8f9f9;
+        --color-fill: #d5b2b2;
 
-        --color-accent          : 213, 178, 178;
-        --color-accent-hover    : 218, 169, 177;
-        --color-background      : 231, 234, 234;
-        --color-background-dark : 17, 23, 29;
+        --color-accent: #d5b2b2;
+        --color-accent-hover: #daa9b1;
+        --color-background: #e7eaea;
+        --color-foreground: #f8f9f9;
 
         h1, h2, h3, h4, h5, h6{
             @apply font-bold mb-2
         }
+
         h1 {
             @apply text-2xl
         }
@@ -94,12 +106,57 @@
 
         }
 
+        table {
+            th {
+                @apply bg-skin-foreground border-b-2 border-gray-200 dark:border-gray-500
+            }
 
-        @apply text-skin-base dark:text-skin-base-dark
+            .even {
+                @apply even:bg-gray-200/70 dark:bg-gray-800/50
+            }
+
+            tr {
+                &.div-y {
+                    @apply border-b border-gray-300 dark:border-gray-600 last:border-b-0
+                }
+
+                .div-x {
+                    @apply border-r border-gray-300 dark:border-gray-600 last:border-r-0
+                }
+
+                @apply border-0;
+
+                td {
+                    @apply border-0;
+                }
+            }
+        }
+
+        input[type=text], input[type=time], textarea {
+            @apply
+            px-3 py-2
+            placeholder-gray-300 dark:placeholder-gray-500
+            bg-white dark:bg-inherit
+            outline-transparent
+            border border-gray-300 dark:border-gray-700
+            focus:border-gray-300 focus:dark:border-gray-700
+            focus:ring
+            focus:outline-none
+            focus:ring-skin-primary focus:dark:ring-skin-primary
+            focus:ring-opacity-50
+            disabled:opacity-60
+            rounded-md
+            block
+            w-full
+            placeholder-skin-primary-100 dark:placeholder-skin-primary-100
+        }
+
+
+        @apply text-skin-base
     }
 
     body {
-        @apply text-skin-base dark:text-skin-base-dark
+        @apply text-skin-base
     }
 
     h1 {
@@ -169,6 +226,6 @@
     }
 
     .btn-secondary {
-        @apply text-skin-base dark:text-skin-base-dark bg-transparent border-skin-muted dark:border-skin-muted-dark
+        @apply text-skin-base  bg-transparent border-skin-muted
     }
 }

@@ -38,7 +38,7 @@ watch(errors, value => {
         const re = new RegExp("[.]" + attrs.name + "$");
         const rex = new RegExp("^" + attrs.name + "$");
         if (re.test(errorKey) || rex.test(errorKey)) {
-            if(typeof errorValue === "object"){
+            if (typeof errorValue === "object") {
                 error.value = errorValue[0];
             } else {
                 error.value = errorValue;
@@ -65,27 +65,29 @@ const fileManager = reactive({
 });
 </script>
 <template>
-    <label v-if="label"
-           class="text-sm">{{ label }}
-    </label>
-    <figure v-if="modelValue && showImage"
-            class="mb-4 mt-1">
-        <img :alt="alt"
-             :src="modelValue"
-             class="rounded-lg">
-    </figure>
-    <button class="btn btn-secondary w-full justify-center mt-1"
-            v-bind="$attrs"
-            @click.prevent="fileManager.open = true">
-        {{ buttonLabel ? buttonLabel : __("select_image") }}
-    </button>
-    <div v-if="error"
-         class="text-red-300 text-sm mt-1">* {{ error }}
+    <div class="w-full">
+        <label v-if="label"
+               class="text-sm">{{ label }}
+        </label>
+        <figure v-if="modelValue && showImage"
+                class="mb-4 mt-1">
+            <img :alt="alt"
+                 :src="modelValue"
+                 class="rounded-lg">
+        </figure>
+        <button class="btn btn-secondary w-full justify-center mt-1"
+                v-bind="$attrs"
+                @click.prevent="fileManager.open = true">
+            {{ buttonLabel ? buttonLabel : __("select_image") }}
+        </button>
+        <div v-if="error"
+             class="text-red-300 text-sm mt-1">* {{ error }}
+        </div>
+        <Flap v-model="fileManager.open"
+              close-background
+              xl>
+            <FileManager @change="fileManager.insert"></FileManager>
+        </Flap>
     </div>
-    <Flap v-model="fileManager.open"
-          close-background
-          xl>
-        <FileManager @change="fileManager.insert"></FileManager>
-    </Flap>
 </template>
 <style scoped></style>
