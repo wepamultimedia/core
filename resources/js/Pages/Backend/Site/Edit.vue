@@ -76,11 +76,11 @@ function submit() {
         preserveScroll: true,
         preserveState: true,
         onSuccess() {
-            store.dispatch("addAlert", {type: "success", message: __("saved")});
+            store.dispatch("backend/addAlert", {type: "success", message: __("saved")});
             submiting.value = false;
         },
         onError(){
-            store.dispatch("addAlert", {type: "error", message: errors.value?.seo});
+            store.dispatch("backend/addAlert", {type: "error", message: errors.value?.seo});
         },
         onFinish(){
             submiting.value = false;
@@ -94,7 +94,7 @@ function submitIcon() {
             preserveState: true,
             preserveScroll: true,
             onSuccess: () => {
-                store.dispatch("addAlert", {type: "success", message: __("icons_generated")});
+                store.dispatch("backend/addAlert", {type: "success", message: __("icons_generated")});
                 checkIcons();
             }
         });

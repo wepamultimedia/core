@@ -23,7 +23,7 @@ const breakpoints = useBreakpoints(breakpointsTailwind);
 const smallerMd = breakpoints.smaller("md");
 const showDesktop = ref(true);
 const showMobile = ref(false);
-const loading = computed(() => store.getters["loading"]);
+const loading = computed(() => store.getters["backend/loading"]);
 
 onMounted(() => {
     let timeoutLoading = null;

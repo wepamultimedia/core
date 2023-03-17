@@ -153,13 +153,13 @@ buildInputValue();
     <template v-else>
         <div>
             <label :for="inputId"
-                   class="block font-medium text-sm">
+                   class="block font-medium text-sm mb-0.5">
                 <span>{{ label }}</span>
                 <span v-if="required"
                       class="px-1">*
                 </span>
             </label>
-            <div class="flex items-center mt-1">
+            <div class="flex items-center">
                 <button v-if="$slots.icon"
                         class="py-2.5 px-2 bg-white dark:bg-gray-500 border border-r-0 rounded-l-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
                         type="button">

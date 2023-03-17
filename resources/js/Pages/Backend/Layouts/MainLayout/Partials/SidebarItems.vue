@@ -86,7 +86,7 @@ const show = computed(() => {
                               class="text-sm text-left"
                               type="button"
                               as="button"
-                              @click="store.dispatch('menuActiveItem', item.id); selectedItemId = item.id; emit('click')">
+                              @click="store.dispatch('backend/menuActiveItem', item.id); selectedItemId = item.id; emit('click')">
                             {{ item.label }}
                         </Link>
                         <svg v-show="loading && selectedItemId === item.id"
@@ -135,7 +135,7 @@ const show = computed(() => {
                                   as="button"
                                   class="w-full text-left py-2 pl-8"
                                   type="button"
-                                  @click="store.dispatch('menuActiveItem', subitem.id); selectedItemId = subitem.id; emit('click')">
+                                  @click="store.dispatch('backend/menuActiveItem', subitem.id); selectedItemId = subitem.id; emit('click')">
                                 {{ subitem.label }}
                             </Link>
                             <svg v-show="loading && selectedItemId === subitem.id"

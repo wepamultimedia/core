@@ -162,13 +162,13 @@ buildInputValue();
     <template v-else>
         <div>
             <label :for="inputId"
-                   class="block font-medium text-sm">
+                   class="block font-medium text-sm mb-0.5">
                 <span>{{ label }}</span>
                 <span v-if="required"
                       class="px-1">*
                 </span>
             </label>
-            <div class="flex flex-col mt-1">
+            <div class="flex flex-col">
                 <div class="w-full">
                     <textarea :id="inputId"
                               ref="textarea"

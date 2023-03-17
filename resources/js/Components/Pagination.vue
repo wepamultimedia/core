@@ -3,7 +3,7 @@ import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 defineProps({
-    links: Array,
+    links: [Array, Object],
     callback: Function
 });
 

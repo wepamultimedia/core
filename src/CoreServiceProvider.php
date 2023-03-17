@@ -44,7 +44,7 @@ class CoreServiceProvider extends PackageServiceProvider
 		$this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 		$this->publishes([
 			__DIR__ . '/../database/migrations/' => database_path('migrations'),
-		], 'core-migrations');
+		], ['core', 'core-migrations']);
 		
 		// JS Components
 		$this->publishes([

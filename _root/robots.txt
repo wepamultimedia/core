@@ -1,0 +1,15 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /login/
+Disallow: /register/
+Disallow: /register/
+Disallow: /contact/
+Disallow: /logout/
+Disallow: /privacy-policy/
+Disallow: /terms-of-service/
+Disallow: /two-factor-challenge/
+Disallow: /user/
+Disallow: /reset-password/
+Disallow: /sanctum/
+

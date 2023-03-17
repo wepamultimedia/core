@@ -9,6 +9,10 @@ const props = defineProps({
         type: Function,
         default: () => {}
     },
+    containerClass: {
+        type: String,
+        default: 'bg-white dark:bg-gray-800'
+    },
     title: String,
     sm: Boolean,
     md: Boolean,
@@ -64,8 +68,8 @@ onUnmounted(() => {
              :class="[{'w-[95%] sm:w-3/5 md:w-[50%] lg:w-1/3 xl:w-1/4 2xl:w-1/6' : sm || (!sm && !md && !lg && !xl) },
                  {'w-[95%] sm:w-2/3 md:w-[50%] lg:w-2/5 xl:w-1/3 2xl:w-1/4' : md},
                  {'w-[95%] sm:w-5/6 md:w-3/4 lg:w-2/3 xl:w-3/5 2xl:w-1/2' : lg},
-                 {'w-[95%] sm:w-5/6 md:w-4/5 lg:w-3/4 xl:w-2/3 2xl:w-3/5' : xl}]"
-             class="fixed right-0 top-0 bottom-0 bg-white dark:bg-gray-800 shadow-2xl p-6 z-30 transition-all ease-in-out overflow-y-auto">
+                 {'w-[95%] sm:w-5/6 md:w-4/5 lg:w-3/4 xl:w-2/3 2xl:w-3/5' : xl}, containerClass]"
+             class="fixed right-0 top-0 bottom-0 shadow-2xl p-6 z-30 transition-all ease-in-out overflow-y-auto">
             <h2 v-if="title"
                 class="mb-4">{{ title }}
             </h2>

@@ -6,18 +6,19 @@ import { Head, Link, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
 import DarkModeToggle from "@/Vendor/Core/Components/DarkModeToggle.vue";
 import SeoInject from "@/Vendor/Core/Components/Frontend/SeoInject.vue";
-import storeFrontend from "@/Vendor/Core/Store/frontend";
 import SocialNetworks from "@/Vendor/Core/Components/Frontend/SocialNetworks.vue"
+import { useStore } from "vuex";
 
 const props = defineProps(["title"]);
 const pageProps = usePage().props.default;
 const selectedLocale = ref(pageProps.locales.find(locale => locale.code === pageProps.locale));
+const store = useStore();
 
 const site = computed(() => {
-    return storeFrontend.getters["site"];
+    return store.getters["frontend/site"];
 });
 
-storeFrontend.dispatch("loadSite");
+store.dispatch("frontend/loadSite");
 </script>
 <template>
     <SeoInject :title="title"/>

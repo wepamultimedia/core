@@ -28,8 +28,8 @@ const form = useForm({
 
 function submit() {
     form.post(route("admin.permissions.store"), {
-        onSuccess: () => store.dispatch("addAlert", {type: "success", message: __("saved")}),
-        onError: () => store.dispatch("addAlert", {type: "error", message: form.errors})
+        onSuccess: () => store.dispatch("backend/addAlert", {type: "success", message: __("saved")}),
+        onError: () => store.dispatch("backend/addAlert", {type: "error", message: form.errors})
     });
 };
 </script>

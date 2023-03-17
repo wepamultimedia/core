@@ -26,7 +26,7 @@ const {showDesktop, showMobile} = toRefs(props);
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const maximized = ref(false);
 
-const menu = computed(() => store.getters['menu']);
+const menu = computed(() => store.getters['backend/menu']);
 const smallerMd = breakpoints.smaller("md");
 const minimized = computed(() => {
     if (smallerMd.value) {
@@ -45,7 +45,7 @@ const showDesktopToggle = () => {
 }
 
 onMounted((app) => {
-    store.dispatch('menu', 'backend');
+    store.dispatch('backend/menu', 'backend');
     if (window.localStorage.showdesktop) {
         emit("update:showDesktop", localStorage.showdesktop === "true");
     }

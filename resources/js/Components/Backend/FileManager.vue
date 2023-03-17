@@ -1,14 +1,13 @@
 <script setup>
-import { reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import _ from "lodash";
+import { __ } from "@/Vendor/Core/Mixins/translations";
 import Pagination from "@/Vendor/Core/Components/Pagination.vue";
 import Flap from "@/Vendor/Core/Components/Flap.vue";
 import Input from "@/Vendor/Core/Components/Form/Input.vue";
 import ToggleButton from "@/Vendor/Core/Components/Form/ToggleButton.vue";
-import { usePage } from "@inertiajs/vue3";
 import Textarea from "@/Vendor/Core/Components/Form/Textarea.vue";
 import { useStore } from "vuex";
-import { __ } from "@/Vendor/Core/Mixins/translations";
 
 const props = defineProps({
     errors: String,
@@ -35,9 +34,8 @@ const search = _.throttle(value => {
 }, 100);
 const mimeTypes = ref();
 const loading = ref(false);
-const loadingSubmit = ref(false);
-const defaultProps = usePage().props.default;
 const store = useStore();
+
 // File
 const fileInput = ref({});
 const isImage = () => {
@@ -88,7 +86,7 @@ const file = reactive({
         }
 
         //navigator.clipboard.writeText(link);
-        store.dispatch("addAlert", {
+        store.dispatch("backend/addAlert", {
             type: "info",
             title: `${__("link_copied")}`,
             message: `${link}`
@@ -330,8 +328,10 @@ watch(searchInput, value => {
     search(value);
 });
 
-getFiles();
-getMimeTypes();
+onMounted(() => {
+    getFiles();
+    getMimeTypes();
+})
 </script>
 <template>
     <!-- toolbar -->

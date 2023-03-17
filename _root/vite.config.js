@@ -8,19 +8,22 @@ export default defineConfig({
         alias: {
             "@/": path.resolve(__dirname, "./resources/js"),
             "@pages": path.resolve(__dirname, "./resources/js/Pages"),
-            "@core": path.resolve(__dirname, "./resources/js/Vendor/Core"),
+            "@core": path.resolve(__dirname, "./resources/js/Vendor/Core")
         }
     },
     plugins: [
         laravel({
-            input: ["resources/js/app.js", "resources/scss/app.scss"], refresh: true
+            input: ["resources/js/app.js", "resources/scss/app.scss"],
+            ssr: "resources/js/ssr.js",
+            refresh: true
         }),
         vue({
             template: {
                 transformAssetUrls: {
-                    base: null, includeAbsolute: false
+                    base: null,
+                    includeAbsolute: false
                 }
             }
         })
-    ],
+    ]
 });

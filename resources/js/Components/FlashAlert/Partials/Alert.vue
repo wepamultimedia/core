@@ -21,7 +21,7 @@ let closed = false;
 function startTimeout() {
     showTimeout = setTimeout(() => {
         if(!closed){
-            store.dispatch("removeAlert", alert.value);
+            store.dispatch("backend/removeAlert", alert.value);
         }
     }, timeout.value);
 }
@@ -37,7 +37,7 @@ function mouseLeave() {
 function close() {
     closed = true;
     clearTimeout(showTimeout);
-    store.dispatch("removeAlert", alert.value);
+    store.dispatch("backend/removeAlert", alert.value);
 }
 
 startTimeout();

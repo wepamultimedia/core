@@ -19,7 +19,7 @@ const props = defineProps({
     }
 });
 
-const alerts = computed(() => store.getters["alerts"]);
+const alerts = computed(() => store.getters["backend/alerts"]);
 
 const {timeout, position} = toRefs(props);
 </script>

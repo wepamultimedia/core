@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { onMounted, onUnmounted, ref } from "vue";
 
@@ -45,10 +46,8 @@ export const screenSize = () => {
 };
 
 
-export const calculate = window._.throttle(() => {
+export const calculate = _.throttle(() => {
     reset();
-
-
     for (let i = 0; i < sizes.length; i ++){
         if (breakpoints.isGreater(sizes[i])) {
             screen.value.size = sizes[i];

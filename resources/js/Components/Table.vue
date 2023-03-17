@@ -1,4 +1,5 @@
 <script setup>
+import _ from "lodash";
 import { onMounted, ref, toRefs, watch } from "vue";
 import { Link, router } from "@inertiajs/vue3";
 import Modal from "@/Vendor/Core/Components/Modal.vue";
@@ -49,7 +50,7 @@ const countColumns = () => {
     }
 };
 
-const search = window._.throttle(value => {
+const search = _.throttle(value => {
     if (searchRoute.value) {
         if (value.length > 0) {
             router.get(route(searchRoute.value), {search: value}, {preserveState: true});

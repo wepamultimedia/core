@@ -1,36 +1,20 @@
-<script>
-let $window = typeof window !== "undefined" ? window : null;
-
-export function mockWindow(self) {
-    $window = self || window; // mock window for unit testing
-}
-
-let $url = window.location.href;
-</script>
 <script setup>
-import { ref, toRefs } from "vue";
-import Icon from "@/Vendor/Core/Components/Heroicon.vue";
+import { onMounted, toRefs } from "vue";
 import InlineSvg from "vue-inline-svg";
 
+let $window = null;
+let $url = null;
 
 const props = defineProps({
     svgClass: {
         type: String,
-        default: 'w-8 h-8'
+        default: "w-5 h-5"
     },
-    showLabel: Boolean,
+    label: String,
     network: {
         type: String,
         required: true
     },
-
-    // /**
-    //  * URL of the content to share.
-    //  */
-    // url: {
-    //     type: String,
-    //     required: true
-    // },
 
     /**
      * Title of the content to share.
@@ -115,10 +99,10 @@ const {
 
 const emit = defineEmits(["change", "close", "open"]);
 
-const popupTop = ref(0);
-const popupLeft = ref(0);
-const popupWindow = ref(undefined);
-const popupInterval = ref(null);
+let popupTop = 0;
+let popupLeft = 0;
+let popupWindow = undefined;
+let popupInterval = null;
 
 const networks = {
     baidu: "http://cang.baidu.com/do/add?iu=@u&it=@t",
@@ -221,10 +205,10 @@ const resizePopup = () => {
     const height = $window.innerHeight || (document.documentElement.clientHeight || $window.screenY);
     const systemZoom = width / $window.screen.availWidth;
 
-    popupLeft.value = (width - popup.value.width) / 2 / systemZoom + ($window.screenLeft !== undefined
-                                                                      ? $window.screenLeft : $window.screenX);
-    popupTop.value = (height - popup.value.height) / 2 / systemZoom + ($window.screenTop !== undefined
-                                                                       ? $window.screenTop : $window.screenY);
+    popupLeft = (width - props.popup.width) / 2 / systemZoom + ($window.screenLeft !== undefined
+                                                                ? $window.screenLeft : $window.screenX);
+    popupTop = (height - props.popup.height) / 2 / systemZoom + ($window.screenTop !== undefined
+                                                                 ? $window.screenTop : $window.screenY);
 };
 
 /**
@@ -234,28 +218,36 @@ const share = () => {
     resizePopup();
 
     // If a popup window already exist, we close it and trigger a change event.
-    if (popupWindow.value && popupInterval.value) {
-        clearInterval(popupInterval.value);
+    if (popupWindow && popupInterval) {
+        clearInterval(popupInterval);
 
         // Force close (for Facebook)
-        popupWindow.value.close();
+        popupWindow.close();
 
         emit("change");
     }
 
-    popupWindow.value = $window.open(shareLink(), "sharer-" + key(), ",height=" + popup.value.height + ",width=" + popup.value.width + ",left=" + popupLeft.value + ",top=" + popupTop.value + ",screenX=" + popupLeft.value + ",screenY=" + popupTop.value);
+    popupWindow = $window.open(
+        shareLink(),
+        "sharer-" + key(),
+        ",height=" + props.popup.height +
+        ",width=" + props.popup.width +
+        ",left=" + popupLeft +
+        ",top=" + popupTop +
+        ",screenX=" + popupLeft +
+        ",screenY=" + popupTop);
 
     // If popup are prevented (AdBlocker, Mobile App context..), popup.window stays undefined and we can't display it
-    if (!popupWindow.value) return;
+    if (!popupWindow) return;
 
-    popupWindow.value.focus();
+    popupWindow.focus();
 
     // Create an interval to detect popup closing event
-    popupInterval.value = setInterval(() => {
-        if (!popupWindow.value || popupWindow.value.closed) {
-            clearInterval(popupInterval.value);
+    popupInterval = setInterval(() => {
+        if (!popupWindow || popupWindow.closed) {
+            clearInterval(popupInterval);
 
-            popupWindow.value = null;
+            popupWindow = null;
 
             emit("close");
         }
@@ -274,25 +266,39 @@ const touch = () => {
 };
 
 const onClick = () => {
-    if(rawLink().substring(0, 4) === 'http'){
+    if (rawLink().substring(0, 4) === "http") {
         share();
     } else {
         touch();
     }
-}
+};
+
+onMounted(() => {
+    $window = typeof window !== "undefined" ? window : null;
+    $url = window.location.href;
+});
 </script>
 <template>
     <button @click.stop="onClick()">
         <slot :onClick="onClick">
-            <div class="flex items-center flex-wrap gap-1 p-2 justify-center" :class="key()">
-                <InlineSvg :class="[svgClass]" class="min-w-max" :src="'/vendor/core/icons/social-networks/' + key() + '.svg'"/>
-                <span v-if="showLabel" class="min-w-max px-2 py-1">{{ network }}</span>
+            <div :class="key()"
+                 class="flex items-center flex-wrap gap-1 py-2 px-2 justify-center">
+                <InlineSvg :class="[svgClass]"
+                           :src="'/vendor/core/icons/social-networks/' + key() + '.svg'"
+                           class="min-w-max"/>
+                <span v-if="label"
+                      class="min-w-max px-2 text-sm">{{ label }}
+                </span>
             </div>
         </slot>
     </button>
 </template>
 <style scoped>
 .facebook {
+    @apply bg-[#2374E1] hover:bg-[#16488b] fill-white text-white
+}
+
+.linkedin {
     @apply bg-[#2374E1] hover:bg-[#16488b] fill-white text-white
 }
 

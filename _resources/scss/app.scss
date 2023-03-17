@@ -75,7 +75,7 @@
         --color-background: #e7eaea;
         --color-foreground: #f8f9f9;
 
-        h1, h2, h3, h4, h5, h6{
+        h1, h2, h3, h4, h5, h6 {
             @apply font-bold mb-2
         }
 
@@ -106,7 +106,7 @@
 
         }
 
-        table {
+        table.default {
             th {
                 @apply bg-skin-foreground border-b-2 border-gray-200 dark:border-gray-500
             }
@@ -132,10 +132,10 @@
             }
         }
 
-        input[type=text], input[type=time], textarea {
+        .input {
             @apply
             px-3 py-2
-            placeholder-gray-300 dark:placeholder-gray-500
+            placeholder-gray-500 dark:placeholder-gray-400
             bg-white dark:bg-inherit
             outline-transparent
             border border-gray-300 dark:border-gray-700
@@ -148,12 +148,29 @@
             rounded-md
             block
             w-full
-            placeholder-skin-primary-100 dark:placeholder-skin-primary-100
         }
 
-
         @apply text-skin-base
+
     }
+
+    .input {
+        @apply
+        px-3 py-2
+        placeholder-gray-300 dark:placeholder-gray-300
+        bg-white dark:bg-inherit
+        outline-transparent
+        border border-gray-300 dark:border-gray-700
+        focus:border-gray-300 focus:dark:border-gray-700
+        focus:ring
+        focus:outline-none
+        focus:ring-skin-primary focus:dark:ring-skin-primary
+        focus:ring-opacity-50
+        disabled:opacity-60
+        block
+        w-full
+    }
+
 
     body {
         @apply text-skin-base

@@ -1,14 +1,16 @@
 <script setup>
-import storeFrontend from "@/Vendor/Core/Store/frontend";
 import { computed, onBeforeMount, ref } from "vue";
+import { useStore } from "vuex";
 
 const props = defineProps(["iconClass"]);
 
+const store = useStore();
+
 const site = computed(() => {
-    return storeFrontend.getters["site"];
+    return store.getters["frontend/site"];
 });
 
-const socialVetworks = ref([
+const socialNetworks = ref([
     "facebook",
     "twitter",
     "youtube",
@@ -21,12 +23,12 @@ const socialVetworks = ref([
 ]);
 
 onBeforeMount(() => {
-    storeFrontend.dispatch("loadSite");
+    store.dispatch("frontend/loadSite");
 });
 </script>
 <template>
     <div class="flex items-center">
-        <template v-for="social in socialVetworks">
+        <template v-for="social in socialNetworks">
             <a v-if="site[social] !== null"
                :href="social === 'whatsapp' ? `https://wa.me/${site[social]}`: site[social]"
                :title="social"
