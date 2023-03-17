@@ -77,8 +77,6 @@ const open = ref(false);
                         border
                         rounded
                         text-sm
-                        text-skin-base
-                        bg-skin-light
                         dark:border-gray-600"
                  @click="open=false"
                  @mouseleave="onHover ? open = false : ''">

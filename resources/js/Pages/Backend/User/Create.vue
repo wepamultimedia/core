@@ -16,7 +16,6 @@ export default {
 };
 </script>
 <script setup>
-import {ref} from "vue";
 import Checkbox from "@/Vendor/Core/Components/Form/Checkbox.vue";
 import Input from "@/Vendor/Core/Components/Form/Input.vue";
 import SaveFormButton from "@/Vendor/Core/Components/Form/SaveFormButton.vue";
@@ -41,8 +40,8 @@ const form = useForm({
 
 function submit() {
     form.post(route("admin.users.store"), {
-        onSuccess: () => store.dispatch("backend/addAlert", { type: 'success', message: __('saved')}),
-        onError: () => store.dispatch("backend/addAlert", { type: 'error', message: form.errors}),
+        onSuccess: () => store.dispatch("backend/addAlert", {type: "success", message: __("saved")}),
+        onError: () => store.dispatch("backend/addAlert", {type: "error", message: form.errors})
     });
 }
 </script>
@@ -70,18 +69,22 @@ function submit() {
                             <Input v-model="form.name"
                                    :errors="errors"
                                    :label="__('name')"
+                                   autofocus
+                                   class="input"
                                    name="name"/>
                         </div>
                         <div class="col-span-6 sm:col-span-6 lg:col-span-5 xl:col-span-4 mb-6">
                             <Input v-model="form.email"
                                    :errors="errors"
                                    :label="__('email')"
+                                   class="input"
                                    name="email"/>
                         </div>
                         <div class="col-span-6 sm:col-span-6 lg:col-span-5 xl:col-span-4 mb-6">
                             <Input v-model="form.password"
                                    :errors="errors"
                                    :label="__('password')"
+                                   class="input"
                                    name="password"
                                    type="password"/>
                         </div>
@@ -89,6 +92,7 @@ function submit() {
                             <Input v-model="form.password_confirmation"
                                    :errors="errors"
                                    :label="__('repassword')"
+                                   class="input"
                                    name="password_confirmation"
                                    type="password"/>
                         </div>

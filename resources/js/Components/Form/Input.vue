@@ -142,7 +142,7 @@ const setInputValue = (value) => {
             proxyModelValue.value[attrs["name"]] = value;
         }
     } else {
-        proxyModelValue.value = value
+        proxyModelValue.value = value;
     }
 };
 
@@ -160,19 +160,22 @@ buildInputValue();
                 </span>
             </label>
             <div class="flex items-center">
-                <button v-if="$slots.icon"
-                        class="py-2.5 px-2 bg-white dark:bg-gray-500 border border-r-0 rounded-l-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
-                        type="button">
-                    <slot name="icon"></slot>
-                </button>
+                <slot name="left">
+                    <div v-if="$slots.icon"
+                            class="py-2.5 px-2 bg-white dark:bg-gray-500 border border-r-0 rounded-l-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
+                            type="button">
+                        <slot name="icon"></slot>
+                    </div>
+                </slot>
                 <div class="w-full">
                     <input :id="inputId"
                            ref="input"
                            v-model="inputValue"
                            :class="[
-                               {'rounded-r-none': translation && $page.props.default.locales.length > 1},
-                               {'rounded-l-none': $slots.icon}
+                               {'!rounded-r-none': translation && $page.props.default.locales.length > 1},
+                               {'!rounded-l-none': $slots.icon}
                                ]"
+                           class="input"
                            type="text"
                            v-bind="$attrs">
                     <div v-if="legend"

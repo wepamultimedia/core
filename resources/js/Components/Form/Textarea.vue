@@ -168,30 +168,14 @@ buildInputValue();
                       class="px-1">*
                 </span>
             </label>
-            <div class="flex flex-col">
+            <div class="flex flex-col mt-1">
                 <div class="w-full">
                     <textarea :id="inputId"
                               ref="textarea"
                               v-model="inputValue"
                               :class="{'resize-none overflow-hidden' : autoresize}"
                               :rows="autoresize ? 1 : $attrs.rows"
-                              class="px-3 py-2
-                                 transition-transform
-                                 transform
-                                 ease-in-out
-                                 placeholder-gray-300 dark:placeholder-gray-500
-                                 bg-white dark:bg-inherit
-                                 border border-gray-300 dark:border-gray-700
-                                 dark:text-light
-                                 focus:border-gray-300 focus:dark:border-gray-700
-                                 focus:ring
-                                 focus:outline-none
-                                 focus:ring-gray-300 focus:dark:ring-gray-600
-                                 focus:ring-opacity-50
-                                 rounded-md
-                                 shadow-sm
-                                 block
-                                 w-full"
+                              class="input"
                               v-bind="$attrs"/>
                     <div v-if="legend"
                          class="text-sm mt-1 text-gray-400 dark:text-gray-400">

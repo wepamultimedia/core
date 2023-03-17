@@ -93,16 +93,16 @@ const logout = () => {
                                                 src="/vendor/core/icons/solid/chevron-down.svg"/>
                                 </button>
                             </template>
-                            <div class="flex flex-col min-w-[200px] divide-y divide-gray-200 dark:divide-gray-700 text-skin-base ">
-                                <button class="px-4 py-4 text-left">
-                                    <a :href="route('admin.user.profile')">
-                                        {{ __("profile") }}
-                                    </a>
-                                </button>
+                            <div class="flex flex-col min-w-[200px] divide-y divide-gray-200 dark:divide-gray-700 bg-skin-foreground">
+                                <Link :href="route('admin.user.profile')"
+                                      as="button"
+                                      class="px-4 py-4 text-left hover:dark:bg-gray-800 rounded-t">
+                                    {{ __("profile") }}
+                                </Link>
                                 <!-- Authentication -->
                                 <Link :href="route('logout')"
                                       as="button"
-                                      class="px-4 py-4 text-left"
+                                      class="px-4 py-4 text-left hover:dark:bg-gray-800 rounded-b"
                                       method="post">
                                     {{ __("logout") }}
                                 </Link>

@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, ref, toRefs, watch } from "vue";
+import { onBeforeMount, onMounted, ref, toRefs, watch } from "vue";
 import Icon from "@/Vendor/Core/Components/Heroicon.vue";
 import { __ } from "@core/Mixins/translations";
 
@@ -74,23 +74,6 @@ const buildSelect = () => {
     }
 };
 
-watch(search, value => {
-    if (value !== "" || value) {
-        const re = new RegExp(value, "i");
-        if(props.translateLabel){
-            optionsFiltered.value = options.value.filter(option => re.test(__(option[optionLabel.value])));
-        } else {
-            optionsFiltered.value = options.value.filter(option => re.test(option[optionLabel.value]));
-        }
-    } else {
-        optionsFiltered.value = options.value;
-    }
-});
-
-onBeforeMount(() => {
-    buildSelect();
-});
-
 const selectOption = option => {
     if (options.value.length > 0) {
         if (multiSelect.value) {
@@ -133,8 +116,27 @@ const openClick = () => {
     open.value = !oldValue;
 };
 
-document.body.addEventListener("click", () => {
-    open.value = false;
+watch(search, value => {
+    if (value !== "" || value) {
+        const re = new RegExp(value, "i");
+        if (props.translateLabel) {
+            optionsFiltered.value = options.value.filter(option => re.test(__(option[optionLabel.value])));
+        } else {
+            optionsFiltered.value = options.value.filter(option => re.test(option[optionLabel.value]));
+        }
+    } else {
+        optionsFiltered.value = options.value;
+    }
+});
+
+onBeforeMount(() => {
+    buildSelect();
+});
+
+onMounted(() => {
+    document.body.addEventListener("click", () => {
+        open.value = false;
+    });
 });
 </script>
 <template>
@@ -185,7 +187,8 @@ document.body.addEventListener("click", () => {
              class=" w-full absolute bg-white border dark:border-gray-700 dark:bg-gray-600 mt-1 overflow-hidden z-50 min-w-[200px] scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 overflow-hidden overflow-y-scroll"
              v-bind="$attrs">
             <div v-if="searcheable"
-                 class="flex items-center px-2 sticky top-0 bg-white dark:bg-gray-600" @click.stop="">
+                 class="flex items-center px-2 sticky top-0 bg-white dark:bg-gray-600"
+                 @click.stop="">
                 <svg class="fill-gray-600 dark:fill-gray-300"
                      fill="none"
                      height="20"

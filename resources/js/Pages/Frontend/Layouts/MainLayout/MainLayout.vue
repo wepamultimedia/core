@@ -9,10 +9,10 @@ import SeoInject from "@/Vendor/Core/Components/Frontend/SeoInject.vue";
 import SocialNetworks from "@/Vendor/Core/Components/Frontend/SocialNetworks.vue"
 import { useStore } from "vuex";
 
+const store = useStore();
 const props = defineProps(["title"]);
 const pageProps = usePage().props.default;
 const selectedLocale = ref(pageProps.locales.find(locale => locale.code === pageProps.locale));
-const store = useStore();
 
 const site = computed(() => {
     return store.getters["frontend/site"];

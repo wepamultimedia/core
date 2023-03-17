@@ -12,7 +12,7 @@ export default {
 };
 </script>
 <script setup>
-import { reactive, ref, toRefs } from "vue";
+import { onMounted, reactive, ref, toRefs } from "vue";
 import { useForm, usePage, router } from "@inertiajs/vue3";
 import Input from "@/Vendor/Core/Components/Form/Input.vue";
 import SeoForm from "@/Vendor/Core/Components/Backend/SeoForm.vue";
@@ -107,7 +107,9 @@ function activeSeccion(section) {
     sections[section] = true;
 }
 
-checkIcons();
+onMounted(() => {
+    checkIcons();
+})
 </script>
 <template>
     <!--Title-->

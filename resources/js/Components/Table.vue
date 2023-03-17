@@ -3,6 +3,7 @@ import _ from "lodash";
 import { onMounted, ref, toRefs, watch } from "vue";
 import { Link, router } from "@inertiajs/vue3";
 import Modal from "@/Vendor/Core/Components/Modal.vue";
+import Input from "@/Vendor/Core/Components/Form/Input.vue";
 import Pagination from "@/Vendor/Core/Components/Pagination.vue";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 
@@ -36,18 +37,13 @@ const {
 const items = ref();
 
 const showActions = () => {
-    if (viewRoute.value || editRoute.value || deleteRoute.value) {
-        return true;
-    }
-
-    return false;
+    return !!(viewRoute.value || editRoute.value || deleteRoute.value);
 };
 const countColumns = () => {
     if (showActions()) {
         return columns.value.length + 1;
-    } else {
-        return columns.value.length;
     }
+    return columns.value.length;
 };
 
 const search = _.throttle(value => {
@@ -86,6 +82,7 @@ onMounted(() => {
 </script>
 <template>
     <table class="table
+                  default
                   table-auto
                   w-full
                   text-left">
@@ -106,11 +103,19 @@ onMounted(() => {
         <tbody class="text-sm">
             <tr v-if="searchRoute">
                 <td :colspan="countColumns()">
-                    <input v-model="searchInput"
+                    <Input v-model="searchInput"
                            :placeholder="__('search')"
-                           class="w-full text-sm sm:w-1/2 !rounded-none !border-none"
+                           class="input w-full text-sm sm:w-1/2 !rounded-none !border-none focus:!border-0 focus:!ring-0"
+                           name="search"
                            type="text"
                            @keyup.enter="search(searchInput)">
+                        <template #left>
+                            <div class="px-2">
+                                <inline-svg class="w-5 h-5 fill-skin-base"
+                                            src="/vendor/core/icons/solid/search.svg"></inline-svg>
+                            </div>
+                        </template>
+                    </Input>
                 </td>
             </tr>
             <template v-for="item in data.data ? data.data : data"

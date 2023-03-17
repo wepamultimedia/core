@@ -19,7 +19,7 @@ import { toRefs } from "vue";
 import Checkbox from "@/Vendor/Core/Components/Form/Checkbox.vue";
 import Input from "@/Vendor/Core/Components/Form/Input.vue";
 import Modal from "@/Vendor/Core/Components/Modal.vue";
-import SaveFormButton from "@/Vendor/Core/Components/Form/SaveFormButton.vue"
+import SaveFormButton from "@/Vendor/Core/Components/Form/SaveFormButton.vue";
 import { __ } from "@/Vendor/Core/Mixins/translations";
 import { useForm } from "@inertiajs/vue3";
 import { useStore } from "vuex";
@@ -45,10 +45,10 @@ const form = useForm({
     selectedPermissions: selectedPermissions.value, ...translations.value
 });
 
-function submit(){
+function submit() {
     form.put(route("admin.roles.update", {id: role.value.id}), {
-        onSuccess: () => store.dispatch("backend/addAlert", {type: 'success', message: __('saved')}),
-        onError: () => store.dispatch("backend/addAlert", {type: 'error', message: form.errors})
+        onSuccess: () => store.dispatch("backend/addAlert", {type: "success", message: __("saved")}),
+        onError: () => store.dispatch("backend/addAlert", {type: "error", message: form.errors})
     });
 };
 </script>

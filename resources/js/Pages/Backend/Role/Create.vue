@@ -40,8 +40,8 @@ const form = useForm({
 
 const submit = () => {
     form.post(route("admin.roles.store"), {
-        onSuccess: () => store.dispatch("backend/addAlert", {type: 'success', message: __('saved')}),
-        onError: () => store.dispatch("backend/addAlert", {type: 'error', message: form.errors})
+        onSuccess: () => store.dispatch("backend/addAlert", {type: "success", message: __("saved")}),
+        onError: () => store.dispatch("backend/addAlert", {type: "error", message: form.errors})
     });
 };
 </script>
@@ -67,6 +67,7 @@ const submit = () => {
                             <Input v-model="form.name"
                                    :errors="errors"
                                    :label="__('name')"
+                                   autofocus
                                    name="name"/>
                         </div>
                         <div class="col-span-6 sm:col-span-6 lg:col-span-5 xl:col-span-4 mb-6">

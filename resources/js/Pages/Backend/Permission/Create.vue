@@ -54,6 +54,7 @@ function submit() {
                         <div class="col-span-6 sm:col-span-6 lg:col-span-5 xl:col-span-4 mb-6">
                             <Input v-model="form.name"
                                    :errors="errors"
+                                   autofocus
                                    :label="__('name')"
                                    name="name"/>
                         </div>

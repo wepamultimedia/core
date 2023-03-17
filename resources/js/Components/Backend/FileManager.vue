@@ -2,6 +2,7 @@
 import { onMounted, reactive, ref, watch } from "vue";
 import _ from "lodash";
 import { __ } from "@/Vendor/Core/Mixins/translations";
+import axios from "axios";
 import Pagination from "@/Vendor/Core/Components/Pagination.vue";
 import Flap from "@/Vendor/Core/Components/Flap.vue";
 import Input from "@/Vendor/Core/Components/Form/Input.vue";
@@ -35,7 +36,6 @@ const search = _.throttle(value => {
 const mimeTypes = ref();
 const loading = ref(false);
 const store = useStore();
-
 // File
 const fileInput = ref({});
 const isImage = () => {
@@ -265,9 +265,6 @@ const resetFolderFlap = () => {
 
 
 // Files
-const showFile = file => {
-    getFiles(file.id);
-};
 const refresh = data => {
     files.value = data.files;
     breadcrumb.value = data.breadcrumb;
@@ -331,7 +328,7 @@ watch(searchInput, value => {
 onMounted(() => {
     getFiles();
     getMimeTypes();
-})
+});
 </script>
 <template>
     <!-- toolbar -->
@@ -453,6 +450,7 @@ onMounted(() => {
                 <Input v-model="folder.form.name"
                        :errors="errors"
                        :label="__('name')"
+                       autofocus
                        name="name"/>
                 <button :disabled="loading"
                         class="btn btn-success flex justify-center"
@@ -486,6 +484,7 @@ onMounted(() => {
                 <Input v-model="folder.form.name"
                        :errors="errors"
                        :label="__('name')"
+                       autofocus
                        name="name"/>
                 <button :disabled="loading"
                         class="btn btn-success flex justify-center"
@@ -524,6 +523,7 @@ onMounted(() => {
             <div class="my-4">
                 <Input v-model="folder.confirmDeleteInput"
                        :label="__('type_folder_name')"
+                       autofocus
                        name="name"/>
             </div>
             <button :disabled="(folder.form.name.toLowerCase() !== folder.confirmDeleteInput.toLocaleLowerCase() || loading)"
@@ -558,10 +558,12 @@ onMounted(() => {
         <div v-if="file.create"
              class="flex flex-col gap-4">
             <h2 class="pb-4">{{ __("upload_file") }}</h2>
-            <Input v-if="file.form.file" v-model="file.form.name"
+            <Input v-if="file.form.file"
+                   v-model="file.form.name"
                    :errors="errors"
                    :label="__('name')"
                    :legend="__('image_name_legend')"
+                   autofocus
                    name="name"
                    required/>
             <div v-if="isImage()">
@@ -616,8 +618,8 @@ onMounted(() => {
                        type="number"/>
             </div>
             <button v-if="file.form.file !== ''"
-                    class="btn btn-success justify-center flex items-center"
                     :disabled="loading"
+                    class="btn btn-success justify-center flex items-center"
                     type="button"
                     @click.prevent="file.createSubmit()">
                 <span v-if="!loading">{{ __("upload") }}</span>
@@ -655,6 +657,7 @@ onMounted(() => {
                    :errors="errors"
                    :label="__('name')"
                    :legend="__('image_name_legend')"
+                   autofocus
                    name="name"
                    required/>
             <div v-if="file.selected.type.extension === 'jpg' || file.selected.type.extension === 'jpeg' || file.selected.type.extension === 'png'">
@@ -672,9 +675,9 @@ onMounted(() => {
                           :legend="__('image_description_legend')"
                           name="description"></Textarea>
             </div>
-            <button class="btn btn-success justify-center flex items-center"
+            <button :disabled="loading"
+                    class="btn btn-success justify-center flex items-center"
                     type="button"
-                    :disabled="loading"
                     @click.prevent="file.updateSubmit()">
                 <span v-if="!loading">{{ __("save") }}</span>
                 <span v-else>
@@ -709,6 +712,7 @@ onMounted(() => {
             <div class="my-4">
                 <Input v-model="file.confirmDeleteInput"
                        :label="__('type_file_name')"
+                       autofocus
                        name="name"/>
             </div>
             <button :disabled="(file.form.name.toLowerCase() !== file.confirmDeleteInput.toLocaleLowerCase() || loading)"
