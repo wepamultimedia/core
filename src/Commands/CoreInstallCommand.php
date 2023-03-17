@@ -69,6 +69,7 @@ class CoreInstallCommand extends Command
             // Resources
             ['type' => 'file', 'from' => resource_path('js/app.js'), 'to' => __DIR__.'/../../_resources/js/app.js'],
             ['type' => 'file', 'from' => resource_path('js/ssr.js'), 'to' => __DIR__.'/../../_resources/js/ssr.js'],
+            ['type' => 'directory', 'from' => resource_path('js/Store'), 'to' => __DIR__.'/../../_resources/js/Store'],
             [
                 'type' => 'file', 'from' => resource_path('css/app.css'),
                 'to' => __DIR__.'/../../_resources/css/app.css',

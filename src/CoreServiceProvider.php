@@ -58,7 +58,7 @@ class CoreServiceProvider extends PackageServiceProvider
 		
 		// JS Store
 		$this->publishes([
-			__DIR__ . '/../resources/js/Store' => resource_path('js/Vendor/Core/Store'),
+			__DIR__ . '/../_resources/js/Store' => resource_path('js/Store'),
 		], ['core', 'core-store']);
 		
 		// JS Pages
