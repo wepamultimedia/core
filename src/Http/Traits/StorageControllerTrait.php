@@ -43,21 +43,18 @@ trait StorageControllerTrait
 	                                int          $maxSize = 0,
 	                                string       $options = 'public'): bool|array
 	{
-		$name = $name ?? time() . '.' . $file->extension();
+		$name = $name ?? time() . '.webp';
 		
 		if($file->extension() === 'jpg' or $file->extension() === 'png' or $file->extension() === 'jpeg') {
-			if($maxSize > 0) {
-				$image = new InterventionImageHelper($file);
-				$image->resize($maxSize);
-			} else {
-				$image = $file;
+            $image = new InterventionImageHelper($file);
+            $image->asWebp();
+            if($maxSize > 0) {
+                $image->resize($maxSize);
 			}
 			
 			if($storage = Storage::disk($this->fileSystemDisk())
 				->putFileAs($path, $maxSize > 0 ? $image->toStorage() : $file, $name, $options)) {
-				if($maxSize > 0) {
-					$image->destroy();
-				}
+                $image->destroy();
 				
 				$url = Storage::disk($this->fileSystemDisk())->url($storage);
 				$url = str_replace(['\\', '%5C'], '/', $url);
@@ -65,7 +62,7 @@ trait StorageControllerTrait
 				return [
 					'name' => $name,
 					'url' => $url,
-					'extension' => $file->extension(),
+					'extension' => 'webp',
 				];
 			}
 		}
@@ -81,7 +78,7 @@ trait StorageControllerTrait
 	                               string       $name = null,
 	                               string       $options = 'public'): bool|array
 	{
-		$name = $name ?? time() . '.' . $file->extension();
+		$name = $name ? $name . '.' . $file->extension() : time() . '.' . $file->extension();
 		
 		if($storage = Storage::disk($this->fileSystemDisk())->putFileAs($path, $file, $name, $options)) {
 			$url = Storage::disk($this->fileSystemDisk())->url($storage);

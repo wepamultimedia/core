@@ -31,7 +31,7 @@ class InterventionImageHelper
         $this->image = Image::make($file);
         $this->format = $file->extension();
         $this->quality = $quality;
-        $this->savePath = storage_path('app/public/'.time().'.'.$file->extension());
+        $this->savePath = storage_path('app/public/'. time() . '.' . $file->extension());
         $this->realPath = $file->getRealPath();
 
         return $this;
@@ -60,11 +60,10 @@ class InterventionImageHelper
         return $this->realPath;
     }
 
-    /**
-     * @return $this
-     */
     public function save(): static
     {
+        $this->image->encode($this->format, $this->quality);
+        $this->savePath = storage_path('app/public/'. time() . '.' . $this->format);
         $this->image->save($this->savePath, $this->quality, $this->format);
         $this->saved = true;
 
@@ -78,13 +77,27 @@ class InterventionImageHelper
         }
     }
 
-    /**
-     * @return $this
-     */
     public function asJpg(): static
     {
         $this->format = 'jpg';
+    
+        if($this->file->extension() !== 'jpg'){
+            $this->hasModified = true;
+        }
 
+        return $this;
+    }
+    
+    /**
+     * @return $this
+     */
+    public function asWebp(): static
+    {
+        $this->format = 'WebP';
+        
+        if($this->file->extension() !== 'WebP'){
+            $this->hasModified = true;
+        }
         return $this;
     }
 
@@ -94,6 +107,10 @@ class InterventionImageHelper
     public function asPng(): static
     {
         $this->format = 'png';
+    
+        if($this->file->extension() !== 'png'){
+            $this->hasModified = true;
+        }
 
         return $this;
     }

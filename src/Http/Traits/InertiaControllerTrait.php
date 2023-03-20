@@ -49,6 +49,7 @@ trait InertiaControllerTrait
 
         $defatultShare = [
             'default' => [
+                'env' => config('app.env'),
                 'theme' => config('core.theme'),
                 'locale' => app()->getLocale(),
                 'locales' => config('core.locales'),

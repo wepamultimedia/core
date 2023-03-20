@@ -423,8 +423,7 @@ onMounted(() => {
                      @click="file.type.icon === 'folder' ? onClick(() => updateFolder(file), () => getFiles(file.id)) : updateFile(file)">
                     <inline-svg :src="'/vendor/core/icons/file-types/' + file.type.icon + '.svg'"
                                 class="w-full h-auto"></inline-svg>
-                    <p class="text-sm font-bold mt-2 text-center">{{ file.name }}
-                        <span v-if="file.type.extension !== '.'">.{{ file.type.extension }}</span>
+                    <p class="text-sm font-bold mt-2 text-center">{{ file.name }}<span v-if="file.type.extension !== '.'">.{{ file.type.extension }}</span>
                     </p>
                 </div>
             </div>

@@ -149,21 +149,20 @@ class FileManagerController extends Controller
 	{
 		//
 	}
-	
-	/**
-	 * @param Request $request
-	 * @param $parentId
-	 *
-	 * @throws ValidationException
-	 */
+    
+    /**
+     * @param  FileManagerFileRequest  $request
+     *
+     * @return Response|array|Application|ResponseFactory
+     */
 	public function store(FileManagerFileRequest $request): Response|array|Application|ResponseFactory
 	{
 		$file = $request->file('file');
 		$type = FileType::where('extension', $file->extension())->first();
 		
+  
 		if($file->extension() === 'jpg' or $file->extension() === 'jpeg' or $file->extension() === 'png') {
-			$name = Str::slug($request->name) . '-' . time() . '.' . $file->extension();
-			
+            $name = Str::slug($request->name) . '-' . time() . '.webp';
 			if($savedFile = $this->storageImage($file, 'file-manager', $name, $request->max_size)) {
 				$data = collect($request->all())->filter()
 					->merge([
@@ -180,7 +179,8 @@ class FileManagerController extends Controller
 				return $this->index($request, $request->parent_id);
 			}
 		} else {
-			if($savedFile = $this->storageSave($file, 'file-manager')) {
+            $name = Str::slug($request->name) . '-' . time() . '.' . $file->extension();
+			if($savedFile = $this->storageSave($file, 'file-manager', $name)) {
 				$data = collect($request->all())->filter()
 					->merge([
 						'url' => $savedFile['url'],
