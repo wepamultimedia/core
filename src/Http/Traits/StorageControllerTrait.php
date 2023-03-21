@@ -45,7 +45,7 @@ trait StorageControllerTrait
 	{
 		$name = $name ?? time() . '.webp';
 		
-		if($file->extension() === 'jpg' or $file->extension() === 'png' or $file->extension() === 'jpeg') {
+		if($file->extension() === 'jpg' or $file->extension() === 'png' or $file->extension() === 'jpeg' or $file->extension() === 'webp') {
             $image = new InterventionImageHelper($file);
             $image->asWebp();
             if($maxSize > 0) {

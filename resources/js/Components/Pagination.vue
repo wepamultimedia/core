@@ -3,7 +3,7 @@ import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 defineProps({
-    links: Array,
+    links: [Array,Object],
     callback: Function
 });
 
@@ -15,7 +15,7 @@ const getPage = (url) => {
 };
 </script>
 <template>
-    <div v-if="links?.length > 3">
+    <div v-if="links.length > 3">
         <div class="flex flex-wrap -mb-1">
             <template v-for="(link, key) in links"
                       :key="key">

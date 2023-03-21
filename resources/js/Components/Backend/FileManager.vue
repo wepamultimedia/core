@@ -41,7 +41,7 @@ const fileInput = ref({});
 const isImage = () => {
     if (file.form.file) {
         let fileType = fileInput.value?.files[0]?.type;
-        return (fileType?.indexOf("jpeg") !== -1 || fileType?.indexOf("jpg") !== -1 || fileType?.indexOf("png") !== -1);
+        return (fileType?.indexOf("jpeg") !== -1 || fileType?.indexOf("jpg") !== -1 || fileType?.indexOf("png") !== -1 || fileType?.indexOf("webp") !== -1);
     }
 
     return false;
@@ -275,6 +275,8 @@ const refresh = data => {
 };
 const getFiles = (parentId = null, page = null, search = null) => {
     loading.value = true;
+    page = page === null ? currentPage.value : page;
+    console.log(page);
     axios.get(route("api.v1.filenamager.index", {
         parentId,
         page,
@@ -416,14 +418,14 @@ onMounted(() => {
                              :src="file.url"
                              class="object-cover aspect-square">
                     </div>
-                    <p class="text-sm font-bold mt-2 text-center">{{ file.name }}.{{ file.type.extension }}</p>
+                    <p class="text-sm font-bold mt-2 text-center break-words">{{ file.name }}.{{ file.type.extension }}</p>
                 </div>
                 <div v-else
                      class="w-full"
                      @click="file.type.icon === 'folder' ? onClick(() => updateFolder(file), () => getFiles(file.id)) : updateFile(file)">
                     <inline-svg :src="'/vendor/core/icons/file-types/' + file.type.icon + '.svg'"
                                 class="w-full h-auto"></inline-svg>
-                    <p class="text-sm font-bold mt-2 text-center">{{ file.name }}<span v-if="file.type.extension !== '.'">.{{ file.type.extension }}</span>
+                    <p class="text-sm font-bold mt-2 text-center break-words">{{ file.name }}<span v-if="file.type.extension !== '.'">.{{ file.type.extension }}</span>
                     </p>
                 </div>
             </div>

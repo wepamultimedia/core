@@ -5,9 +5,11 @@ const props = defineProps({
     modelValue: Boolean,
     removeBackground: Boolean,
     closeBackground: Boolean,
+    containerClass: String,
     onClose: {
         type: Function,
-        default: () => {}
+        default: () => {
+        }
     },
     title: String,
     sm: Boolean,
@@ -26,31 +28,31 @@ const close = () => {
     emit("close");
 };
 const toggle = () => {
-    if(modelValue.value){
+    if (modelValue.value) {
         close();
     }
     emit("update:modelValue", !modelValue.value);
 };
 
 const closeOnEscape = (e) => {
-    if (e.key === 'Escape' && modelValue.value) {
+    if (e.key === "Escape" && modelValue.value) {
         close();
     }
 };
 
 onMounted(() => {
-    watch(modelValue, value =>{
-        if(value === true){
-            document.body.style.overflow = 'hidden';
+    watch(modelValue, value => {
+        if (value === true) {
+            document.body.style.overflow = "hidden";
         } else {
-            document.body.style.overflow = 'auto';
+            document.body.style.overflow = "auto";
         }
-    })
+    });
     document.addEventListener("keydown", closeOnEscape);
 });
 
 onUnmounted(() => {
-    document.removeEventListener('keydown', closeOnEscape);
+    document.removeEventListener("keydown", closeOnEscape);
 });
 </script>
 <template>
@@ -61,7 +63,7 @@ onUnmounted(() => {
     </transition>
     <transition name="flap-content">
         <div v-if="modelValue"
-             :class="[{'w-[95%] sm:w-3/5 md:w-[50%] lg:w-1/3 xl:w-1/4 2xl:w-1/6' : sm || (!sm && !md && !lg && !xl) },
+             :class="[containerClass, {'w-[95%] sm:w-3/5 md:w-[50%] lg:w-1/3 xl:w-1/4 2xl:w-1/6' : sm || (!sm && !md && !lg && !xl) },
                  {'w-[95%] sm:w-2/3 md:w-[50%] lg:w-2/5 xl:w-1/3 2xl:w-1/4' : md},
                  {'w-[95%] sm:w-5/6 md:w-3/4 lg:w-2/3 xl:w-3/5 2xl:w-1/2' : lg},
                  {'w-[95%] sm:w-5/6 md:w-4/5 lg:w-3/4 xl:w-2/3 2xl:w-3/5' : xl}]"

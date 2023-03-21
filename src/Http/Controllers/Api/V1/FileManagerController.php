@@ -161,7 +161,7 @@ class FileManagerController extends Controller
 		$type = FileType::where('extension', $file->extension())->first();
 		
   
-		if($file->extension() === 'jpg' or $file->extension() === 'jpeg' or $file->extension() === 'png') {
+		if($file->extension() === 'jpg' or $file->extension() === 'jpeg' or $file->extension() === 'png' or $file->extension() === 'webp') {
             $name = Str::slug($request->name) . '-' . time() . '.webp';
 			if($savedFile = $this->storageImage($file, 'file-manager', $name, $request->max_size)) {
 				$data = collect($request->all())->filter()

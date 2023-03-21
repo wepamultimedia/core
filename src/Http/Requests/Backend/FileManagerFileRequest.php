@@ -45,7 +45,7 @@ class FileManagerFileRequest extends FormRequest
         switch(request()->method) {
             case 'POST':
 	            $extension = $this->file('file')->extension();
-	            $isImage = ($extension === 'jpg' or $extension === 'jpeg' or $extension === 'png');
+	            $isImage = ($extension === 'jpg' or $extension === 'jpeg' or $extension === 'png' or $extension === 'webp');
 	
 	            $rules = [
 		            'alt_name' => ['string', 'nullable', Rule::when($isImage, ['required'])],

@@ -100,6 +100,12 @@ class FileManagerSeeder extends Seeder
                 'mime' => 'image/png',
             ],
             [
+                'name' => 'WEBP',
+                'extension' => 'webp',
+                'icon' => 'image',
+                'mime' => 'image/webp',
+            ],
+            [
                 'name' => 'SVG',
                 'extension' => 'svg',
                 'icon' => 'svg',
