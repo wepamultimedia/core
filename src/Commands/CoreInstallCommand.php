@@ -2,12 +2,10 @@
 
 namespace Wepa\Core\Commands;
 
-
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Process\Process;
 use Wepa\Core\Models\Menu;
-
 
 class CoreInstallCommand extends Command
 {
@@ -17,17 +15,14 @@ class CoreInstallCommand extends Command
      * @var string
      */
     protected $description = 'Core install copy instalation files, execute migration databases and seeders';
-    
+
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
     protected $signature = 'core:install';
-    
-    /**
-     * @return int
-     */
+
     public function handle(): int
     {
         $this->call('migrate');
@@ -35,23 +30,23 @@ class CoreInstallCommand extends Command
         $this->copyFiles();
         Menu::loadPackageItems('core');
         $this->call('db:seed', ['class' => 'Wepa\Core\Database\seeders\DefaultSeeder']);
-        
+
         $process = Process::fromShellCommandline('npm i -D vuex@next @vueuse/core vue-inline-svg@next vue-screen@next tailwind-scrollbar @inertiajs/progress sass');
         $process->run();
         $this->info($process->getOutput());
-        
+
         return self::SUCCESS;
     }
-    
+
     public function copyFiles(): void
     {
         $files = $this->files();
         foreach ($files as $file) {
             $from = $file['from'];
             $to = $file['to'];
-            
+
             File::ensureDirectoryExists(dirname($file['from']));
-            
+
             if ($file['type'] === 'directory') {
                 File::copyDirectory($to, $from);
             } else {
@@ -59,7 +54,7 @@ class CoreInstallCommand extends Command
             }
         }
     }
-    
+
     /**
      * @return array[]
      */
@@ -83,10 +78,10 @@ class CoreInstallCommand extends Command
                 'to' => __DIR__.'/../../_resources/js/Pages/Home.vue',
             ],
             ['type' => 'directory', 'from' => resource_path('views'), 'to' => __DIR__.'/../../_resources/views'],
-            
+
             // Lang
             ['type' => 'directory', 'from' => resource_path('lang'), 'to' => __DIR__.'/../../_resources/lang'],
-            
+
             // Root
             [
                 'type' => 'file', 'from' => base_path('tailwind.config.js'),
@@ -97,7 +92,7 @@ class CoreInstallCommand extends Command
                 'to' => __DIR__.'/../../_root/.gitignore',
             ],
             ['type' => 'file', 'from' => base_path('vite.config.js'), 'to' => __DIR__.'/../../_root/vite.config.js'],
-            
+
             // Config
             ['type' => 'file', 'from' => base_path('config/app.php'), 'to' => __DIR__.'/../../_config/app.php'],
             [
@@ -116,13 +111,13 @@ class CoreInstallCommand extends Command
                 'type' => 'file', 'from' => base_path('config/filesystems.php'),
                 'to' => __DIR__.'/../../_config/filesystems.php',
             ],
-            
+
             // Middleware
             [
                 'type' => 'file', 'from' => app_path('Http/Middleware/HandleInertiaRequests.php'),
                 'to' => __DIR__.'/../../_app/Http/Middleware/HandleInertiaRequests.php',
             ],
-            
+
             // Models
             ['type' => 'directory', 'from' => app_path('Models'), 'to' => __DIR__.'/../../_app/Models'],
             [
@@ -145,7 +140,7 @@ class CoreInstallCommand extends Command
                 'to' => __DIR__.'/../../_app/Http/Requests',
             ],
             ['type' => 'directory', 'from' => app_path('Mail'), 'to' => __DIR__.'/../../_app/Mail'],
-            
+
             // Routes
             ['type' => 'directory', 'from' => base_path('routes'), 'to' => __DIR__.'/../../_routes'],
         ];

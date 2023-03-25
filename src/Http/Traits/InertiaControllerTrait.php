@@ -36,12 +36,6 @@ trait InertiaControllerTrait
         return Jetstream::inertia()->render($request, $view, $props);
     }
 
-	/**
-	 * @param string $view
-	 * @param mixed $translation
-	 *
-	 * @return void
-	 */
     protected function buildRender(string &$view,
                                    mixed $translation = []): void
     {
@@ -143,14 +137,7 @@ trait InertiaControllerTrait
     {
         Inertia::share($this->share);
     }
-    
-    /**
-     * @param  string  $view
-     * @param  mixed  $translation
-     * @param  array  $props
-     *
-     * @return Response
-     */
+
     public function render(string $view,
                            mixed $translation = [],
                            array $props = []): Response

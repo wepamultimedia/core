@@ -27,22 +27,22 @@ onBeforeMount(() => {
 });
 </script>
 <template>
-    <div class="flex items-center">
-        <template v-for="social in socialNetworks">
-            <a v-if="site[social] !== null"
-               :href="social === 'whatsapp' ? `https://wa.me/${site[social]}`: site[social]"
-               :title="social"
-               class="flex items-center"
-               target="_blank">
-                <button type="button"
-                        v-bind="$attrs">
-                    <slot name="icon">
-                        <inline-svg :src="`/vendor/core/icons/social-networks/${social}.svg`"
-                                    class="w-5 h-5"/>
-                    </slot>
-                </button>
-            </a>
-        </template>
-    </div>
+    <nav>
+        <ul class="[&>li]:inline-block [&>li]:mx-1">
+            <template v-for="social in socialNetworks">
+                <li v-if="site[social] !== null">
+                    <a :href="social === 'whatsapp' ? `https://wa.me/${site[social]}`: site[social]"
+                       :title="social"
+                       class="flex items-center justify-center"
+                       target="_blank">
+                        <slot name="icon">
+                            <inline-svg :src="`/vendor/core/icons/social-networks/${social}.svg`"
+                                        class="w-5 h-5"/>
+                        </slot>
+                    </a>
+                </li>
+            </template>
+        </ul>
+    </nav>
 </template>
 <style scoped></style>

@@ -67,13 +67,10 @@ trait SeoControllerTrait
 
         return $seo->id;
     }
-	
-	/**
-	 * @param array $params
-	 *
-	 * @return Seo
-	 * @throws BindingResolutionException
-	 */
+
+    /**
+     * @throws BindingResolutionException
+     */
     protected function seoStore(array $params = []): Seo
     {
         $request = app()->make(SeoInjectFormRequest::class);

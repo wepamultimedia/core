@@ -49,10 +49,11 @@ const emit = defineEmits(["update:modelValue"]);
              class="flex items-center">
             <input :id="label" v-model="proxyModelValue"
                    class="checkbox"
+                   v-bind="$attrs"
                    type="checkbox">
             <label :for="label"
                    class="form-check-label inline-block text-skin-base  text-sm">
-                {{ label }}
+                <slot>{{ label }}</slot>
             </label>
         </div>
         <div v-if="errors[name]"

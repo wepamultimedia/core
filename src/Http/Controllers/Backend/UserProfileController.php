@@ -2,7 +2,6 @@
 
 namespace Wepa\Core\Http\Controllers\Backend;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Laravel\Fortify\Features;
@@ -16,16 +15,11 @@ class UserProfileController extends \Laravel\Jetstream\Http\Controllers\Inertia\
     {
         $this->packageName = 'core';
     }
-	
-	/**
-	 * @param Request $request
-	 *
-	 * @return Response
-	 */
+
     public function show(Request $request): Response
     {
         $this->validateTwoFactorAuthenticationState($request);
-		
+
         return $this->jetrender($request,
             'Vendor/Core/Backend/User/Profile/Show',
             'backend/user',

@@ -46,5 +46,7 @@ return [
     'upload' => 'Upload',
     'select_image' => 'Select image',
     'image' => 'Image',
-    'image_alt' => 'Alternative text image'
+    'image_alt' => 'Alternative text image',
+    'change_mode_light' => 'Change design to light mode',
+    'change_mode_dark' => 'Change design to dark mode',
 ];

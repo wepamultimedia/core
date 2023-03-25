@@ -1,12 +1,10 @@
 <?php
 
-
 use App\Http\Controllers\MainController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Wepa\Core\Http\Controllers\Frontend\InertiaController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -29,12 +27,11 @@ Route::middleware([
     })->name('dashboard');
 });
 
+Route::middleware(['web', 'core.locale'])->group(function () {
+    // Add custom routes
 
-Route::middleware(['web', 'core.locale'])->group(function(){
-	// Add custom routes
-	
-	Route::get('/', [MainController::class, 'home'])->name('home');
-	Route::post('/contact', [MainController::class, 'sendContact'])->name('contact');
-	
-	Route::get('{slug}', [InertiaController::class, 'slugRedirect']);
+    Route::get('/', [MainController::class, 'home'])->name('home');
+    Route::post('/contact', [MainController::class, 'sendContact'])->name('contact');
+
+    Route::get('{slug}', [InertiaController::class, 'slugRedirect']);
 });

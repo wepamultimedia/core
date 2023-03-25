@@ -5,7 +5,7 @@
 return [
     'can_login' => true,
     'can_register' => true,
-	'google_api_key' => env('google_api_key', null),
+    'google_api_key' => env('google_api_key', null),
     'theme' => [
         'frontend' => '',
         'backend' => '',

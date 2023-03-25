@@ -4,8 +4,6 @@ namespace App\Mail;
 
 use App\Http\Requests\ContactRequest;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Http\Request;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -14,11 +12,13 @@ use Illuminate\Queue\SerializesModels;
 class ContactMail extends Mailable
 {
     use Queueable, SerializesModels;
-	
-	public string $name;
-	public string $email;
-	public string $message;
-	
+
+    public string $name;
+
+    public string $email;
+
+    public string $message;
+
     /**
      * Create a new message instance.
      *
@@ -29,7 +29,7 @@ class ContactMail extends Mailable
         $this->name = $request->name;
         $this->email = $request->email;
         $this->message = $request->message;
-		$this->replyTo($this->email);
+        $this->replyTo($this->email);
     }
 
     /**
@@ -55,7 +55,7 @@ class ContactMail extends Mailable
             markdown: 'emails.contact',
         );
     }
-	
+
     /**
      * Get the attachments for the message.
      *

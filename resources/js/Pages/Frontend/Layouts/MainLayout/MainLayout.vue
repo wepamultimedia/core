@@ -3,7 +3,7 @@ import HorizontalNavbar from "@pages/Vendor/Core/Frontend/Layouts/MainLayout/Par
 import MenuButton from "@/Vendor/Core/Components/Frontend/HorizontalNavbar/Partials/MenuButton.vue";
 import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
 import { Head, Link, usePage } from "@inertiajs/vue3";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import DarkModeToggle from "@/Vendor/Core/Components/DarkModeToggle.vue";
 import SeoInject from "@/Vendor/Core/Components/Frontend/SeoInject.vue";
 import SocialNetworks from "@/Vendor/Core/Components/Frontend/SocialNetworks.vue"
@@ -14,11 +14,14 @@ const props = defineProps(["title"]);
 const pageProps = usePage().props.default;
 const selectedLocale = ref(pageProps.locales.find(locale => locale.code === pageProps.locale));
 
+
 const site = computed(() => {
     return store.getters["frontend/site"];
 });
 
-store.dispatch("frontend/loadSite");
+onMounted(() => {
+    store.dispatch("frontend/loadSite");
+})
 </script>
 <template>
     <SeoInject :title="title"/>

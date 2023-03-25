@@ -6,7 +6,6 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
-
 class BaseSymlinkCommand extends Command
 {
     protected $description = 'Symbolic links';

@@ -45,5 +45,6 @@ return [
     'select_image' => 'Seleccionar imágen',
     'image' => 'Imágen',
     'image_alt' => 'Texto alternativo de imágen',
-
+    'change_mode_light' => 'Cambiar diseño a modo claro',
+    'change_mode_dark' => 'Cambiar diseño a modo oscuro',
 ];
