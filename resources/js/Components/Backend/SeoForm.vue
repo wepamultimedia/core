@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, onMounted, reactive, ref, toRefs, watch } from "vue";
+import { computed, onBeforeMount, onMounted, reactive, ref, toRefs, watch } from "vue";
 import Textarea from "@/Vendor/Core/Components/Form/Textarea.vue";
 import Input from "@/Vendor/Core/Components/Form/Input.vue";
 import InputImage from "@/Vendor/Core/Components/Form/InputImage.vue";
@@ -247,17 +247,18 @@ onMounted(() => {
     });
     watch(() => values.description, (value, oldValue) => {
         values.facebook_description = values.facebook_description === null ? '' : values.facebook_description;
-        if (values.facebook_description === oldValue) {
+        if (values.facebook_description === oldValue || values.facebook_description === '') {
             values.facebook_description = value;
         }
         values.twitter_description = values.twitter_description === null ? '' : values.twitter_description;
-        if (values.twitter_description === oldValue) {
+        if (values.twitter_description === oldValue || values.twitter_description === '') {
             values.twitter_description = value;
         }
     });
     watch(form, value => {
         emit("update:seo", value);
     });
+
 });
 </script>
 <template>

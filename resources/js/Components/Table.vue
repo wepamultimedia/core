@@ -149,34 +149,43 @@ onMounted(() => {
                                 class="px-2 py-3 text-center">
                                 <slot :item="item"
                                       name="action">
-                                    <Link v-if="viewRoute"
-                                          :href="route(viewRoute, {id:item.id})"
-                                          as="button"
-                                          class="p-1 w-8 h-6">
-                                        <icon class="fill-skin-base  w-5 h-5"
-                                              icon="eye"></icon>
-                                    </Link>
-                                    <Link v-if="editRoute"
-                                          :href="route(editRoute, {id:item.id})"
-                                          as="button"
-                                          class="p-1 w-8 h-6">
-                                        <icon class="fill-skin-base  w-5 h-5"
-                                              icon="pencil-alt"></icon>
-                                    </Link>
-                                    <Modal v-if="deleteRoute"
-                                           :href="route(deleteRoute, {id:item.id})"
-                                           :message="deleteMessage ? deleteMessage : __('delete_message')"
-                                           :title="deleteTitle ? deleteTitle : __('delete_title')"
-                                           danger
-                                           method="delete">
-                                        <template #button="{open}">
-                                            <button class="p-1 w-8 h-6"
-                                                    @click="open">
-                                                <icon class="fill-skin-base  w-5 h-5"
-                                                      icon="trash"></icon>
-                                            </button>
-                                        </template>
-                                    </Modal>
+                                    <slot :item="item"
+                                          name="action-view">
+                                        <Link v-if="viewRoute"
+                                              :href="route(viewRoute, {id:item.id})"
+                                              as="button"
+                                              class="p-1 w-8 h-6">
+                                            <icon class="fill-skin-base  w-5 h-5"
+                                                  icon="eye"></icon>
+                                        </Link>
+                                    </slot>
+                                    <slot :item="item"
+                                          name="action-edit">
+                                        <Link v-if="editRoute"
+                                              :href="route(editRoute, {id:item.id})"
+                                              as="button"
+                                              class="p-1 w-8 h-6">
+                                            <icon class="fill-skin-base  w-5 h-5"
+                                                  icon="pencil-alt"></icon>
+                                        </Link>
+                                    </slot>
+                                    <slot :item="item"
+                                          name="action-delete">
+                                        <Modal v-if="deleteRoute"
+                                               :href="route(deleteRoute, {id:item.id})"
+                                               :message="deleteMessage ? deleteMessage : __('delete_message')"
+                                               :title="deleteTitle ? deleteTitle : __('delete_title')"
+                                               danger
+                                               method="delete">
+                                            <template #button="{open}">
+                                                <button class="p-1 w-8 h-6"
+                                                        @click="open">
+                                                    <icon class="fill-skin-base  w-5 h-5"
+                                                          icon="trash"></icon>
+                                                </button>
+                                            </template>
+                                        </Modal>
+                                    </slot>
                                 </slot>
                             </td>
                         </slot>
@@ -185,7 +194,7 @@ onMounted(() => {
             </template>
         </tbody>
     </table>
-    <Pagination :links="data.links"
+    <Pagination :links="data.meta?.links || data.links"
                 class="m-4"/>
 </template>
 <style scoped></style>

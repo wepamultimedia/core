@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, toRefs, useAttrs, watch } from "vue";
+import { computed, nextTick, onMounted, ref, toRefs, useAttrs, watch } from "vue";
 import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
 import { usePage } from "@inertiajs/vue3";
 
@@ -30,7 +30,7 @@ const proxyModelValue = computed({
 const input = ref(null);
 const attrs = useAttrs();
 const inputId = ref(null);
-const selectedLocale = ref(usePage().props.default.locale);
+const selectedLocale = ref(props.locale || usePage().props.default.locale);
 const inputValue = ref("");
 const error = ref();
 const emit = defineEmits(["update:modelValue", "update:locale", "update:value"]);
@@ -40,6 +40,16 @@ const {
           locale,
           value
       } = toRefs(props);
+
+// const inputValue = computed({
+//     get(){
+//         return value.value;
+//     },
+//     set(value){
+//         emit("update:value", value);
+//         setInputValue(value);
+//     }
+// })
 
 watch(locale, value => {
     if (selectedLocale.value !== value) {
@@ -55,7 +65,9 @@ watch(inputValue, value => {
     setInputValue(value);
 });
 watch(value, value => {
-    inputValue.value = value;
+    nextTick(() => {
+        inputValue.value = value;
+    })
 });
 watch(errors, value => {
     for (const [errorKey, errorValue] of Object.entries(value)) {

@@ -48,12 +48,10 @@ const close = () => {
 const show = ref(false);
 </script>
 <template>
-    <div class="inline-block">
-        <slot :close="close"
-              :open="open"
-              :show="show"
-              name="button"></slot>
-    </div>
+    <slot :close="close"
+          :open="open"
+          :show="show"
+          name="button"></slot>
     <div v-if="show"
          class="inline-block">
         <div :class="overlayBgColor"
@@ -111,5 +109,4 @@ const show = ref(false);
         </div>
     </div>
 </template>
-
 <style scoped></style>

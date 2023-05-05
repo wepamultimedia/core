@@ -276,7 +276,6 @@ const refresh = data => {
 const getFiles = (parentId = null, page = null, search = null) => {
     loading.value = true;
     page = page === null ? currentPage.value : page;
-    console.log(page);
     axios.get(route("api.v1.filenamager.index", {
         parentId,
         page,

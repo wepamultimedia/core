@@ -36,6 +36,7 @@ const toggle = () => {
     }
     emit("update:modelValue", !modelValue.value);
 };
+
 const closeOnEscape = (e) => {
     if (e.key === "Escape" && modelValue.value) {
         close();

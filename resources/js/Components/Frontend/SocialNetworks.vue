@@ -2,7 +2,16 @@
 import { computed, onBeforeMount, ref } from "vue";
 import { useStore } from "vuex";
 
-const props = defineProps(["iconClass"]);
+const props = defineProps({
+    ulClass: {
+        type: String,
+        default: "flex items-center [&>li]:mx-2 first:[&>li]:ml-0 last:[&>li]:mr-0"
+    },
+    iconClass: {
+        type: String,
+        default: "w-5 h-5"
+    }
+});
 
 const store = useStore();
 
@@ -11,15 +20,15 @@ const site = computed(() => {
 });
 
 const socialNetworks = ref([
-    "facebook",
-    "twitter",
-    "youtube",
-    "skype",
-    "linkedin",
-    "instagram",
-    "vimeo",
-    "twitch",
-    "whatsapp"
+    {name: "facebook", url: "https://facebook.com"},
+    {name: "twitter", url: "https://twitter.com"},
+    {name: "youtube", url: "https://youtube.com"},
+    {name: "skype", url: ""},
+    {name: "linkedin", url: "https://www.linkedin.com/in"},
+    {name: "instagram", url: "https://instagram.com"},
+    {name: "vimeo", url: "https://vimeo.com"},
+    {name: "twitch", url: "https://twitch.com"},
+    {name: "whatsapp", url: "https://wa.me"}
 ]);
 
 onBeforeMount(() => {
@@ -28,16 +37,16 @@ onBeforeMount(() => {
 </script>
 <template>
     <nav>
-        <ul class="[&>li]:inline-block [&>li]:mx-1">
+        <ul :class="[ulClass]">
             <template v-for="social in socialNetworks">
-                <li v-if="site[social] !== null">
-                    <a :href="social === 'whatsapp' ? `https://wa.me/${site[social]}`: site[social]"
+                <li v-if="site[social.name] !== null">
+                    <a :href="`${social.url}/${site[social.name]}`"
                        :title="social"
                        class="flex items-center justify-center"
                        target="_blank">
                         <slot name="icon">
-                            <inline-svg :src="`/vendor/core/icons/social-networks/${social}.svg`"
-                                        class="w-5 h-5"/>
+                            <inline-svg :src="`/vendor/core/icons/social-networks/${social.name}.svg`"
+                                        :class="[iconClass]"/>
                         </slot>
                     </a>
                 </li>

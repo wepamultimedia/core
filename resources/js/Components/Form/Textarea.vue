@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, toRefs, useAttrs, watch } from "vue";
+import { computed, nextTick, onMounted, ref, toRefs, useAttrs, watch } from "vue";
 import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
 import { usePage } from "@inertiajs/vue3";
 
@@ -145,8 +145,10 @@ watch(errors, value => {
 onMounted(() => {
     if (autoresize.value) resize();
     watch(value, value => {
-        resize();
-        inputValue.value = value;
+        nextTick(() => {
+            resize();
+            inputValue.value = value;
+        })
     });
     watch(inputValue, value => {
         emit("update:value", value);

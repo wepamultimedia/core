@@ -271,25 +271,26 @@ buildInputValue();
                       :id="inputId"
                       :config="ckconfig"
                       :editor="Editor"></CKEditor>
-            <div class="flex justify-end mt-2">
-                <Dropdown v-if="$page.props.default.locales.length > 1"
-                          class="w-full">
-                    <template #button="{open}">
-                        <button class="w-full py-2.5 px-4 bg-white dark:bg-gray-500 border border rounded-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
-                                type="button">
-                            {{ selectedLocale }}
-                        </button>
-                    </template>
-                    <div class="grid divide-y divide-y-gray-300">
-                        <button v-for="locale in $page.props.default.locales"
-                                class="px-4 py-2 text-sm"
-                                type="button"
-                                @click="selectedLocale=locale.code">
-                            {{ locale.name }}
-                        </button>
-                    </div>
-                </Dropdown>
-            </div>
+        </div>
+        <div class="flex justify-end mt-2">
+            <Dropdown v-if="$page.props.default.locales.length > 1"
+                      class="w-full" center>
+                <template #button="{open}">
+                    <button class="w-full py-2.5 px-4 bg-white dark:bg-gray-500 border border rounded-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
+                            type="button">
+                        {{ selectedLocale }}
+                    </button>
+                </template>
+                <div class="grid divide-y divide-y-gray-300 dark:divide-gray-700 bg-white dark:bg-gray-800 rounded overflow-hidden">
+                    <button v-for="loc in $page.props.default.locales"
+                            v-show="loc.code !== selectedLocale"
+                            class="px-4 py-2 text-sm hover:dark:bg-gray-900"
+                            type="button"
+                            @click="selectedLocale=loc.code">
+                        {{ loc.name }}
+                    </button>
+                </div>
+            </Dropdown>
         </div>
         <div v-if="error"
              class="text-red-300 text-sm mt-1">* {{ error }}

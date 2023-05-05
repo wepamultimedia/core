@@ -10,6 +10,10 @@ const props = defineProps({
     },
     buttonLabel: String,
     image: Object,
+    buttonClass: {
+      type: String,
+      default: 'btn btn-secondary'
+    },
     showInfo: {
         type: Boolean,
         default: false
@@ -23,8 +27,7 @@ const props = defineProps({
     errors: Object
 });
 
-const emits = defineEmits(["update:modelValue", "update:image", "update:title", "update:alt", "update:description"]);
-
+const emits = defineEmits(["update:modelValue", "update:image", "update:title", "update:alt", "update:description", "change"]);
 
 const attrs = useAttrs();
 const error = ref();
@@ -57,6 +60,7 @@ const fileManager = reactive({
         fileManager.open = false;
         fileManager.selectedImage = image;
         emits("update:image", image);
+        emits("change", image);
         emits("update:modelValue", image.url);
         emits("update:title", image.name);
         emits("update:alt", image.alt_name);
@@ -65,7 +69,7 @@ const fileManager = reactive({
 });
 </script>
 <template>
-    <div class="w-full">
+    <div>
         <label v-if="label"
                class="text-sm">{{ label }}
         </label>
@@ -75,8 +79,7 @@ const fileManager = reactive({
                  :src="modelValue"
                  class="rounded-lg">
         </figure>
-        <button class="btn btn-secondary w-full justify-center mt-1"
-                v-bind="$attrs"
+        <button :class="[buttonClass, {'mt-1': label}]"
                 @click.prevent="fileManager.open = true">
             {{ buttonLabel ? buttonLabel : __("select_image") }}
         </button>
