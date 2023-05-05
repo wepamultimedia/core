@@ -120,17 +120,20 @@ trait InertiaControllerTrait
 
     protected function defaultTranslation($locale): array
     {
-        $translation = is_array($translation = Lang::get('core::default'))
-            ? $translation : [];
-
+        $defaultTranslation = is_array($defaultTranslation = Lang::get('default'))
+            ? $defaultTranslation : [];
+    
+        $packageDefaultTranslation = is_array($packageDefaultTranslation = Lang::get('core::default'))
+            ? $packageDefaultTranslation : [];
+    
         $packageTranslation = [];
-
+    
         if ($this->packageName !== '') {
             $packageTranslation = is_array($packageTranslation = Lang::get($this->packageName.'::default'))
                 ? $packageTranslation : [];
         }
-
-        return array_merge($translation, $packageTranslation);
+    
+        return array_merge($packageDefaultTranslation, $packageTranslation, $defaultTranslation);
     }
 
     protected function publishShare(): void
