@@ -111,6 +111,7 @@ const file = reactive({
                 loading.value = false;
             }).catch(error => {
                 errors.value = error.response.data.errors;
+                store.dispatch("backend/addAlert", {type: "error", message: error.response.data.errors})
                 loading.value = false;
             });
         }
@@ -268,14 +269,15 @@ const resetFolderFlap = () => {
 const refresh = data => {
     files.value = data.files;
     breadcrumb.value = data.breadcrumb;
-    currentPage.value = data.current_page;
+    currentPage.value = data.files.current_page;
     if (data.parentId) {
         currentParentId.value = data.parentId;
     }
 };
 const getFiles = (parentId = null, page = null, search = null) => {
     loading.value = true;
-    page = page === null ? currentPage.value : page;
+    page = page !== null ? page : currentPage.value;
+    console.log(page);
     axios.get(route("api.v1.filenamager.index", {
         parentId,
         page,
@@ -330,6 +332,7 @@ onMounted(() => {
     getFiles();
     getMimeTypes();
 });
+
 </script>
 <template>
     <!-- toolbar -->
@@ -602,7 +605,7 @@ onMounted(() => {
                           dark:placeholder-gray-400"
                    name="file"
                    type="file"
-                   @change="file.form.file = $event.target.files[0].name"/>
+                   @change="file.form.file = $event.target.files[0].name; file.form.name = file.form.altName = $event.target.files[0].name.replace(/\.[^/.]+$/, '')"/>
             <div v-if="isImage()">
                 <div class="mb-4">
                     <ToggleButton v-model="file.originalSize"
@@ -660,7 +663,7 @@ onMounted(() => {
                    autofocus
                    name="name"
                    required/>
-            <div v-if="file.selected.type.extension === 'jpg' || file.selected.type.extension === 'jpeg' || file.selected.type.extension === 'png'">
+            <div v-if="file.selected.type.extension === 'jpg' || file.selected.type.extension === 'jpeg' || file.selected.type.extension === 'png' || file.selected.type.extension === 'webp'">
                 <Textarea v-model="file.form.altName"
                           :errors="errors"
                           :label="__('alt_name')"
