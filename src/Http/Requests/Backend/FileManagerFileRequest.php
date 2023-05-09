@@ -70,7 +70,7 @@ class FileManagerFileRequest extends FormRequest
                                 ->where('parent_id', $this['parent_id']);
                         }),
                     ],
-                    'file' => 'required|mimes:'.$mimes.'|max:4096',
+                    'file' => 'required|mimes:'.$mimes.'|max:8192',
                 ]);
             case 'PUT':
                 $file = File::find($this['id']);
