@@ -2,21 +2,29 @@
 import { useDark, useToggle } from "@vueuse/core";
 
 const props = defineProps({
-    label: String
+    label: Boolean,
+    iconClass: {
+        type: String,
+        default: "fill-skin-base"
+    },
+    labelClass: {
+        type: String,
+        default: "text-skin-base"
+    }
 });
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 </script>
 <template>
-    <button :aria-label="label ? label : isDark ? __('change_mode_light') : __('change_mode_dark')"
+    <button :aria-label="isDark ? __('change_mode_light') : __('change_mode_dark')"
             @click="toggleDark()">
         <span v-if="!isDark"
               class="text-sm flex items-center gap-1">
-            <svg aria-hidden="true"
-                 class="w-5 h-5"
+            <svg :class="[iconClass]"
+                 aria-hidden="true"
+                 class="w-5 h-5 inline-block"
                  fill="none"
-                 v-bind="$attrs"
                  stroke-width="1.5"
                  viewBox="0 0 24 24"
                  xmlns="http://www.w3.org/2000/svg">
@@ -24,14 +32,17 @@ const toggleDark = useToggle(isDark);
                       stroke-linecap="round"
                       stroke-linejoin="round"></path>
             </svg>
-            Oscuro
+            <span :class="labelClass" v-if="label">
+                {{ __("dark") }}
+            </span>
         </span>
         <span v-else
               class="text-sm flex items-center gap-1">
-            <svg aria-hidden="true"
+            <svg :class="[iconClass]"
+                 aria-hidden="true"
                  class="w-5 h-5 inline-block"
                  fill="none"
-                 v-bind="$attrs"
+                 stroke="currentColor"
                  stroke-width="1.5"
                  viewBox="0 0 24 24"
                  xmlns="http://www.w3.org/2000/svg">
@@ -39,7 +50,9 @@ const toggleDark = useToggle(isDark);
                       stroke-linecap="round"
                       stroke-linejoin="round"></path>
             </svg>
-            Claro
+            <span :class="labelClass" v-if="label">
+                {{ __("light") }}
+            </span>
         </span>
     </button>
 </template>

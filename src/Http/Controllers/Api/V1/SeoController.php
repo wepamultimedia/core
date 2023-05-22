@@ -4,6 +4,9 @@ namespace Wepa\Core\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
+use Wepa\Core\Http\Resources\SeoResource;
+use Wepa\Core\Models\Seo;
+
 
 class SeoController extends Controller
 {
@@ -12,5 +15,10 @@ class SeoController extends Controller
         $language = $locale ?? app()->getLocale();
 
         return Str::slug($text, '-', $language);
+    }
+    
+    public function byAlias(string $alias): SeoResource
+    {
+        return SeoResource::make(Seo::where('alias', $alias)->first());
     }
 }
