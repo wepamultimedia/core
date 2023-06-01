@@ -55,8 +55,6 @@ class SeoInjectFormRequest extends FormRequest
             return Str::slug($value, '-') === $value;
         });
 
-        $locale = app()->getLocale();
-
         $rules = [
             'seo.controller' => 'nullable|string|max:255',
             'seo.action' => 'nullable|string|max:255',
@@ -67,17 +65,17 @@ class SeoInjectFormRequest extends FormRequest
             'seo.alias' => 'nullable|string|max:255',
         ];
 
-        if (Arr::exists($this, 'seo_id')) {
+        if (Arr::exists($this['seo'], 'id')) {
             return array_merge($rules, [
                 'seo.translations.*.slug' => [
                     'nullable',
                     'slug',
-                    Rule::unique('core_seo_translations')->ignore($this['seo_id'], 'seo_id'),
+                    Rule::unique('core_seo_translations')->ignore($this['seo']['id'], 'seo_id'),
                 ],
                 'seo.translations.*.keyword' => [
                     'string',
                     'nullable',
-                    Rule::unique('core_seo_translations')->ignore($this['seo_id'], 'seo_id'),
+                    Rule::unique('core_seo_translations')->ignore($this['seo']['id'], 'seo_id'),
                 ],
             ]);
         } else {

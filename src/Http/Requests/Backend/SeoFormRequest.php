@@ -63,6 +63,7 @@ class SeoFormRequest extends FormRequest
             'translations.*.description' => 'required|string|max:255',
             'alias' => 'nullable|string|max:255',
         ];
+
         switch(request()->method) {
             case 'POST':
                 return array_merge($rules, [
@@ -81,7 +82,7 @@ class SeoFormRequest extends FormRequest
                     'translations.*.slug' => [
                         'nullable',
                         'slug',
-                        Rule::unique('core_seo_translations')->ignore($this['id'], 'seo_id'),
+                        Rule::unique('core_seo_translations')->ignore($this['seo']['id'], 'seo_id'),
                     ],
                     'translations.*.keyword' => [
                         'string',

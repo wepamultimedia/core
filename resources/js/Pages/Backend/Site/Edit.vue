@@ -21,9 +21,9 @@ import { useStore } from "vuex";
 import { __ } from "@/Vendor/Core/Mixins/translations";
 import iconSizes from "@/Vendor/Core/Mixins/iconSizes";
 
-const props = defineProps(["site", "errors", "seo"]);
+const props = defineProps(["site", "errors"]);
 const store = useStore();
-const {site, seo, errors} = toRefs(props);
+const {site, errors} = toRefs(props);
 
 const form = reactive({
     id: site.value.id,

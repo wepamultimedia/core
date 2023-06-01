@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Response;
+use Wepa\Core\Events\SeoModelRequestEvent;
+use Wepa\Core\Events\SeoModelSavedEvent;
+use Wepa\Core\Events\SitemapUpdatedEvent;
 use Wepa\Core\Http\Helpers\InterventionImageHelper;
 use Wepa\Core\Http\Requests\Backend\SeoFormRequest;
 use Wepa\Core\Http\Traits\Backend\SeoControllerTrait;
@@ -32,10 +35,9 @@ class SiteController extends InertiaController
 
     public function edit(): Response
     {
-        $seo = Seo::where(['alias' => 'home'])->first();
-        $site = Site::find(1)->attrsToArray(['seo']);
-
-        return $this->render('Vendor/Core/Backend/Site/Edit', ['seo', 'backend/site'], compact(['site', 'seo']));
+        $site = Site::whereId(1)->with('seo')->first();
+        
+        return $this->render('Vendor/Core/Backend/Site/Edit', ['seo', 'backend/site'], compact(['site']));
     }
 
     public function generateBrowserConfigFile(Request $request)
@@ -151,6 +153,8 @@ class SiteController extends InertiaController
     {
         $site = Site::find(1);
         $site->update($request->all());
-        $this->seoUpdate($site->seo_id);
+//        $this->seoUpdate($site->seo_id);
+        SeoModelRequestEvent::dispatch();
+        SeoModelSavedEvent::dispatch($site);
     }
 }

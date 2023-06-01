@@ -107,7 +107,8 @@ class Site extends Model
 
     public function seo(): HasOne
     {
-        return $this->hasOne(Seo::class, 'id', 'seo_id');
+        return $this->hasOne(Seo::class, 'model_id', 'id')
+            ->where('model_type', '=', self::class);
     }
 
     public function toArray(): array

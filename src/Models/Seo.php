@@ -67,7 +67,15 @@ class Seo extends Model implements TranslatableContract
     use HasFactory;
     use Translatable;
     use TranslationsTrait;
-
+    
+    const CHANGE_FREQUENCY_ALWAYS = 'always';
+    const CHANGE_FREQUENCY_HOURLY = 'hourly';
+    const CHANGE_FREQUENCY_DAILY = 'daily';
+    const CHANGE_FREQUENCY_WEEKLY = 'weekly';
+    const CHANGE_FREQUENCY_MONTHLY = 'monthly';
+    const CHANGE_FREQUENCY_YEARLY = 'yearly';
+    const CHANGE_FREQUENCY_NEVER = 'never';
+    
     public $timestamps = false;
 
     public array $translatedAttributes = [

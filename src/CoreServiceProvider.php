@@ -4,6 +4,7 @@ namespace Wepa\Core;
 
 use Config;
 use Database\Seeders\DatabaseSeeder;
+use Illuminate\Console\Scheduling\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Route;
@@ -17,15 +18,25 @@ use Wepa\Core\Commands\CoreSymlinkCommand;
 use Wepa\Core\Commands\CoreUninstallCommand;
 use Wepa\Core\Commands\CoreUpdateCommand;
 use Wepa\Core\Database\seeders\DefaultSeeder;
+use Wepa\Core\Events\SeoModelDestroyedEvent;
+use Wepa\Core\Events\SeoModelRequestEvent;
+use Wepa\Core\Events\SeoModelSavedEvent;
+use Wepa\Core\Events\SitemapUpdatedEvent;
 use Wepa\Core\Http\Middleware\Backend;
 use Wepa\Core\Http\Middleware\Frontend;
 use Wepa\Core\Http\Middleware\Locale;
+use Wepa\Core\Listeners\SeoModelListener;
 use Wepa\Core\Models\Permission;
 
 class CoreServiceProvider extends PackageServiceProvider
 {
     public function bootingPackage()
     {
+        Event::listen(SitemapUpdatedEvent::class, GenerateSitemapJob::class);
+        Event::listen(SeoModelSavedEvent::class, [SeoModelListener::class, 'saved']);
+        Event::listen(SeoModelDestroyedEvent::class, [SeoModelListener::class, 'destroy']);
+        Event::listen(SeoModelRequestEvent::class, [SeoModelListener::class, 'request']);
+        
         $this->hasSeeders([DefaultSeeder::class]);
         $this->registerViews();
 
