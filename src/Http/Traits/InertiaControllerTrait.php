@@ -40,7 +40,6 @@ trait InertiaControllerTrait
                                    mixed $translation = []): void
     {
         $this->buildViewPath($view);
-
         $defatultShare = [
             'default' => [
                 'env' => config('app.env'),

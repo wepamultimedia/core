@@ -7,12 +7,16 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Response;
+use Wepa\Core\Events\SitemapUpdatedEvent;
 use Wepa\Core\Http\Helpers\InterventionImageHelper;
 use Wepa\Core\Http\Requests\Backend\SeoFormRequest;
 use Wepa\Core\Http\Traits\Backend\SeoControllerTrait;
 use Wepa\Core\Http\Traits\StorageControllerTrait;
+use Wepa\Core\Listeners\GenerateSitemapListener;
 use Wepa\Core\Models\Seo;
 use Wepa\Core\Models\Site;
 
@@ -32,8 +36,11 @@ class SiteController extends InertiaController
 
     public function edit(): Response
     {
+        Log::info('hola');
         $seo = Seo::where(['alias' => 'home'])->first();
         $site = Site::find(1)->attrsToArray(['seo']);
+        
+        
 
         return $this->render('Vendor/Core/Backend/Site/Edit', ['seo', 'backend/site'], compact(['site', 'seo']));
     }
@@ -152,5 +159,8 @@ class SiteController extends InertiaController
         $site = Site::find(1);
         $site->update($request->all());
         $this->seoUpdate($site->seo_id);
+        
+        
+        SitemapUpdatedEvent::dispatch();
     }
 }

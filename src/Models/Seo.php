@@ -2,6 +2,7 @@
 
 namespace Wepa\Core\Models;
 
+
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Wepa\Core\Http\Traits\TranslationsTrait;
+
 
 /**
  * Wepa\Core\Models\Seo
@@ -42,6 +44,11 @@ use Wepa\Core\Http\Traits\TranslationsTrait;
  * @property string $page_type
  * @property string $article_type
  * @property bool $autocomplete
+ * @property float $priority
+ * @property string $change_freq
+ * @property string $model_type
+ * @property int $model_id
+ * @property \Illuminate\Support\Carbon|null $last_mod
  * @property-read \Wepa\Core\Models\SeoTranslation|null $translation
  * @property-read \Illuminate\Database\Eloquent\Collection|\Wepa\Core\Models\SeoTranslation[] $translations
  * @property-read int|null $translations_count
@@ -67,9 +74,17 @@ class Seo extends Model implements TranslatableContract
     use HasFactory;
     use Translatable;
     use TranslationsTrait;
-
+    
+    
+    const CHANGE_FREQUENCY_ALWAYS = 'always';
+    const CHANGE_FREQUENCY_HOURLY = 'hourly';
+    const CHANGE_FREQUENCY_DAILY = 'daily';
+    const CHANGE_FREQUENCY_WEEKLY = 'weekly';
+    const CHANGE_FREQUENCY_MONTHLY = 'monthly';
+    const CHANGE_FREQUENCY_YEARLY = 'yearly';
+    const CHANGE_FREQUENCY_NEVER = 'never';
     public $timestamps = false;
-
+    
     public array $translatedAttributes = [
         'keyword',
         'title',
@@ -86,15 +101,15 @@ class Seo extends Model implements TranslatableContract
         'twitter_image_title',
         'twitter_image_alt',
     ];
-
+    
     protected array $attrsArray = [];
-
+    
     protected $casts = [
         'route_params' => 'array',
         'request_params' => 'array',
         'robots' => 'array',
     ];
-
+    
     protected $fillable = [
         'controller',
         'package',
@@ -109,10 +124,15 @@ class Seo extends Model implements TranslatableContract
         'image',
         'facebook_image',
         'twitter_image',
+        'change_freq',
+        'priority',
+        'model_type',
+        'model_id',
+        'last_mod',
     ];
-
+    
     protected $table = 'core_seo';
-
+    
     /**
      * @return $this
      */
@@ -123,27 +143,27 @@ class Seo extends Model implements TranslatableContract
         } else {
             $this->attrsArray[] = $attrs;
         }
-
+        
         return $this;
     }
-
+    
     public function toArray(): array|Collection
     {
         $collection = collect(parent::toArray())
             ->merge(['translations' => $this->getTranslationsArray()])
             ->merge(['site' => $this->site()]);
-
+        
         foreach ($this->attrsArray as $attr) {
             $collection = $collection->merge([$attr => $this->{$attr}]);
         }
-
+        
         return $collection;
     }
-
+    
     public function site(): Attribute
     {
         return Attribute::make(
-            get: fn () => Site::first()->only([
+            get: fn() => Site::first()->only([
                 'company', 'email', 'phone', 'mobile', 'address', 'latitude', 'longitude',
             ]),
         );

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, nextTick, onMounted, ref, toRefs, useAttrs, watch } from "vue";
+import { computed, onMounted, ref, toRefs, useAttrs, watch } from "vue";
 import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
 import { usePage } from "@inertiajs/vue3";
 
@@ -19,7 +19,9 @@ const props = defineProps({
     label: String,
     locale: String,
     translation: Boolean,
-    debug: Boolean
+    debug: Boolean,
+    limit: Array,
+    limitLabel: Boolean
 });
 
 const proxyModelValue = computed({
@@ -53,17 +55,20 @@ const buildInputValue = () => {
     } else if (attrs.name) {
         inputId.value = attrs.name + "-" + Math.floor(Math.random() * 1000);
     }
+
     if (typeof proxyModelValue.value === "object" && proxyModelValue.value !== null) {
         if (translation.value) {
-            if (!proxyModelValue.value["translations"]) {
+            if (!proxyModelValue.value.hasOwnProperty("translations")) {
                 proxyModelValue.value["translations"] = {};
             }
 
             proxyModelValue.value["translations"] = Object.assign({}, proxyModelValue.value["translations"]);
 
-            if (proxyModelValue.value["translations"][selectedLocale.value]) {
-                inputValue.value = proxyModelValue.value["translations"][selectedLocale.value][attrs.name]
-                                   ? proxyModelValue.value["translations"][selectedLocale.value][attrs.name] : "";
+            if (proxyModelValue.value.translations.hasOwnProperty(selectedLocale.value)) {
+                inputValue.value = proxyModelValue.value.translations[selectedLocale.value].hasOwnProperty(attrs.name)
+                                   ? proxyModelValue.value.translations[selectedLocale.value][attrs.name] : value.value
+                                                                                                            ? value.value
+                                                                                                            : "";
             } else {
                 inputValue.value = "";
             }
@@ -73,6 +78,7 @@ const buildInputValue = () => {
     } else {
         inputValue.value = proxyModelValue.value;
     }
+    emit("update:value", inputValue.value);
 };
 const setInputValue = (value) => {
     if (typeof proxyModelValue.value === "object" && proxyModelValue.value) {
@@ -89,7 +95,8 @@ const setInputValue = (value) => {
                         let any = false;
                         Object.keys(proxyModelValue.value.translations[locale]).forEach(property => {
                             if (proxyModelValue.value.translations[locale][property]) {
-                                return any = true;
+                                any = true;
+                                return true;
                             }
                         });
                         if (!any) {
@@ -113,6 +120,13 @@ const resize = () => {
         }
     }
 };
+
+const progressbar = computed(() => {
+    if (inputValue.value.length > 0) {
+        const percent = (inputValue.value.length / props.limit[1]) * 100;
+        return Math.round(percent) > 100 ? 100 : Math.round(percent);
+    }
+});
 
 watch(locale, value => {
     if (selectedLocale.value !== value) {
@@ -145,10 +159,8 @@ watch(errors, value => {
 onMounted(() => {
     if (autoresize.value) resize();
     watch(value, value => {
-        nextTick(() => {
-            resize();
-            inputValue.value = value;
-        })
+        resize();
+        inputValue.value = value;
     });
     watch(inputValue, value => {
         emit("update:value", value);
@@ -179,6 +191,15 @@ buildInputValue();
                               :rows="autoresize ? 1 : $attrs.rows"
                               class="input"
                               v-bind="$attrs"/>
+                    <div v-if="limit"
+                         class="w-full mt-2">
+                        <div :class="{'bg-green-700': inputValue.length >= limit[0] && inputValue.length <= limit[1], 'bg-orange-600': inputValue.length < limit[0], 'bg-red-600' : inputValue.length > limit[1]}"
+                             :style="`width: ${progressbar}%`"
+                             class="h-1"></div>
+                        <span v-if="limitLabel"
+                              class="text-xs">{{ progressbar }}% | {{ inputValue.length }} / {{ limit[1] }}
+                        </span>
+                    </div>
                     <div v-if="legend"
                          class="text-sm mt-1 text-gray-400 dark:text-gray-400">
                         {{ legend }}
