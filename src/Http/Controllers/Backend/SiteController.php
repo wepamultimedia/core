@@ -7,6 +7,8 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Response;
 use Wepa\Core\Events\SeoModelRequestEvent;
@@ -16,6 +18,7 @@ use Wepa\Core\Http\Helpers\InterventionImageHelper;
 use Wepa\Core\Http\Requests\Backend\SeoFormRequest;
 use Wepa\Core\Http\Traits\Backend\SeoControllerTrait;
 use Wepa\Core\Http\Traits\StorageControllerTrait;
+use Wepa\Core\Listeners\GenerateSitemapListener;
 use Wepa\Core\Models\Seo;
 use Wepa\Core\Models\Site;
 

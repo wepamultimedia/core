@@ -2,11 +2,14 @@
 
 namespace Wepa\Core\Models;
 
+
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use Wepa\Core\Http\Traits\Backend\SeoModelTrait;
+
 
 /**
  * Wepa\Core\Models\Site
@@ -62,8 +65,9 @@ use Illuminate\Support\Carbon;
  */
 class Site extends Model
 {
+    
     protected array $attrsArray = [];
-
+    
     protected $fillable = [
         'seo_id',
         'maintenance',
@@ -88,9 +92,9 @@ class Site extends Model
         'logo',
         'logo_invert',
     ];
-
+    
     protected $table = 'core_site';
-
+    
     /**
      * @return $this
      */
@@ -101,24 +105,24 @@ class Site extends Model
         } else {
             $this->attrsArray[] = $attrs;
         }
-
+        
         return $this;
     }
-
+    
     public function seo(): HasOne
     {
         return $this->hasOne(Seo::class, 'model_id', 'id')
             ->where('model_type', '=', self::class);
     }
-
+    
     public function toArray(): array
     {
         $collection = collect(parent::toArray());
-
+        
         foreach ($this->attrsArray as $attr) {
             $collection = $collection->merge([$attr => $this->{$attr}]);
         }
-
+        
         return $collection->toArray();
     }
 }

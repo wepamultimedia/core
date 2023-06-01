@@ -58,10 +58,8 @@ class SeoInjectFormRequest extends FormRequest
         $rules = [
             'seo.controller' => 'nullable|string|max:255',
             'seo.action' => 'nullable|string|max:255',
-            "seo.translations.$locale.title" => 'required|string|max:255',
-            "seo.translations.$locale.description" => 'required|string|max:255',
-            'seo.translations.*.title' => 'required|string|max:255',
-            'seo.translations.*.description' => 'required|string|max:255',
+            'seo.translations.*.title' => 'nullable|string|max:255',
+            'seo.translations.*.description' => 'nullable|string|max:255',
             'seo.alias' => 'nullable|string|max:255',
         ];
 

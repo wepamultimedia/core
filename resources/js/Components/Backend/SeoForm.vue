@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onBeforeMount, onMounted, reactive, ref, toRefs, watch } from "vue";
+import { onBeforeMount, onMounted, reactive, ref, toRefs, watch } from "vue";
 import Textarea from "@/Vendor/Core/Components/Form/Textarea.vue";
 import Input from "@/Vendor/Core/Components/Form/Input.vue";
 import InputImage from "@/Vendor/Core/Components/Form/InputImage.vue";
@@ -7,6 +7,7 @@ import Icon from "@/Vendor/Core/Components/Heroicon.vue";
 import Select from "@/Vendor/Core/Components/Select.vue";
 import ToggleButton from "@/Vendor/Core/Components/Form/ToggleButton.vue";
 import { usePage } from "@inertiajs/vue3";
+import axios from "axios";
 
 const props = defineProps({
     seo: Object,
@@ -50,6 +51,8 @@ const form = reactive({
     canonical: false,
     robots: robots.value,
     autocomplete: autocomplete.value,
+    change_freq: null,
+    priority: null,
     translations: {}
 });
 const sections = reactive({
@@ -62,22 +65,22 @@ const showSeoAnalysis = ref(false);
 const showReadability = ref(false);
 const selected_locale = ref();
 const values = reactive({
-    title: null,
-    facebook_title: null,
-    twitter_title: null,
-    description: null,
-    facebook_description: null,
-    twitter_description: null,
-    slug: null,
-    image: null,
-    image_title: null,
-    image_alt: null,
-    facebook_image: null,
-    facebook_image_title: null,
-    facebook_image_alt: null,
-    twitter_image: null,
-    twitter_image_title: null,
-    twitter_image_alt: null
+    title: "",
+    facebook_title: "",
+    twitter_title: "",
+    description: "",
+    facebook_description: "",
+    twitter_description: "",
+    slug: "",
+    image: "",
+    image_title: "",
+    image_alt: "",
+    facebook_image: "",
+    facebook_image_title: "",
+    facebook_image_alt: "",
+    twitter_image: "",
+    twitter_image_title: "",
+    twitter_image_alt: ""
 });
 const robots_options = [
     {
@@ -163,6 +166,17 @@ const article_types = [
         label: "none"
     }
 ];
+const site_seo = ref({
+    title: null,
+    description: null,
+    image: null,
+    image_alt: null,
+    slug: null
+});
+const googleLimits = {
+    title: {min: 40, max: 60},
+    description: {min: 140, max: 160}
+};
 
 function activeSeccion(section) {
     Object.keys(sections).forEach(function (key) {
@@ -187,7 +201,7 @@ function generateSlug(text) {
 
 onBeforeMount(() => {
     Object.keys(seo.value).filter(key => key in form).forEach(key => form[key] = seo.value[key]);
-    emit('update:seo', form)
+    emit("update:seo", form);
 });
 
 onMounted(() => {
@@ -235,23 +249,23 @@ onMounted(() => {
         }
     });
     watch(() => values.title, (value, oldValue) => {
-        values.facebook_title = values.facebook_title === null ? '' : values.facebook_title;
+        values.facebook_title = values.facebook_title === null ? "" : values.facebook_title;
         if (values.facebook_title === oldValue) {
             values.facebook_title = value;
         }
 
-        values.twitter_title = values.twitter_title === null ? '' : values.twitter_title;
+        values.twitter_title = values.twitter_title === null ? "" : values.twitter_title;
         if (values.twitter_title === oldValue) {
             values.twitter_title = value;
         }
     });
     watch(() => values.description, (value, oldValue) => {
-        values.facebook_description = values.facebook_description === null ? '' : values.facebook_description;
-        if (values.facebook_description === oldValue || values.facebook_description === '') {
+        values.facebook_description = values.facebook_description === null ? "" : values.facebook_description;
+        if (values.facebook_description === oldValue) {
             values.facebook_description = value;
         }
-        values.twitter_description = values.twitter_description === null ? '' : values.twitter_description;
-        if (values.twitter_description === oldValue || values.twitter_description === '') {
+        values.twitter_description = values.twitter_description === null ? "" : values.twitter_description;
+        if (values.twitter_description === oldValue) {
             values.twitter_description = value;
         }
     });
@@ -259,6 +273,10 @@ onMounted(() => {
         emit("update:seo", value);
     });
 
+    axios.get(route("api.v1.seo.by_alias", {alias: "home"}))
+    .then(response => {
+        site_seo.value = {...response.data.data};
+    });
 });
 </script>
 <template>
@@ -289,7 +307,7 @@ onMounted(() => {
             {{ __("advanced") }}
         </button>
     </div>
-    <div class="bg-white dark:bg-gray-600 border border-t-0 border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-t-none overflow-y-auto overflow-x-hidden">
+    <div class="bg-white dark:bg-gray-600 border border-t-0 border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-t-none">
         <div class="p-6 border-b border-gray-300 dark:border-gray-700">
             <ToggleButton v-model="form.autocomplete"
                           :label="__('autocomplete')"/>
@@ -331,6 +349,8 @@ onMounted(() => {
                            v-model:value="values.title"
                            :errors="errors"
                            :label="__('seo_title')"
+                           :limit="[googleLimits.title.min,googleLimits.title.max]"
+                           limit-label
                            name="title"
                            translation></Input>
                 </div>
@@ -341,6 +361,8 @@ onMounted(() => {
                               :autoresize="false"
                               :errors="errors"
                               :label="__('description')"
+                              :limit="[googleLimits.description.min,googleLimits.description.max]"
+                              limit-label
                               name="description"
                               rows="4"
                               translation></Textarea>
@@ -520,6 +542,138 @@ onMounted(() => {
                             reduce></Select>
                 </div>
             </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
+                <h3 class="col-span-full">{{ __("sitemap") }}</h3>
+                <div class="mb-4">
+                    <Input v-model="form"
+                           :errors="errors"
+                           :label="__('priority')"
+                           name="priority"></Input>
+                </div>
+                <div class="mb-4">
+                    <Select v-model="form.change_freq"
+                            :errors="errors"
+                            :label="__('change_freq')"
+                            :options="[
+                                {id: 'always', label: __('always')},
+                                {id: 'hourly', label: __('hourly')},
+                                {id: 'daily', label: __('daily')},
+                                {id: 'weekly', label: __('weekly')},
+                                {id: 'monthly', label: __('monthly')},
+                                {id: 'yearly', label: __('yearly')},
+                                {id: 'never', label: __('never')}]"
+                            name="change_freq"></Select>
+                </div>
+            </div>
+        </div>
+        <!-- google preview -->
+        <div class="p-6 border-t border-gray-300 dark:border-gray-700 ">
+            <h2 class="pb-4">{{ __("preview_google") }}</h2>
+            <h3>{{ __("desktop") }}</h3>
+            <div class="max-w-[600px]">
+                <div class="mb-[12px] flex items-center overflow-ellipsis pt-[1px] leading-[16px] text-[14px]">
+                    <div class="w-[28px] h-[28px] flex items-center justify-center mr-[12px]">
+                        <img :src="`${$page.props.default.storageUrl}/icons/android-icon-48x48.png`"
+                             alt=""
+                             class="w-[18px] h-[18px]">
+                    </div>
+                    <div class="flex-auto">
+                        <div class="text-[14px] font-arial">{{ site_seo.title }}</div>
+                        <div class="text-[12px] font-arial">{{ $page.props.default.baseUrl }}
+                            <svg v-if="values.slug"
+                                 aria-hidden="true"
+                                 class="w-2.5 h-2.5 inline-block"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.5"
+                                 viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"></path>
+                            </svg>
+                            {{ values.slug }}
+                            <svg aria-hidden="true"
+                                 class="inline-block w-5 h-5 ml-2"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.5"
+                                 viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="font-arial text-[20px] text-[#1a0dab] dark:text-[#8ab4f8]">{{
+                            values.title.length > googleLimits.title.max
+                            ? values.title.substring(0, googleLimits.title.max - 1) + "..."
+                            : values.title
+                        }}</div>
+                    <div class="font-arial leading-[1.58rem] text-[14px]">{{
+                            values.description.length > googleLimits.description.max
+                            ? values.description.substring(0, googleLimits.description.max - 1) + "..."
+                            : values.description
+                        }}</div>
+                </div>
+            </div>
+            <h3 class="mt-10">{{ __("mobile") }}</h3>
+            <div class="max-w-[400px]">
+                <div class="mb-[12px] flex items-center overflow-ellipsis pt-[1px] leading-[16px] text-[14px]">
+                    <div class="w-[28px] h-[28px] flex items-center justify-center mr-[12px]">
+                        <img :src="`${$page.props.default.storageUrl}/icons/android-icon-48x48.png`"
+                             alt=""
+                             class="w-[18px] h-[18px]">
+                    </div>
+                    <div class="flex-auto">
+                        <div class="text-[14px] font-arial">{{ site_seo.title }}</div>
+                        <div class="text-[12px] font-arial">{{ $page.props.default.baseUrl }}
+                            <svg v-if="values.slug"
+                                 aria-hidden="true"
+                                 class="w-2.5 h-2.5 inline-block"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.5"
+                                 viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"></path>
+                            </svg>
+                            {{ values.slug }}
+                            <svg aria-hidden="true"
+                                 class="inline-block w-5 h-5 ml-2"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.5"
+                                 viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="font-arial text-[20px] text-[#1a0dab] dark:text-[#8ab4f8]">
+                        {{
+                            values.title.length > googleLimits.title.max
+                            ? values.title.substring(0, googleLimits.title.max - 1) + "..."
+                            : values.title
+                        }}
+                    </div>
+                    <div class="font-arial leading-[1.58rem] text-[14px]">{{
+                            values.description.length > googleLimits.description.max
+                            ? values.description.substring(0, googleLimits.description.max - 1) + "..."
+                            : values.description
+                        }}
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="border-t dark:border-gray-700">
             <div class="flex items-center justify-between cursor-pointer bg-gray-300 dark:bg-gray-700 p-4"
@@ -532,8 +686,8 @@ onMounted(() => {
                  class="p-4">...
             </div>
         </div>
-        <div class="border-t dark:border-gray-700 ">
-            <div class="flex items-center justify-between cursor-pointer bg-gray-300 dark:bg-gray-700 p-4"
+        <div class="border-t dark:border-gray-700 rounded-b-lg">
+            <div class="flex items-center justify-between cursor-pointer bg-gray-300 dark:bg-gray-700 p-4 rounded-b-lg"
                  @click="showReadability = !showReadability">
                 <h3>{{ __("readability") }}</h3>
                 <Icon :icon="!showReadability ? 'chevron-up' : 'chevron-down'"

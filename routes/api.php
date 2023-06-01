@@ -23,6 +23,7 @@ Route::prefix('api/v1')->middleware(['api'])->group(function () {
 });
 
 Route::prefix('api/v1')->middleware(['web', 'auth:sanctum'])->group(function () {
+    Route::get('seo/by-alias/{alias}', [SeoController::class, 'byAlias'])->name('api.v1.seo.by_alias');
     Route::get('menu/{app}', [MenuController::class, 'getMenu'])->name('api.v1.menu.index');
 
     // Deprected

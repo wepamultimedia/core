@@ -1,5 +1,5 @@
 <script setup>
-import { computed, nextTick, onMounted, ref, toRefs, useAttrs, watch } from "vue";
+import { computed, onMounted, ref, toRefs, useAttrs, watch } from "vue";
 import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
 import { usePage } from "@inertiajs/vue3";
 
@@ -15,7 +15,9 @@ const props = defineProps({
     },
     label: String,
     translation: Boolean,
-    debug: Boolean
+    debug: Boolean,
+    limit: Array,
+    limitLabel: Boolean
 });
 
 const proxyModelValue = computed({
@@ -30,7 +32,7 @@ const proxyModelValue = computed({
 const input = ref(null);
 const attrs = useAttrs();
 const inputId = ref(null);
-const selectedLocale = ref(props.locale || usePage().props.default.locale);
+const selectedLocale = ref(usePage().props.default.locale);
 const inputValue = ref("");
 const error = ref();
 const emit = defineEmits(["update:modelValue", "update:locale", "update:value"]);
@@ -41,15 +43,12 @@ const {
           value
       } = toRefs(props);
 
-// const inputValue = computed({
-//     get(){
-//         return value.value;
-//     },
-//     set(value){
-//         emit("update:value", value);
-//         setInputValue(value);
-//     }
-// })
+const progressbar = computed(() => {
+    if (inputValue.value.length > 0) {
+        const percent = (inputValue.value.length / props.limit[1]) * 100;
+        return Math.round(percent) > 100 ? 100 : Math.round(percent);
+    }
+});
 
 watch(locale, value => {
     if (selectedLocale.value !== value) {
@@ -65,9 +64,7 @@ watch(inputValue, value => {
     setInputValue(value);
 });
 watch(value, value => {
-    nextTick(() => {
-        inputValue.value = value;
-    })
+    inputValue.value = value;
 });
 watch(errors, value => {
     for (const [errorKey, errorValue] of Object.entries(value)) {
@@ -174,8 +171,8 @@ buildInputValue();
             <div class="flex items-center">
                 <slot name="left">
                     <div v-if="$slots.icon"
-                            class="py-2.5 px-2 bg-white dark:bg-gray-500 border border-r-0 rounded-l-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
-                            type="button">
+                         class="py-2.5 px-2 bg-white dark:bg-gray-500 border border-r-0 rounded-l-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
+                         type="button">
                         <slot name="icon"></slot>
                     </div>
                 </slot>
@@ -190,6 +187,15 @@ buildInputValue();
                            class="input"
                            type="text"
                            v-bind="$attrs">
+                    <div v-if="limit"
+                         class="w-full mt-2">
+                        <div :class="{'bg-green-700': inputValue.length >= limit[0] && inputValue.length <= limit[1], 'bg-orange-600': inputValue.length < limit[0], 'bg-red-600' : inputValue.length > limit[1]}"
+                             :style="`width: ${progressbar}%`"
+                             class="h-1"></div>
+                        <span v-if="limitLabel"
+                              class="text-xs">{{ progressbar }}% | {{ inputValue.length }} / {{ limit[1] }}
+                        </span>
+                    </div>
                     <div v-if="legend"
                          class="text-sm mt-1 text-gray-400 dark:text-gray-400">
                         {{ legend }}

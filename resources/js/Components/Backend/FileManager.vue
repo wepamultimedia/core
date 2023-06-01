@@ -65,7 +65,7 @@ const file = reactive({
         altName: "",
         description: "",
         file: "",
-        maxSize: 800
+        maxSize: 1200
     },
     selected: null,
     copyLink: () => {
@@ -277,7 +277,6 @@ const refresh = data => {
 const getFiles = (parentId = null, page = null, search = null) => {
     loading.value = true;
     page = page !== null ? page : currentPage.value;
-    console.log(page);
     axios.get(route("api.v1.filenamager.index", {
         parentId,
         page,
@@ -319,9 +318,6 @@ const onClick = (callbackClick, callbackDbClick) => {
         clicks.click = 0;
         callbackDbClick();
     }
-};
-const message = message => {
-    console.log(message);
 };
 
 watch(searchInput, value => {
