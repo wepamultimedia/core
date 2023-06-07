@@ -18,6 +18,7 @@ class SeoModelListener
     {
         if ($seo = Seo::where('model_type', $event->model::class)->where('model_id', $event->model->id)->first()) {
             $seo->delete();
+            
             SitemapUpdatedEvent::dispatch();
         }
     }

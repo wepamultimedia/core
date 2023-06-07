@@ -6,7 +6,7 @@ namespace Wepa\Core\Http\Traits;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Wepa\Core\Events\{SeoModelRequestEvent, SeoModelSavedEvent};
+use Wepa\Core\Events\{SeoModelDestroyedEvent, SeoModelRequestEvent, SeoModelSavedEvent};
 use Wepa\Core\Models\Seo;
 
 
@@ -17,6 +17,10 @@ trait SeoModelTrait
     public static function boot()
     {
         parent::boot();
+        
+        static::deleted(function (Model $model) {
+            SeoModelDestroyedEvent::dispatch($model);
+        });
         
         static::saving(function () {
             SeoModelRequestEvent::dispatch();
@@ -32,6 +36,13 @@ trait SeoModelTrait
         return $this->hasOne(Seo::class, 'model_id', 'id')
             ->where('model_type', '=', self::class)
             ->withDefault($this->seoDefaultParams());
+    }
+    
+    public abstract function seoDefaultParams(): array;
+    
+    public function seoAddParams(array $params): void
+    {
+        $this->_seoParams = array_merge($this->_seoParams, $params);
     }
     
     public function seoParams(): Attribute
@@ -53,14 +64,7 @@ trait SeoModelTrait
         );
     }
     
-    public abstract function seoDefaultParams(): array;
-    
     public abstract function seoRequestParams(): array;
     
     public abstract function seoRouteParams(): array;
-    
-    public function seoAddParams(array $params): void
-    {
-        $this->_seoParams = array_merge($this->_seoParams, $params);
-    }
 }
