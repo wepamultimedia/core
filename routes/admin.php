@@ -27,10 +27,11 @@ Route::prefix('admin')->middleware(['web', 'auth:sanctum'])->group(function () {
     Route::resource('users', UserController::class)->names('admin.users');
     Route::resource('roles', RoleController::class)->names('admin.roles');
     Route::resource('permissions', PermissionController::class)->names('admin.permissions');
+
     Route::post('site/icons/generate', [SiteController::class, 'generateIcons'])->name('admin.site.icons.generate');
     Route::get('site/edit', [SiteController::class, 'edit'])->name('admin.site.edit');
     Route::put('site/update', [SiteController::class, 'update'])->name('admin.site.update');
-    //	Route::put('site/update', [SiteController::class, 'update'])->name('admin.site.update');
+
     Route::resource('seo', SeoController::class)->names('admin.seo');
 
     Route::resource('translations', TranslationController::class)->names('admin.translations');

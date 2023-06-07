@@ -34,7 +34,6 @@ const attrs = useAttrs();
 const inputId = ref(null);
 const selectedLocale = ref(usePage().props.default.locale);
 const inputValue = ref("");
-const error = ref();
 const emit = defineEmits(["update:modelValue", "update:locale", "update:value"]);
 const {
           translation,
@@ -66,19 +65,19 @@ watch(inputValue, value => {
 watch(value, value => {
     inputValue.value = value;
 });
-watch(errors, value => {
-    for (const [errorKey, errorValue] of Object.entries(value)) {
+
+const error = computed(() =>{
+    for (const [errorKey, errorValue] of Object.entries(errors.value)) {
         const re = new RegExp("[.]" + attrs.name + "$");
         const rex = new RegExp("^" + attrs.name + "$");
         if (re.test(errorKey) || rex.test(errorKey)) {
             if (typeof errorValue === "object") {
-                error.value = errorValue[0];
-            } else {
-                error.value = errorValue;
+                return errorValue[0];
             }
-            return;
+
+            return errorValue;
         } else {
-            error.value = null;
+            return null;
         }
     }
 });

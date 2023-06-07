@@ -30,11 +30,27 @@ const props = defineProps({
 const emits = defineEmits(["update:modelValue", "update:image", "update:title", "update:alt", "update:description", "change"]);
 
 const attrs = useAttrs();
-const error = ref();
+
 const {
           errors,
           modelValue
       } = toRefs(props);
+
+const error = computed(() =>{
+    for (const [errorKey, errorValue] of Object.entries(errors.value)) {
+        const re = new RegExp("[.]" + attrs.name + "$");
+        const rex = new RegExp("^" + attrs.name + "$");
+        if (re.test(errorKey) || rex.test(errorKey)) {
+            if (typeof errorValue === "object") {
+                return errorValue[0];
+            }
+
+            return errorValue;
+        } else {
+            return null;
+        }
+    }
+});
 
 watch(errors, value => {
     for (const [errorKey, errorValue] of Object.entries(value)) {

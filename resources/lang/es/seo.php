@@ -77,4 +77,5 @@ return [
     'preview_google' => 'Vista previa de Google',
     'desktop' => 'Ordenador',
     'mobile' => 'Móvil',
+    'routes_list' => 'Lista de rutas'
 ];

@@ -163,13 +163,28 @@ const fileManager = reactive({
 const attrs = useAttrs();
 const selectedLocale = ref(usePage().props.default.locale);
 const inputValue = ref();
-const error = ref();
 const emit = defineEmits(["update:modelValue", "update:locale"]);
 const {
           translation,
           errors,
           locale
       } = toRefs(props);
+
+const error = computed(() =>{
+    for (const [errorKey, errorValue] of Object.entries(errors.value)) {
+        const re = new RegExp("[.]" + attrs.name + "$");
+        const rex = new RegExp("^" + attrs.name + "$");
+        if (re.test(errorKey) || rex.test(errorKey)) {
+            if (typeof errorValue === "object") {
+                return errorValue[0];
+            }
+
+            return errorValue;
+        } else {
+            return null;
+        }
+    }
+});
 
 watch(locale, value => {
     if (selectedLocale.value !== value) {
@@ -183,17 +198,6 @@ watch(selectedLocale, value => {
     buildInputValue();
 });
 watch(inputValue, value => setInputValue(value));
-watch(errors, value => {
-    for (const [errorKey, errorValue] of Object.entries(value)) {
-        const re = new RegExp(attrs.name + "$");
-        if (re.test(errorKey)) {
-            error.value = errorValue;
-            return;
-        } else {
-            error.value = null;
-        }
-    }
-});
 
 const buildInputValue = () => {
     if (attrs.id) {

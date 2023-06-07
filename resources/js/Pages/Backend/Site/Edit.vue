@@ -23,7 +23,7 @@ import iconSizes from "@/Vendor/Core/Mixins/iconSizes";
 
 const props = defineProps(["site", "errors"]);
 const store = useStore();
-const {site, errors} = toRefs(props);
+const {site, seo, errors} = toRefs(props);
 
 const form = reactive({
     id: site.value.id,
@@ -51,7 +51,6 @@ const formIcon = useForm({
     file: null,
     sizes: iconSizes
 });
-const SeoFormComponent = ref();
 const submiting = ref(false);
 const defaultProps = usePage().props.default;
 const sections = reactive({
@@ -309,8 +308,7 @@ onMounted(() => {
             <!-- SEO -->
             <div class="pb-8">
                 <h2 class="uppercase">{{ __("seo") }}</h2>
-                <SeoForm v-model:seo="form.seo"
-                         :errors="errors.seo"/>
+                <SeoForm v-model:seo="form.seo"/>
             </div>
             <!-- Icons -->
             <div class="pb-8">

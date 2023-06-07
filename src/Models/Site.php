@@ -3,12 +3,13 @@
 namespace Wepa\Core\Models;
 
 
+use App\Http\Controllers\MainController;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
-use Wepa\Core\Http\Traits\Backend\SeoModelTrait;
+use Wepa\Core\Http\Traits\SeoModelTrait;
 
 
 /**
@@ -65,9 +66,9 @@ use Wepa\Core\Http\Traits\Backend\SeoModelTrait;
  */
 class Site extends Model
 {
+    use SeoModelTrait;
     
     protected array $attrsArray = [];
-    
     protected $fillable = [
         'seo_id',
         'maintenance',
@@ -92,7 +93,6 @@ class Site extends Model
         'logo',
         'logo_invert',
     ];
-    
     protected $table = 'core_site';
     
     /**
@@ -109,12 +109,6 @@ class Site extends Model
         return $this;
     }
     
-    public function seo(): HasOne
-    {
-        return $this->hasOne(Seo::class, 'model_id', 'id')
-            ->where('model_type', '=', self::class);
-    }
-    
     public function toArray(): array
     {
         $collection = collect(parent::toArray());
@@ -124,5 +118,26 @@ class Site extends Model
         }
         
         return $collection->toArray();
+    }
+    
+    public function seoDefaultParams(): array
+    {
+        return [
+            'controller' => MainController::class,
+            'action' => 'home',
+            'page_type' => 'website',
+            'change_freq' => Seo::CHANGE_FREQUENCY_WEEKLY,
+            'priority' => '1'
+        ];
+    }
+    
+    public function seoRouteParams(): array
+    {
+        return [];
+    }
+    
+    public function seoRequestParams(): array
+    {
+        return [];
     }
 }

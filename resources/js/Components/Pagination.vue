@@ -15,7 +15,7 @@ const getPage = (url) => {
 };
 </script>
 <template>
-    <nav v-if="links">
+    <nav v-if="links?.length > 3">
         <ul class="flex flex-wrap -mb-1">
             <template v-for="(link, key) in links"
                       :key="key">

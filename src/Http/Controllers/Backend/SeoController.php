@@ -35,8 +35,6 @@ class SeoController extends InertiaController
             $query->where('alias', 'LIKE', '%'.$search.'%')
                 ->orWhereTranslationLike('slug', '%'.$search.'%');
         })
-            ->where('alias', '<>', 'home')
-            ->orWhereNull('alias')
             ->paginate();
 
         return $this->render('Vendor/Core/Backend/Seo/Index', 'seo', compact(['routes']));

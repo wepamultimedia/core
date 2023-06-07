@@ -77,4 +77,5 @@ return [
     'desktop' => 'Desktop',
     'mobile' => 'Mobile',
     'change_freq' => 'Change frequency',
+    'routes_list' => 'Route list'
 ];

@@ -37,7 +37,6 @@ const attrs = useAttrs();
 const selectedLocale = ref(usePage().props.default.locale);
 const inputId = ref(null);
 const inputValue = ref();
-const error = ref();
 const textarea = ref();
 const emit = defineEmits(["update:modelValue", "update:locale", "update:value"]);
 const {

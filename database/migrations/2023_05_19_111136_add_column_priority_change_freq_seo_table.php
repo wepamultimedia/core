@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('core_seo', function (Blueprint $table) {
             $table->string('change_freq')->default('never');
-            $table->decimal('priority',1,1)->default(0.5);
+            $table->string('priority')->default('0.7');
         });
     }
 

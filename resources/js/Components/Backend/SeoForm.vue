@@ -11,7 +11,6 @@ import axios from "axios";
 
 const props = defineProps({
     seo: Object,
-    errors: Object,
     locale: String,
     autocomplete: Boolean,
     alias: String,
@@ -20,6 +19,8 @@ const props = defineProps({
     description: String,
     pageType: String,
     articleType: String,
+    changeFreq: String,
+    priority: Number,
     robots: Array
 });
 
@@ -43,16 +44,16 @@ const form = reactive({
     controller: null,
     alias: null,
     action: null,
-    page_type: !pageType.value ? "website" : pageType.value,
-    article_type: !articleType.value ? "website" : articleType.value,
-    image: null,
+    page_type: props.pageType || "website",
+    article_type: props.articleType || "website",
+    image: {},
     facebook_image: null,
     twitter_image: null,
     canonical: false,
     robots: robots.value,
     autocomplete: autocomplete.value,
-    change_freq: null,
-    priority: null,
+    change_freq: props.changeFreq || "never",
+    priority: props.priority || 0.5,
     translations: {}
 });
 const sections = reactive({
@@ -72,7 +73,7 @@ const values = reactive({
     facebook_description: "",
     twitter_description: "",
     slug: "",
-    image: "",
+    image: {},
     image_title: "",
     image_alt: "",
     facebook_image: "",
@@ -178,6 +179,10 @@ const googleLimits = {
     description: {min: 140, max: 160}
 };
 
+const errors = computed(() => {
+    return usePage().props.errors.seo;
+});
+
 function activeSeccion(section) {
     Object.keys(sections).forEach(function (key) {
         sections[key] = false;
@@ -273,8 +278,7 @@ onMounted(() => {
         emit("update:seo", value);
     });
 
-    axios.get(route("api.v1.seo.by_alias", {alias: "home"}))
-    .then(response => {
+    axios.get(route("api.v1.seo.by_alias", {alias: "home"})).then(response => {
         site_seo.value = {...response.data.data};
     });
 });
@@ -569,6 +573,7 @@ onMounted(() => {
         <!-- google preview -->
         <div class="p-6 border-t border-gray-300 dark:border-gray-700 ">
             <h2 class="pb-4">{{ __("preview_google") }}</h2>
+            <!-- desktop -->
             <h3>{{ __("desktop") }}</h3>
             <div class="max-w-[600px]">
                 <div class="mb-[12px] flex items-center overflow-ellipsis pt-[1px] leading-[16px] text-[14px]">
@@ -579,7 +584,7 @@ onMounted(() => {
                     </div>
                     <div class="flex-auto">
                         <div class="text-[14px] font-arial">{{ site_seo.title }}</div>
-                        <div class="text-[12px] font-arial">{{ $page.props.default.baseUrl }}
+                        <div class="text-[12px] font-arial min-w-max">{{ $page.props.default.baseUrl }}
                             <svg v-if="values.slug"
                                  aria-hidden="true"
                                  class="w-2.5 h-2.5 inline-block"
@@ -612,14 +617,17 @@ onMounted(() => {
                             values.title.length > googleLimits.title.max
                             ? values.title.substring(0, googleLimits.title.max - 1) + "..."
                             : values.title
-                        }}</div>
+                        }}
+                    </div>
                     <div class="font-arial leading-[1.58rem] text-[14px]">{{
                             values.description.length > googleLimits.description.max
                             ? values.description.substring(0, googleLimits.description.max - 1) + "..."
                             : values.description
-                        }}</div>
+                        }}
+                    </div>
                 </div>
             </div>
+            <!-- mobile -->
             <h3 class="mt-10">{{ __("mobile") }}</h3>
             <div class="max-w-[400px]">
                 <div class="mb-[12px] flex items-center overflow-ellipsis pt-[1px] leading-[16px] text-[14px]">
@@ -630,7 +638,8 @@ onMounted(() => {
                     </div>
                     <div class="flex-auto">
                         <div class="text-[14px] font-arial">{{ site_seo.title }}</div>
-                        <div class="text-[12px] font-arial">{{ $page.props.default.baseUrl }}
+                        <div class="text-[12px] font-arial min-w-max">
+                            {{ $page.props.default.baseUrl }}
                             <svg v-if="values.slug"
                                  aria-hidden="true"
                                  class="w-2.5 h-2.5 inline-block"
