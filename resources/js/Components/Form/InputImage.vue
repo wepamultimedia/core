@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, toRefs, useAttrs, watch } from "vue";
+import { reactive, computed, toRefs, useAttrs, watch } from "vue";
 import Flap from "@/Vendor/Core/Components/Flap.vue";
 import FileManager from "@/Vendor/Core/Components/Backend/FileManager.vue";
 
@@ -24,7 +24,10 @@ const props = defineProps({
     title: String,
     description: String,
     label: String,
-    errors: Object
+    errors: {
+        type: Object,
+        default: {}
+    },
 });
 
 const emits = defineEmits(["update:modelValue", "update:image", "update:title", "update:alt", "update:description", "change"]);
