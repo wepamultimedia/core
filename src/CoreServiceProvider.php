@@ -78,6 +78,29 @@ class CoreServiceProvider extends PackageServiceProvider
         $this->publishes([
             __DIR__.'/../resources/js/Pages' => resource_path('js/Pages/Vendor/Core'),
         ], ['core', 'core-pages']);
+        
+        // Framework files
+        $this->publishes([
+            __DIR__.'/../_app' => app_path(),
+        ], ['core-framework', 'core-framework-app']);
+    
+        $this->publishes([
+            __DIR__.'/../_config' => config_path(),
+        ], ['core-framework', 'core-framework-config']);
+    
+        $this->publishes([
+            __DIR__.'/../_resources' => resource_path(),
+        ], ['core-framework', 'core-framework-resources']);
+    
+        $this->publishes([
+            __DIR__.'/../_root/.env.example' => base_path('.env.example'),
+            __DIR__.'/../_root/tailwind.config.js' => base_path('tailwind.config.js'),
+            __DIR__.'/../_root/vite.config.js' => base_path('vite.config.js'),
+        ], ['core-framework', 'core-framework-root']);
+    
+        $this->publishes([
+            __DIR__.'/../_routes' => base_path('routes'),
+        ], ['core-framework', 'core-framework-routes']);
     }
     
     protected function hasSeeders(array $seeders): void

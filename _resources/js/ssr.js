@@ -6,7 +6,7 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
 import Heroicon from "@/Vendor/Core/Components/Heroicon.vue";
 import InlineSvg from "vue-inline-svg";
-import store from "@core/Store";
+import store from "@/Store/index";
 import { translations } from "@core/Mixins/translations";
 
 const appName = "Laravel";

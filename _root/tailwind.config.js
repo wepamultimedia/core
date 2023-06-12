@@ -93,6 +93,9 @@ module.exports = {
             fontFamily: {
                 sans: [
                     "Nunito", ...defaultTheme.fontFamily.sans
+                ],
+                nunito: [
+                    'Nunito', ...defaultTheme.fontFamily.sans
                 ]
             }
         }

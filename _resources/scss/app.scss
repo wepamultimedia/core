@@ -75,6 +75,8 @@
         --color-background: #e7eaea;
         --color-foreground: #f8f9f9;
 
+        @apply font-nunito;
+
         h1, h2, h3, h4, h5, h6 {
             @apply font-bold mb-2
         }
@@ -152,6 +154,20 @@
 
         @apply text-skin-base
 
+    }
+
+    p {
+        @apply py-3
+    }
+
+    .ckeditor {
+        ul {
+            @apply ml-2 list-disc list-outside [&>li]:ml-4;
+        }
+    }
+
+    figure.media {
+        @apply my-6;
     }
 
     .input {

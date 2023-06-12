@@ -1,5 +1,5 @@
 import "./bootstrap";
-import "../css/app.css";
+import "../scss/app.scss";
 
 import { createApp, h } from "vue";
 import { createInertiaApp } from "@inertiajs/vue3";
@@ -9,7 +9,7 @@ import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
 import { translations } from "@/Vendor/Core/Mixins/translations";
 import Heroicon from "@/Vendor/Core/Components/Heroicon.vue";
 import InlineSvg from "vue-inline-svg";
-import store from "@/Vendor/Core/Store/index";
+import store from "@/Store";
 
 const appName = window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
 
