@@ -26,12 +26,14 @@ class CoreInstallCommand extends Command
     public function handle(): int
     {
         $this->call('migrate');
+        $this->call('vendor:publish', ['--tag' => 'core-framework', '--force' => true]);
         $this->call('vendor:publish', ['--tag' => 'core', '--force' => true]);
-        $this->copyFiles();
+        
         Menu::loadPackageItems('core');
+        
         $this->call('db:seed', ['class' => 'Wepa\Core\Database\seeders\DefaultSeeder']);
 
-        $process = Process::fromShellCommandline('npm i -D vuex@next @vueuse/core vue-inline-svg@next vue-screen@next tailwind-scrollbar @inertiajs/progress sass');
+        $process = Process::fromShellCommandline('npm i -D vuex@next @vueuse/core vue-inline-svg@next vue-screen@next @inertiajs/progress tailwind-scrollbar sass');
         $process->run();
         $this->info($process->getOutput());
 
