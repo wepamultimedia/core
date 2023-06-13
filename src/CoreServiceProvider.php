@@ -81,26 +81,26 @@ class CoreServiceProvider extends PackageServiceProvider
         
         // Framework files
         $this->publishes([
-            __DIR__.'/../_app' => app_path(),
-        ], ['core-framework', 'core-framework-app']);
+            __DIR__.'/../_app' => base_path('core/app'),
+        ], ['core']);
     
         $this->publishes([
-            __DIR__.'/../_config' => config_path(),
-        ], ['core-framework', 'core-framework-config']);
+            __DIR__.'/../_config' => base_path('core/config'),
+        ], ['core']);
     
         $this->publishes([
-            __DIR__.'/../_resources' => resource_path(),
-        ], ['core-framework', 'core-framework-resources']);
+            __DIR__.'/../_resources' => base_path('core/resources'),
+        ], ['core']);
     
         $this->publishes([
-            __DIR__.'/../_root/.env.example' => base_path('.env.example'),
-            __DIR__.'/../_root/tailwind.config.js' => base_path('tailwind.config.js'),
-            __DIR__.'/../_root/vite.config.js' => base_path('vite.config.js'),
-        ], ['core-framework', 'core-framework-root']);
+            __DIR__.'/../_root/.env.example' => base_path('core/.env.example'),
+            __DIR__.'/../_root/tailwind.config.js' => base_path('core/tailwind.config.js'),
+            __DIR__.'/../_root/vite.config.js' => base_path('core/vite.config.js'),
+        ], ['core']);
     
         $this->publishes([
-            __DIR__.'/../_routes' => base_path('routes'),
-        ], ['core-framework', 'core-framework-routes']);
+            __DIR__.'/../_routes' => base_path('core/routes'),
+        ], ['core']);
     }
     
     protected function hasSeeders(array $seeders): void

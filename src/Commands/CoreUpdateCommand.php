@@ -20,13 +20,12 @@ class CoreUpdateCommand extends CoreInstallCommand
      *
      * @var string
      */
-    protected $signature = 'core:update';
+    protected $signature = 'core:update {--framework}';
 
     public function handle(): int
     {
         $this->call('migrate');
         $this->call('vendor:publish', ['--tag' => 'core', '--force' => true]);
-
         $process = Process::fromShellCommandline('npm i -D vuex@next @vueuse/core vue-inline-svg@next vue-screen@next @inertiajs/progress tailwind-scrollbar sass');
         $process->run();
         $this->info($process->getOutput());
