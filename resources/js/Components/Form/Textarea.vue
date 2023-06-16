@@ -125,6 +125,7 @@ const progressbar = computed(() => {
         const percent = (inputValue.value.length / props.limit[1]) * 100;
         return Math.round(percent) > 100 ? 100 : Math.round(percent);
     }
+    return 0;
 });
 
 watch(locale, value => {

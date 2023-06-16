@@ -47,6 +47,7 @@ const progressbar = computed(() => {
         const percent = (inputValue.value.length / props.limit[1]) * 100;
         return Math.round(percent) > 100 ? 100 : Math.round(percent);
     }
+    return 0;
 });
 
 watch(locale, value => {
@@ -167,7 +168,7 @@ buildInputValue();
                       class="px-1">*
                 </span>
             </label>
-            <div class="flex items-center">
+            <div class="flex items-top">
                 <slot name="left">
                     <div v-if="$slots.icon"
                          class="py-2.5 px-2 bg-white dark:bg-gray-500 border border-r-0 rounded-l-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
