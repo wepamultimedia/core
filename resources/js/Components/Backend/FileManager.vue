@@ -15,7 +15,8 @@ const props = defineProps({
     contentClasses: String,
     toolbarClasses: String,
     breadcrumbClasses: String,
-    modelValue: String
+    modelValue: String,
+    extensions: Array
 });
 
 const emit = defineEmits(["update:modelValue", "change"]);
@@ -111,7 +112,7 @@ const file = reactive({
                 loading.value = false;
             }).catch(error => {
                 errors.value = error.response.data.errors;
-                store.dispatch("backend/addAlert", {type: "error", message: error.response.data.errors})
+                store.dispatch("backend/addAlert", {type: "error", message: error.response.data.errors});
                 loading.value = false;
             });
         }
@@ -180,7 +181,7 @@ const resetFileFlap = () => {
     file.form.file = "";
     file.form.altName = "";
     file.form.description = "";
-    file.form.maxSize = 800;
+    file.form.maxSize = 1200;
     file.originalSize = false;
     file.confirmDeleteInput = "";
     fileInput.value = null;
@@ -281,7 +282,7 @@ const getFiles = (parentId = null, page = null, search = null) => {
         parentId,
         page,
         search
-    })).then(response => {
+    }), { params: {extensions: props.extensions}}).then(response => {
         currentParentId.value = parentId;
         refresh(response.data);
         loading.value = false;

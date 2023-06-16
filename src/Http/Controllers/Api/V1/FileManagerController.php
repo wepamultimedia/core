@@ -60,6 +60,11 @@ class FileManagerController extends Controller
                 ->orWhere('alt_name', 'LIKE', '%'.$search.'%');
         })
             ->where(['parent_id' => $parentId])
+            ->when($request->extensions, function($query, $extensions){
+                $query->whereHas('type', function ($query) use ($extensions){
+                    $query->whereIn('extension', $extensions);
+                });
+            })
             ->with('type')
             ->orderBy('type_id')
             ->orderBy('created_at', 'desc')
@@ -134,9 +139,12 @@ class FileManagerController extends Controller
         return $this->index($request, $request->parent_id);
     }
     
-    public function mimeTypes(): string
+    public function mimeTypes(Request $request): string
     {
-        return FileType::select(['extension'])
+        return FileType::select('extension')
+            ->when($request->extensions, function ($query, $extensions) {
+                $query->whereIn('extension', $extensions);
+            })
             ->whereNotNull('mime')
             ->where('extension', '<>', '.')
             ->get()

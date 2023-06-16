@@ -28,9 +28,20 @@ const props = defineProps({
         type: Object,
         default: {}
     },
+    extensions: {
+        type: Array,
+        default: ["jpg", "jpeg", "png", "webp"]
+    }
 });
 
-const emits = defineEmits(["update:modelValue", "update:image", "update:title", "update:alt", "update:description", "change"]);
+const emits = defineEmits([
+    "update:modelValue",
+    "update:image",
+    "update:title",
+    "update:alt",
+    "update:description",
+    "change"
+]);
 
 const attrs = useAttrs();
 
@@ -108,7 +119,7 @@ const fileManager = reactive({
         <Flap v-model="fileManager.open"
               close-background
               xl>
-            <FileManager @change="fileManager.insert"></FileManager>
+            <FileManager @change="fileManager.insert" :extensions="extensions"></FileManager>
         </Flap>
     </div>
 </template>
