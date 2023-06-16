@@ -292,7 +292,7 @@ const getFiles = (parentId = null, page = null, search = null) => {
     });
 };
 const getMimeTypes = () => {
-    axios.get(route("api.v1.filenamager.mime_types")).then(response => {
+    axios.get(route("api.v1.filenamager.mime_types"), {params: {extensions: props.extensions}}).then(response => {
         mimeTypes.value = response.data;
         loading.value = false;
     }).catch(error => {
@@ -329,7 +329,6 @@ onMounted(() => {
     getFiles();
     getMimeTypes();
 });
-
 </script>
 <template>
     <!-- toolbar -->
@@ -421,10 +420,13 @@ onMounted(() => {
                 </div>
                 <div v-else
                      class="w-full"
-                     @click="file.type.icon === 'folder' ? onClick(() => updateFolder(file), () => getFiles(file.id)) : updateFile(file)">
+                     @click="file.type.icon === 'folder'
+                        ? onClick(() => updateFolder(file), () => getFiles(file.id))
+                        : onClick(() => updateFile(file), () => selectFile(file))">
                     <inline-svg :src="'/vendor/core/icons/file-types/' + file.type.icon + '.svg'"
                                 class="w-full h-auto"></inline-svg>
-                    <p class="text-sm font-bold mt-2 text-center break-words">{{ file.name }}<span v-if="file.type.extension !== '.'">.{{ file.type.extension }}</span>
+                    <p class="text-sm font-bold mt-2 text-center break-words">{{ file.name }}
+                        <span v-if="file.type.extension !== '.'">.{{ file.type.extension }}</span>
                     </p>
                 </div>
             </div>
