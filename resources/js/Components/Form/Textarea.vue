@@ -47,6 +47,28 @@ const {
           autoresize
       } = toRefs(props);
 
+const error = computed(() =>{
+    for (const [errorKey, errorValue] of Object.entries(errors.value)) {
+        const re = new RegExp("[.]" + attrs.name + "$");
+        const rex = new RegExp("^" + attrs.name + "$");
+        if (re.test(errorKey) || rex.test(errorKey)) {
+            if (typeof errorValue === "object") {
+                return errorValue[0];
+            }
+
+            return errorValue;
+        } else {
+            return null;
+        }
+    }
+});
+const progressbar = computed(() => {
+    if (inputValue.value.length > 0) {
+        const percent = (inputValue.value.length / props.limit[1]) * 100;
+        return Math.round(percent) > 100 ? 100 : Math.round(percent);
+    }
+    return 0;
+});
 
 const buildInputValue = () => {
     if (attrs.id) {
@@ -120,14 +142,6 @@ const resize = () => {
     }
 };
 
-const progressbar = computed(() => {
-    if (inputValue.value.length > 0) {
-        const percent = (inputValue.value.length / props.limit[1]) * 100;
-        return Math.round(percent) > 100 ? 100 : Math.round(percent);
-    }
-    return 0;
-});
-
 watch(locale, value => {
     if (selectedLocale.value !== value) {
         selectedLocale.value = value;
@@ -138,22 +152,6 @@ watch(selectedLocale, value => {
         emit("update:locale", value);
     }
     buildInputValue();
-});
-watch(errors, value => {
-    for (const [errorKey, errorValue] of Object.entries(value)) {
-        const re = new RegExp("[.]" + attrs.name + "$");
-        const rex = new RegExp("^" + attrs.name + "$");
-        if (re.test(errorKey) || rex.test(errorKey)) {
-            if (typeof errorValue === "object") {
-                error.value = errorValue[0];
-            } else {
-                error.value = errorValue;
-            }
-            return;
-        } else {
-            error.value = null;
-        }
-    }
 });
 
 onMounted(() => {
