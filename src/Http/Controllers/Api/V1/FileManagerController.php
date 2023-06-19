@@ -62,7 +62,7 @@ class FileManagerController extends Controller
             ->where(['parent_id' => $parentId])
             ->when($request->extensions, function($query, $extensions){
                 $query->whereHas('type', function ($query) use ($extensions){
-                    $query->whereIn('extension', $extensions);
+                    $query->whereIn('extension', $extensions)->orWhere('extension', '.');
                 });
             })
             ->with('type')
