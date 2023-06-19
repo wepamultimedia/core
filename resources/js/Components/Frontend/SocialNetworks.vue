@@ -41,7 +41,7 @@ onBeforeMount(() => {
             <template v-for="social in socialNetworks">
                 <li v-if="site[social.name] !== null">
                     <a :href="`${social.url}/${site[social.name]}`"
-                       :title="social"
+                       :title="social.name"
                        class="flex items-center justify-center"
                        target="_blank">
                         <slot name="icon">
