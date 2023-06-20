@@ -26,6 +26,7 @@ const files = ref();
 const breadcrumb = ref();
 const currentParentId = ref(null);
 const currentPage = ref(null);
+const prevPage = reactive({});
 const searchInput = ref();
 const search = _.throttle(value => {
     if (value.length > 0) {
@@ -275,14 +276,33 @@ const refresh = data => {
         currentParentId.value = data.parentId;
     }
 };
+
+function getPrevPage(parentId) {
+    if(prevPage.hasOwnProperty(`parentId-${parentId}`)){
+        return prevPage[`parentId-${parentId}`];
+    }
+
+    return 1;
+}
+
+function setPrevPage() {
+    prevPage[`parentId-${currentParentId.value}`] = currentPage.value;
+}
+
 const getFiles = (parentId = null, page = null, search = null) => {
     loading.value = true;
-    page = page !== null ? page : currentPage.value;
+
+    page = page !== null ? page : getPrevPage(parentId);
+
+    if (parentId !== currentParentId.value) {
+        setPrevPage()
+    }
+
     axios.get(route("api.v1.filenamager.index", {
         parentId,
         page,
         search
-    }), { params: {extensions: props.extensions}}).then(response => {
+    }), {params: {extensions: props.extensions}}).then(response => {
         currentParentId.value = parentId;
         refresh(response.data);
         loading.value = false;
@@ -436,7 +456,8 @@ onMounted(() => {
     <!-- pagination -->
     <div v-if="files && files.links.length > 3"
          class="p-6 flex justify-center">
-        <Pagination :callback="page => getFiles(currentParentId, page)"
+        <Pagination :key="`pagination-${currentParentId}`"
+                    :callback="page => getFiles(currentParentId, page)"
                     :links="files.links"></Pagination>
     </div>
     <!-- / pagination -->

@@ -68,7 +68,7 @@ class FileManagerController extends Controller
             ->with('type')
             ->orderBy('type_id')
             ->orderBy('created_at', 'desc')
-            ->paginate();
+            ->paginate(config('core.pagination.filemanager', 50));
         
         $breadcrumb = $this->breadcrumb($parentId);
         

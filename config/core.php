@@ -11,6 +11,9 @@ return [
         'frontend' => '',
         'backend' => '',
     ], // resources/views/themes/{theme}
+    'pagination' => [
+        'filemanager' => 50,
+    ],
     'locales' => [
         [
             'code' => 'es',
