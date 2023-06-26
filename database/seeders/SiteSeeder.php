@@ -19,12 +19,12 @@ class SiteSeeder extends Seeder
      */
     public function run()
     {
-        if(!Site::where('alias', 'home')->exists()) {
+        if(!Site::where('id', 1)->exists()) {
             $site = new Site([
                 'updated_at' => $date = Carbon::now(),
                 'created_at' => $date,
             ]);
-    
+
             $site->seoAddParams([
                 'package' => 'core',
                 'alias' => 'home',
@@ -37,7 +37,7 @@ class SiteSeeder extends Seeder
                 'controller' => SiteController::class,
                 'action' => 'edit',
             ]);
-    
+
             $site->save();
         }
     }
