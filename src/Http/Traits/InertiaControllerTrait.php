@@ -15,8 +15,6 @@ trait InertiaControllerTrait
 {
     public string $packageName;
 
-    protected string $menuScope = '';
-
     protected array $share = [];
 
     protected array $translations = [];
@@ -40,6 +38,7 @@ trait InertiaControllerTrait
                                    mixed $translation = []): void
     {
         $this->buildViewPath($view);
+
         $defatultShare = [
             'default' => [
                 'env' => config('app.env'),
@@ -121,17 +120,17 @@ trait InertiaControllerTrait
     {
         $defaultTranslation = is_array($defaultTranslation = Lang::get('default'))
             ? $defaultTranslation : [];
-    
+
         $packageDefaultTranslation = is_array($packageDefaultTranslation = Lang::get('core::default'))
             ? $packageDefaultTranslation : [];
-    
+
         $packageTranslation = [];
-    
+
         if ($this->packageName !== '') {
             $packageTranslation = is_array($packageTranslation = Lang::get($this->packageName.'::default'))
                 ? $packageTranslation : [];
         }
-    
+
         return array_merge($packageDefaultTranslation, $packageTranslation, $defaultTranslation);
     }
 

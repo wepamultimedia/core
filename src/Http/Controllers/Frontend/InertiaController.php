@@ -14,8 +14,6 @@ use Wepa\Core\Models\Seo;
 
 class InertiaController extends \Wepa\Core\Http\Controllers\InertiaController
 {
-    private static bool $seoLoaded = false;
-
     protected function addThemeNameToViewPath(string &$view): void
     {
         if ($theme = config('core.theme.frontend') and $theme !== '') {
@@ -24,50 +22,6 @@ class InertiaController extends \Wepa\Core\Http\Controllers\InertiaController
                 $view = $themeView;
             }
         }
-    }
-
-    protected function beforeRender(): void
-    {
-        if (! self::$seoLoaded) {
-            $this->addSeo(request()->route()->getName());
-        }
-    }
-
-    public function addSeo(string $alias): void
-    {
-        self::$seoLoaded = true;
-
-        $mainSeo = Seo::where('alias', 'home')->first();
-
-        if ($seo = Seo::where('alias', $alias)->first()) {
-            // Si tiene seo y no tiene la etiqueta noindex o nofollow defino lo contrario
-            if (! $seo->robots) {
-                $seo->robots = ['index', 'follow'];
-            } else {
-                if (! in_array('noindex', $seo->robots)) {
-                    $seo->robots = array_merge($seo->robots, ['index']);
-                }
-
-                if (! in_array('nofollow', $seo->robots)) {
-                    $seo->robots = array_merge($seo->robots, ['follow']);
-                }
-            }
-        } else {
-            $seo = new Seo([
-                'robots' => ['noindex', 'nofollow'],
-                'slug' => request()->route()->getName(),
-            ]);
-        }
-        $seo->image = $seo->image ?? $mainSeo->image;
-        $seo->facebook_image = $seo->facebook_image ?? $seo->image ?? $mainSeo->image;
-        $seo->twitter_image = $seo->twitter_image ?? $seo->image ?? $mainSeo->image;
-
-        $seo->facebook_description = $seo->facebook_description ?? $seo->description ?? $mainSeo->description;
-        $seo->twitter_description = $seo->twitter_description ?? $seo->description ?? $mainSeo->description;
-
-        $this->addShare([
-            'seo' => $seo->toArray(),
-        ]);
     }
 
     /**
