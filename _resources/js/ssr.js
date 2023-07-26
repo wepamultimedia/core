@@ -9,13 +9,11 @@ import InlineSvg from "vue-inline-svg";
 import store from "@/Store/index";
 import { translations } from "@core/Mixins/translations";
 
-const appName = "Laravel";
-
 createServer((page) =>
     createInertiaApp({
         page,
         render: renderToString,
-        title: (title) => `${title} - ${appName}`,
+        title: (title) => `${title}`,
         resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob("./Pages/**/*.vue")),
         setup({App, props, plugin}) {
             return createSSRApp({render: () => h(App, props)})
