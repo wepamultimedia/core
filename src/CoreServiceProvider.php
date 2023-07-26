@@ -77,6 +77,15 @@ class CoreServiceProvider extends PackageServiceProvider
             __DIR__.'/../resources/js/Pages' => resource_path('js/Pages/Vendor/Core'),
         ], ['core', 'core-pages']);
 
+        // JS Backend
+        $this->publishes([
+            __DIR__.'/../resources/js/Pages/Backend' => resource_path('js/Pages/Vendor/Core/Backend'),
+        ], ['core', 'core-backend']);
+
+        $this->publishes([
+            __DIR__.'/../resources/js/Pages/Frontend' => resource_path('js/Pages/Vendor/Core/Frontend'),
+        ], ['core', 'core-frontend']);
+
         // Framework files
         $this->publishes([
             __DIR__.'/../_app' => base_path('core/app'),
