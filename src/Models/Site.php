@@ -2,15 +2,12 @@
 
 namespace Wepa\Core\Models;
 
-
 use App\Http\Controllers\MainController;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Wepa\Core\Http\Traits\SeoModelTrait;
-
 
 /**
  * Wepa\Core\Models\Site
@@ -67,8 +64,9 @@ use Wepa\Core\Http\Traits\SeoModelTrait;
 class Site extends Model
 {
     use SeoModelTrait;
-    
+
     protected array $attrsArray = [];
+
     protected $fillable = [
         'seo_id',
         'maintenance',
@@ -93,8 +91,9 @@ class Site extends Model
         'logo',
         'logo_invert',
     ];
+
     protected $table = 'core_site';
-    
+
     /**
      * @return $this
      */
@@ -105,21 +104,21 @@ class Site extends Model
         } else {
             $this->attrsArray[] = $attrs;
         }
-        
+
         return $this;
     }
-    
+
     public function toArray(): array
     {
         $collection = collect(parent::toArray());
-        
+
         foreach ($this->attrsArray as $attr) {
             $collection = $collection->merge([$attr => $this->{$attr}]);
         }
-        
+
         return $collection->toArray();
     }
-    
+
     public function seoDefaultParams(): array
     {
         return [
@@ -127,15 +126,15 @@ class Site extends Model
             'action' => 'home',
             'page_type' => 'website',
             'change_freq' => Seo::CHANGE_FREQUENCY_WEEKLY,
-            'priority' => '1'
+            'priority' => '1',
         ];
     }
-    
+
     public function seoRouteParams(): array
     {
         return [];
     }
-    
+
     public function seoRequestParams(): array
     {
         return [];

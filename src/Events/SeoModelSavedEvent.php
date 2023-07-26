@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-
 /**
  * @property Model $model
  * @property array $params
@@ -16,9 +15,9 @@ use Illuminate\Queue\SerializesModels;
 class SeoModelSavedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    
+
     public Model $model;
-    
+
     /**
      * Create a new event instance.
      *
@@ -28,7 +27,7 @@ class SeoModelSavedEvent
     {
         $this->model = $model;
     }
-    
+
     /**
      * Get the channels the event should broadcast on.
      *

@@ -6,7 +6,7 @@ return [
     'can_login' => true,
     'can_register' => true,
     'google_api_key' => env('google_api_key', null),
-    'max_filesize' => 8192,// KB
+    'max_filesize' => 8192, // KB
     'theme' => [
         'frontend' => '',
         'backend' => '',

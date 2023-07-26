@@ -4,7 +4,6 @@ namespace Wepa\Core\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-
 class SeoResource extends JsonResource
 {
     /**
@@ -20,7 +19,7 @@ class SeoResource extends JsonResource
             'description' => $this->description,
             'slug' => $this->slug,
             'image' => $this->image,
-            'image_alt' => $this->image_alt
+            'image_alt' => $this->image_alt,
         ];
     }
 }

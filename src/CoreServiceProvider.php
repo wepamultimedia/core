@@ -2,7 +2,6 @@
 
 namespace Wepa\Core;
 
-
 use Config;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Http\Request;
@@ -31,7 +30,6 @@ use Wepa\Core\Jobs\GenerateSitemapJob;
 use Wepa\Core\Listeners\SeoModelListener;
 use Wepa\Core\Models\Permission;
 
-
 class CoreServiceProvider extends PackageServiceProvider
 {
     public function bootingPackage()
@@ -40,69 +38,69 @@ class CoreServiceProvider extends PackageServiceProvider
         Event::listen(SeoModelSavedEvent::class, [SeoModelListener::class, 'saved']);
         Event::listen(SeoModelDestroyedEvent::class, [SeoModelListener::class, 'destroy']);
         Event::listen(SeoModelRequestEvent::class, [SeoModelListener::class, 'request']);
-        
+
         $this->hasSeeders([DefaultSeeder::class]);
         $this->registerViews();
-        
+
         // Assets
         $this->publishes([
             $this->package->basePath('/../resources/dist') => public_path("vendor/{$this->package->shortName()}"),
         ], ['core', 'core-assets']);
-        
+
         $this->publishes([
             __DIR__.'/../src/CoreServiceProvider.php' => app_path('Providers/CoreServiceProvider.php'),
         ], ['core-provider']);
-        
+
         // Migrations
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->publishes([
             __DIR__.'/../database/migrations/' => database_path('migrations'),
         ], ['core', 'core-migrations']);
-        
+
         // JS Components
         $this->publishes([
             __DIR__.'/../resources/js/Components' => resource_path('js/Vendor/Core/Components'),
         ], ['core', 'core-components']);
-        
+
         // JS Mixins
         $this->publishes([
             __DIR__.'/../resources/js/Mixins' => resource_path('js/Vendor/Core/Mixins'),
         ], ['core', 'core-mixins']);
-        
+
         // JS Store
         $this->publishes([
             __DIR__.'/../_resources/js/Store' => resource_path('js/Store'),
         ], ['core', 'core-store']);
-        
+
         // JS Pages
         $this->publishes([
             __DIR__.'/../resources/js/Pages' => resource_path('js/Pages/Vendor/Core'),
         ], ['core', 'core-pages']);
-        
+
         // Framework files
         $this->publishes([
             __DIR__.'/../_app' => base_path('core/app'),
         ], ['core']);
-    
+
         $this->publishes([
             __DIR__.'/../_config' => base_path('core/config'),
         ], ['core']);
-    
+
         $this->publishes([
             __DIR__.'/../_resources' => base_path('core/resources'),
         ], ['core']);
-    
+
         $this->publishes([
             __DIR__.'/../_root/.env.example' => base_path('core/.env.example'),
             __DIR__.'/../_root/tailwind.config.js' => base_path('core/tailwind.config.js'),
             __DIR__.'/../_root/vite.config.js' => base_path('core/vite.config.js'),
         ], ['core']);
-    
+
         $this->publishes([
             __DIR__.'/../_routes' => base_path('core/routes'),
         ], ['core']);
     }
-    
+
     protected function hasSeeders(array $seeders): void
     {
         $this->callAfterResolving(DatabaseSeeder::class,
@@ -110,69 +108,69 @@ class CoreServiceProvider extends PackageServiceProvider
                 $cb->call($seeders);
             });
     }
-    
+
     public function registerViews(): void
     {
         Fortify::loginView(function () {
             $translation = Lang::get('core::auth');
             Inertia::share(['default' => ['translation' => $translation]]);
-            
+
             return Inertia::render('Vendor/Core/Auth/Login', [
                 'canResetPassword' => Route::has('password.request'),
                 'status' => session('status'),
             ]);
         });
-        
+
         Fortify::requestPasswordResetLinkView(function () {
             $translation = Lang::get('core::auth');
             Inertia::share(['default' => ['translation' => $translation]]);
-            
+
             return Inertia::render('Vendor/Core/Auth/ForgotPassword', [
                 'status' => session('status'),
             ]);
         });
-        
+
         Fortify::resetPasswordView(function (Request $request) {
             $translation = Lang::get('core::auth');
             Inertia::share(['default' => ['translation' => $translation]]);
-            
+
             return Inertia::render('Vendor/Core/Auth/ResetPassword', [
                 'email' => $request->input('email'),
                 'token' => $request->route('token'),
             ]);
         });
-        
+
         Fortify::registerView(function () {
             $translation = Lang::get('core::auth');
             Inertia::share(['default' => ['translation' => $translation]]);
-            
+
             return Inertia::render('Vendor/Core/Auth/Register');
         });
-        
+
         Fortify::verifyEmailView(function () {
             $translation = Lang::get('core::auth');
             Inertia::share(['default' => ['translation' => $translation]]);
-            
+
             return Inertia::render('Vendor/Core/Auth/VerifyEmail', [
                 'status' => session('status'),
             ]);
         });
-        
+
         Fortify::twoFactorChallengeView(function () {
             $translation = Lang::get('core::auth');
             Inertia::share(['default' => ['translation' => $translation]]);
-            
+
             return Inertia::render('Vendor/Core/Auth/TwoFactorChallenge');
         });
-        
+
         Fortify::confirmPasswordView(function () {
             $translation = Lang::get('core::auth');
             Inertia::share(['default' => ['translation' => $translation]]);
-            
+
             return Inertia::render('Vendor/Core/Auth/ConfirmPassword');
         });
     }
-    
+
     public function configurePackage(Package $package): void
     {
         /*
@@ -195,7 +193,7 @@ class CoreServiceProvider extends PackageServiceProvider
                 CoreMakeInstallCommand::class,
                 SitemapGenerateCommand::class,
             ]);
-        
+
         /**
          * Config file
          *
@@ -206,16 +204,16 @@ class CoreServiceProvider extends PackageServiceProvider
             __DIR__.'/../config/core.php',
             'core'
         );
-        
+
         // Configure middlewares
         app()['router']->aliasMiddleware('core.backend', Backend::class);
         app()['router']->aliasMiddleware('core.frontend', Frontend::class);
         app()['router']->aliasMiddleware('core.locale', Locale::class);
         app()['router']->prependMiddlewareToGroup('web', Locale::class);
-        
+
         // Configure permission
         config()->set('permission.models.permission', Permission::class);
-        
+
         // Configure translatable
         config()->set('translatable.use_fallback', true);
         config()->set('translatable.fallback_locale', config('app.locale'));

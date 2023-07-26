@@ -15,9 +15,9 @@ use Illuminate\Queue\SerializesModels;
 class SeoModelDestroyedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    
+
     public Model $model;
-    
+
     /**
      * Create a new event instance.
      *

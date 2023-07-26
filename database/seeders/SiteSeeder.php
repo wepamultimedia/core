@@ -2,13 +2,10 @@
 
 namespace Wepa\Core\Database\seeders;
 
-
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Wepa\Core\Http\Controllers\Backend\SiteController;
-use Wepa\Core\Models\Seo;
 use Wepa\Core\Models\Site;
-
 
 class SiteSeeder extends Seeder
 {
@@ -19,7 +16,7 @@ class SiteSeeder extends Seeder
      */
     public function run()
     {
-        if(!Site::where('id', 1)->exists()) {
+        if (! Site::where('id', 1)->exists()) {
             $site = new Site([
                 'updated_at' => $date = Carbon::now(),
                 'created_at' => $date,

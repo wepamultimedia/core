@@ -3,7 +3,6 @@
 namespace Wepa\Core\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
 use Symfony\Component\Process\Process;
 
 class CoreUpdateCommand extends CoreInstallCommand

@@ -7,7 +7,6 @@ use Illuminate\Support\Str;
 use Wepa\Core\Http\Resources\SeoResource;
 use Wepa\Core\Models\Seo;
 
-
 class SeoController extends Controller
 {
     public function slug(string $text, string $locale = null): string
@@ -16,7 +15,7 @@ class SeoController extends Controller
 
         return Str::slug($text, '-', $language);
     }
-    
+
     public function byAlias(string $alias): SeoResource
     {
         return SeoResource::make(Seo::where('alias', $alias)->first());

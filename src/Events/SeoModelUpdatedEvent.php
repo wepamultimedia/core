@@ -6,9 +6,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Http\Request;
 use Illuminate\Queue\SerializesModels;
-
 
 /**
  * @property Model $model
@@ -17,10 +15,11 @@ use Illuminate\Queue\SerializesModels;
 class SeoModelUpdatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    
+
     public Model $model;
+
     public array $params = [];
-    
+
     /**
      * Create a new event instance.
      *
