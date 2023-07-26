@@ -8,6 +8,7 @@ import DarkModeToggle from "@/Vendor/Core/Components/DarkModeToggle.vue";
 import { computed, onMounted, ref } from "vue";
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import { useStore } from "vuex";
+import SeoInject from "@core/Components/Frontend/SeoInject.vue";
 
 const props = defineProps({
     title: String,
@@ -46,7 +47,7 @@ const logout = () => {
 };
 </script>
 <template>
-    <Head :title="`${__(title)} | ${$page.props.default.appName}`"/>
+    <SeoInject :key="route().current()"/>
     <FlashAlertQueue/>
     <div class="flex flex-col justify-between min-h-screen admin-theme bg-skin-background ">
         <!--Header-->
