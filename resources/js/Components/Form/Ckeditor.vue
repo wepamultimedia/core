@@ -12,6 +12,10 @@ const props = defineProps({
     required: Boolean,
     config: Object,
     locale: String,
+    maxHeight: {
+      type: Number,
+      default: 800
+    },
     errors: {
         type: Object,
         default: {}
@@ -307,8 +311,17 @@ buildInputValue();
         </Flap>
     </div>
 </template>
-<style scoped>
+<style>
 .ck-editor__editable {
+    max-height: v-bind(maxHeight + "px");
     @apply min-h-[260px]
+}
+
+.ck.ck-content ul {
+    @apply ml-2 list-disc list-outside [&>li]:ml-4;
+}
+
+.ck.ck-content ol {
+    @apply ml-2 list-decimal list-outside [&>li]:ml-4;
 }
 </style>

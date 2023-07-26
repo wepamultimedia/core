@@ -166,6 +166,10 @@
         ul {
             @apply ml-2 list-disc list-outside [&>li]:ml-4;
         }
+
+        ol {
+            @apply ml-2 list-decimal list-outside [&>li]:ml-4;
+        }
     }
 
     figure.media {
