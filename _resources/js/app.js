@@ -11,8 +11,6 @@ import Heroicon from "@/Vendor/Core/Components/Heroicon.vue";
 import InlineSvg from "vue-inline-svg";
 import store from "@/Store";
 
-const appName = window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
-
 createInertiaApp({
     title: (title) => `${title}`,
     resolve: (name) => {
