@@ -57,14 +57,14 @@ class SeoInjectFormRequest extends FormRequest
 
         $locale = app()->getLocale();
 
-        if (! Arr::exists($this->input('translations'), $locale)) {
+        if (! Arr::exists($this->input('seo.translations'), $locale)) {
             return [
-                'alias' => 'required|string|max:255|unique:core_seo',
+                'seo.alias' => 'required|string|max:255|unique:core_seo',
 
-                "translations.$locale.slug" => 'required|slug|unique:core_seo_translations',
+                "seo.translations.$locale.slug" => 'required|slug|unique:core_seo_translations',
 
-                "translations.$locale.title" => 'required|string|max:255',
-                "translations.$locale.description" => 'required|string|max:255',
+                "seo.translations.$locale.title" => 'required|string|max:255',
+                "seo.translations.$locale.description" => 'required|string|max:255',
             ];
         }
 
@@ -89,7 +89,7 @@ class SeoInjectFormRequest extends FormRequest
 
         if (Arr::exists($this['seo'], 'id')) {
             $rules = array_merge($rules, [
-                'alias' => [
+                'seo.alias' => [
                     'nullable', 'string', 'max:255',
                     Rule::unique('core_seo')->ignore($this['id'], 'id'),
                 ],
@@ -107,7 +107,7 @@ class SeoInjectFormRequest extends FormRequest
 
             if ($this->alias === 'home') {
                 $rules = array_merge($rules, [
-                    'translations.*.slug' => [
+                    'seo.translations.*.slug' => [
                         'nullable',
                         'slug',
                         Rule::unique('core_seo_translations')->ignore($this['seo']['id'], 'seo_id'),
