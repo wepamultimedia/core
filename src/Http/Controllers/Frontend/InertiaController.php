@@ -39,10 +39,13 @@ class InertiaController extends \Wepa\Core\Http\Controllers\InertiaController
         $seoQuery = Seo::with('translation');
 
         if ($slug) {
-            $seoTranslation = SeoTranslation::select(['locale', 'seo_id'])->whereSlug($slug)->first();
-            $seoQuery->whereHas('translations', function ($query) use ($slug) {
-                $query->where('slug', '<>', null)->where('slug', $slug);
-            });
+            if($seoTranslation = SeoTranslation::select(['locale', 'seo_id'])->whereSlug($slug)->first()){
+                $seoQuery->whereHas('translations', function ($query) use ($slug) {
+                    $query->where('slug', '<>', null)->where('slug', $slug);
+                });
+            } else {
+                abort(404);
+            }
         } else {
             $seoTranslation = SeoTranslation::whereNull('slug')->whereHas('seo', function ($query) {
                 $query->whereAlias('home');
