@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, onMounted, ref, toRefs, watch } from "vue";
+import {computed, onBeforeMount, onMounted, ref, toRefs, useAttrs, watch} from "vue";
 import Icon from "@/Vendor/Core/Components/Heroicon.vue";
 import { __ } from "@core/Mixins/translations";
 
@@ -33,10 +33,13 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:modelValue"]);
+const attrs = useAttrs();
+
 const {
           optionLabel,
           height,
           options,
+          errors,
           modelValue,
           reduce,
           multiSelect
@@ -46,6 +49,22 @@ const open = ref(false);
 const search = ref("");
 const optionsFiltered = ref(options.value);
 const selectedOption = ref({});
+
+const error = computed(() =>{
+    for (const [errorKey, errorValue] of Object.entries(errors.value)) {
+        const re = new RegExp("[.]" + attrs.name + "$");
+        const rex = new RegExp("^" + attrs.name + "$");
+        if (re.test(errorKey) || rex.test(errorKey)) {
+            if (typeof errorValue === "object") {
+                return errorValue[0];
+            }
+
+            return errorValue;
+        } else {
+            return null;
+        }
+    }
+});
 
 const buildSelect = () => {
     if (multiSelect.value) {
@@ -221,8 +240,8 @@ onMounted(() => {
             </ul>
         </div>
     </div>
-    <div v-if="errors[$attrs.name]"
-         class="text-red-300 text-sm mt-1">* {{ errors[$attrs.name] }}
+    <div v-if="error"
+         class="text-red-300 text-sm mt-1">* {{ error }}
     </div>
     <pre v-if="debug">{{ modelValue }}</pre>
 </template>

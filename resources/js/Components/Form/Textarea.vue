@@ -48,23 +48,26 @@ const {
       } = toRefs(props);
 
 const error = computed(() =>{
+    let found = false;
     for (const [errorKey, errorValue] of Object.entries(errors.value)) {
-        const re = new RegExp("[.]" + attrs.name + "$");
-        const rex = new RegExp("^" + attrs.name + "$");
+        const re = new RegExp("[.]" + attrs.name + "$", 'g');
+        const rex = new RegExp("^" + attrs.name + "$", 'g');
         if (re.test(errorKey) || rex.test(errorKey)) {
+            found = true;
             if (typeof errorValue === "object") {
                 return errorValue[0];
             }
-
             return errorValue;
-        } else {
-            return null;
         }
+    }
+    if(!found){
+        return null;
     }
 });
 const progressbar = computed(() => {
-    if (inputValue.value.length > 0) {
-        const percent = (inputValue.value.length / props.limit[1]) * 100;
+    if (inputValue.value?.length > 0) {
+        const percent = (inputValue.value?.length / props.limit[1]) * 100;
+
         return Math.round(percent) > 100 ? 100 : Math.round(percent);
     }
     return 0;
@@ -191,11 +194,11 @@ buildInputValue();
                               v-bind="$attrs"/>
                     <div v-if="limit"
                          class="w-full mt-2">
-                        <div :class="{'bg-green-700': inputValue.length >= limit[0] && inputValue.length <= limit[1], 'bg-orange-600': inputValue.length < limit[0], 'bg-red-600' : inputValue.length > limit[1]}"
+                        <div :class="{'bg-green-700': inputValue?.length >= limit[0] && inputValue?.length <= limit[1], 'bg-orange-600': inputValue?.length < limit[0], 'bg-red-600' : inputValue?.length > limit[1]}"
                              :style="`width: ${progressbar}%`"
                              class="h-1"></div>
                         <span v-if="limitLabel"
-                              class="text-xs">{{ progressbar }}% | {{ inputValue.length }} / {{ limit[1] }}
+                              class="text-xs">{{ progressbar }}% | {{ inputValue?.length }} / {{ limit[1] }}
                         </span>
                     </div>
                     <div v-if="legend"

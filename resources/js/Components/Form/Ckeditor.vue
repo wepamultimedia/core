@@ -175,18 +175,20 @@ const {
       } = toRefs(props);
 
 const error = computed(() =>{
+    let found = false;
     for (const [errorKey, errorValue] of Object.entries(errors.value)) {
-        const re = new RegExp("[.]" + attrs.name + "$");
-        const rex = new RegExp("^" + attrs.name + "$");
+        const re = new RegExp("[.]" + attrs.name + "$", 'g');
+        const rex = new RegExp("^" + attrs.name + "$", 'g');
         if (re.test(errorKey) || rex.test(errorKey)) {
+            found = true;
             if (typeof errorValue === "object") {
                 return errorValue[0];
             }
-
             return errorValue;
-        } else {
-            return null;
         }
+    }
+    if(!found){
+        return null;
     }
 });
 
@@ -280,7 +282,7 @@ buildInputValue();
                       :config="ckconfig"
                       :editor="Editor"></CKEditor>
         </div>
-        <div class="flex justify-end mt-2">
+        <div class="flex justify-end mt-2" v-if="translation">
             <Dropdown v-if="$page.props.default.locales.length > 1"
                       class="w-full" center>
                 <template #button="{open}">

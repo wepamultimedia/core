@@ -1,7 +1,7 @@
 <script setup>
-import { computed, onMounted, ref, toRefs, useAttrs, watch } from "vue";
+import {computed, onMounted, ref, toRefs, useAttrs, watch} from "vue";
 import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
-import { usePage } from "@inertiajs/vue3";
+import {usePage} from "@inertiajs/vue3";
 
 const props = defineProps({
     modelValue: [String, Object, Number],
@@ -36,14 +36,14 @@ const selectedLocale = ref(usePage().props.default.locale);
 const inputValue = ref("");
 const emit = defineEmits(["update:modelValue", "update:locale", "update:value"]);
 const {
-          translation,
-          errors,
-          locale,
-          value
-      } = toRefs(props);
+    translation,
+    errors,
+    locale,
+    value
+} = toRefs(props);
 
 const progressbar = computed(() => {
-    if (inputValue.value.length > 0) {
+    if (inputValue.value?.length > 0) {
         const percent = (inputValue.value.length / props.limit[1]) * 100;
         return Math.round(percent) > 100 ? 100 : Math.round(percent);
     }
@@ -67,19 +67,21 @@ watch(value, value => {
     inputValue.value = value;
 });
 
-const error = computed(() =>{
+const error = computed(() => {
+    let found = false;
     for (const [errorKey, errorValue] of Object.entries(errors.value)) {
-        const re = new RegExp("[.]" + attrs.name + "$");
-        const rex = new RegExp("^" + attrs.name + "$");
+        const re = new RegExp("[.]" + attrs.name + "$", 'g');
+        const rex = new RegExp("^" + attrs.name + "$", 'g');
         if (re.test(errorKey) || rex.test(errorKey)) {
+            found = true;
             if (typeof errorValue === "object") {
                 return errorValue[0];
             }
-
             return errorValue;
-        } else {
-            return null;
         }
+    }
+    if (!found) {
+        return null;
     }
 });
 
@@ -108,9 +110,9 @@ const buildInputValue = () => {
 
             if (proxyModelValue.value.translations.hasOwnProperty(selectedLocale.value)) {
                 inputValue.value = proxyModelValue.value.translations[selectedLocale.value].hasOwnProperty(attrs.name)
-                                   ? proxyModelValue.value.translations[selectedLocale.value][attrs.name] : value.value
-                                                                                                            ? value.value
-                                                                                                            : "";
+                    ? proxyModelValue.value.translations[selectedLocale.value][attrs.name] : value.value
+                        ? value.value
+                        : "";
             } else {
                 inputValue.value = "";
             }
@@ -168,7 +170,7 @@ buildInputValue();
                       class="px-1">*
                 </span>
             </label>
-            <div class="flex items-center">
+            <div class="flex items-start">
                 <slot name="left">
                     <div v-if="$slots.icon"
                          class="py-2.5 px-2 bg-white dark:bg-gray-500 border border-r-0 rounded-l-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
@@ -183,17 +185,17 @@ buildInputValue();
                            :class="[
                                {'!rounded-r-none': translation && $page.props.default.locales.length > 1},
                                {'!rounded-l-none': $slots.icon}
-                               ]"
+                           ]"
                            class="input"
                            type="text"
                            v-bind="$attrs">
                     <div v-if="limit"
                          class="w-full mt-2">
-                        <div :class="{'bg-green-700': inputValue.length >= limit[0] && inputValue.length <= limit[1], 'bg-orange-600': inputValue.length < limit[0], 'bg-red-600' : inputValue.length > limit[1]}"
+                        <div :class="{'bg-green-700': inputValue?.length >= limit[0] && inputValue?.length <= limit[1], 'bg-orange-600': inputValue?.length < limit[0], 'bg-red-600' : inputValue?.length > limit[1]}"
                              :style="`width: ${progressbar}%`"
                              class="h-1"></div>
                         <span v-if="limitLabel"
-                              class="text-xs">{{ progressbar }}% | {{ inputValue.length }} / {{ limit[1] }}
+                              class="text-xs">{{ progressbar }}% | {{ inputValue?.length }} / {{ limit[1] }}
                         </span>
                     </div>
                     <div v-if="legend"
