@@ -2,8 +2,8 @@
 import HorizontalNavbar from "@pages/Vendor/Core/Frontend/Layouts/MainLayout/Partials/HorizontalNavbar/HorizontalNavbar.vue";
 import MenuButton from "@/Vendor/Core/Components/Frontend/HorizontalNavbar/Partials/MenuButton.vue";
 import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
-import { Head, Link, usePage } from "@inertiajs/vue3";
-import { computed, onMounted, ref } from "vue";
+import { Link, usePage } from "@inertiajs/vue3";
+import { onMounted, ref } from "vue";
 import DarkModeToggle from "@/Vendor/Core/Components/DarkModeToggle.vue";
 import SeoInject from "@/Vendor/Core/Components/Frontend/SeoInject.vue";
 import SocialNetworks from "@/Vendor/Core/Components/Frontend/SocialNetworks.vue"
@@ -23,12 +23,8 @@ onMounted(() => {
 })
 </script>
 <template>
-    <SeoInject :title="title"/>
-    <Head>
-        <!-- Fonts -->
-        <link href="https://fonts.bunny.net/css?family=aclonica:400"
-              rel="stylesheet"/>
-    </Head>
+    <SeoInject :title="title" :key="route().current()"/>
+
     <div class="default-theme bg-gray-100 dark:bg-gray-800 min-h-screen">
         <HorizontalNavbar :logo-alt="$page.props.appName"
                           content-class="container-fluid"
