@@ -19,6 +19,8 @@ class InertiaController extends Controller
 
     public string $packageName;
 
+    protected string $title = '';
+
     protected string $menuScope = '';
 
     protected array $share = [];
@@ -181,19 +183,23 @@ class InertiaController extends Controller
                 }
             }
         } else {
-            $prefix = request()->route()->getPrefix();
-            $prefix = Str::replace(['/', '-', '_', 'admin'], ' ', $prefix);
-            $prefix = trim($prefix);
+            if ($this->title) {
+                $title = $this->title;
+            } else {
+                $prefix = request()->route()->getPrefix();
+                $prefix = Str::replace(['/', '-', '_', 'admin'], ' ', $prefix);
+                $prefix = trim($prefix);
 
-            $title = Str::afterLast(request()->url(), '/');
-            $title = Str::replace(['-', '_'], ' ', $title);
-            $title = trim($title);
+                $title = Str::afterLast(request()->url(), '/');
+                $title = Str::replace(['-', '_'], ' ', $title);
+                $title = trim($title);
 
-            if ($prefix !== '' and $prefix !== null) {
-                $title = $prefix.' '.$title;
+                if ($prefix !== '' and $prefix !== null) {
+                    $title = $prefix.' '.$title;
+                }
+
+                $title = Str::title($title);
             }
-
-            $title = Str::title($title);
 
             $seo = new Seo([
                 'title' => $title,

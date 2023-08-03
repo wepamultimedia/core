@@ -39,8 +39,8 @@ defineProps(["routes"]);
                even
                search-route="admin.seo.index">
             <template #col-content-slug="{item}">
-                <a :href="$page.props.baseUrl + '/' + item.slug"
-                   :title="$page.props.baseUrl + '/' + item.slug"
+                <a :href="$page.props.default.baseUrl + '/' + item.slug"
+                   :title="$page.props.default.baseUrl + '/' + item.slug"
                    class="font-bold text-lg block"
                    target="_blank">{{ item.slug }}
                 </a>

@@ -14,8 +14,6 @@ class MainController extends InertiaController
 
     public function home()
     {
-        $this->addSeo('home');
-
         return $this->render('Home');
     }
 

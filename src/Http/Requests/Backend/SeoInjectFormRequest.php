@@ -55,18 +55,46 @@ class SeoInjectFormRequest extends FormRequest
             return Str::slug($value, '-') === $value;
         });
 
+        $locale = app()->getLocale();
+
+        if (! Arr::exists($this->input('translations'), $locale)) {
+            return [
+                'alias' => 'required|string|max:255|unique:core_seo',
+
+                "translations.$locale.slug" => 'required|slug|unique:core_seo_translations',
+
+                "translations.$locale.title" => 'required|string|max:255',
+                "translations.$locale.description" => 'required|string|max:255',
+            ];
+        }
+
         $rules = [
+            'seo.alias' => 'nullable|string|max:255|unique:core_seo',
             'seo.controller' => 'nullable|string|max:255',
             'seo.action' => 'nullable|string|max:255',
-            'seo.translations.*.title' => 'nullable|string|max:255',
-            'seo.translations.*.description' => 'nullable|string|max:255',
-            'seo.alias' => 'nullable|string|max:255',
+
+            'seo.translations.*.slug' => 'required|slug|unique:core_seo_translations',
+
+            'seo.translations.*.keyword' => 'nullable|string|unique:core_seo_translations',
+
+            'seo.translations.*.title' => 'required|string|max:255',
+            'seo.translations.*.description' => 'required|string|max:255',
         ];
 
+        if ($this->alias === 'home') {
+            $rules = array_merge($rules, [
+                'seo.translations.*.slug' => 'nullable|slug|unique:core_seo_translations',
+            ]);
+        }
+
         if (Arr::exists($this['seo'], 'id')) {
-            return array_merge($rules, [
+            $rules = array_merge($rules, [
+                'alias' => [
+                    'nullable', 'string', 'max:255',
+                    Rule::unique('core_seo')->ignore($this['id'], 'id'),
+                ],
                 'seo.translations.*.slug' => [
-                    'nullable',
+                    'required',
                     'slug',
                     Rule::unique('core_seo_translations')->ignore($this['seo']['id'], 'seo_id'),
                 ],
@@ -76,15 +104,18 @@ class SeoInjectFormRequest extends FormRequest
                     Rule::unique('core_seo_translations')->ignore($this['seo']['id'], 'seo_id'),
                 ],
             ]);
-        } else {
-            return array_merge($rules, [
-                'seo.translations.*.slug' => [
-                    'nullable',
-                    'slug',
-                    Rule::unique('core_seo_translations'),
-                ],
-                'seo.translations.*.keyword' => 'string|unique:core_seo_translations|nullable',
-            ]);
+
+            if ($this->alias === 'home') {
+                $rules = array_merge($rules, [
+                    'translations.*.slug' => [
+                        'nullable',
+                        'slug',
+                        Rule::unique('core_seo_translations')->ignore($this['seo']['id'], 'seo_id'),
+                    ],
+                ]);
+            }
         }
+
+        return $rules;
     }
 }

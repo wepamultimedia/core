@@ -3,6 +3,7 @@
 namespace Wepa\Core\Http\Requests\Backend;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -16,6 +17,8 @@ use Illuminate\Validation\Rule;
  */
 class SeoFormRequest extends FormRequest
 {
+    protected $errorBag = 'seo';
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -32,10 +35,9 @@ class SeoFormRequest extends FormRequest
 
         return [
             'translations.*.title.required' => __('core::seo.title_required', ['locale' => $locale]),
-            'translations.*.description.required' => __('core::seo.description_required',
-                ['locale' => $locale]),
+            'translations.*.description.required' => __('core::seo.description_required', ['locale' => $locale]),
             'translations.*.slug.required' => __('core::seo.slug_required', ['locale' => $locale]),
-            'translations.*.slug.slug' => __('core::seo.slug_invalid_format', ['locale' => $locale]),
+            'translations.*.slug.slug' => __('core::seo.slug_invalid_format'),
             'translations.*.slug.unique' => __('core::seo.unique_slug'),
             'translations.*.keyword.unique' => __('core::seo.unique_keyword'),
         ];
@@ -54,42 +56,64 @@ class SeoFormRequest extends FormRequest
 
         $locale = app()->getLocale();
 
+        if (! Arr::exists($this->input('translations'), $locale)) {
+            return [
+                'alias' => 'required|string|max:255|unique:core_seo',
+
+                "translations.$locale.slug" => 'required|slug|unique:core_seo_translations',
+
+                "translations.$locale.title" => 'required|string|max:255',
+                "translations.$locale.description" => 'required|string|max:255',
+            ];
+        }
+
         $rules = [
+            'alias' => 'required|string|max:255|unique:core_seo',
             'controller' => 'nullable|string|max:255',
             'action' => 'nullable|string|max:255',
-            "translations.$locale.title" => 'required|string|max:255',
-            "translations.$locale.description" => 'required|string|max:255',
+
+            'translations.*.slug' => 'required|slug|unique:core_seo_translations',
+
+            'translations.*.keyword' => 'nullable|string|unique:core_seo_translations',
+
             'translations.*.title' => 'required|string|max:255',
             'translations.*.description' => 'required|string|max:255',
-            'alias' => 'nullable|string|max:255',
         ];
 
-        switch(request()->method) {
-            case 'POST':
-                return array_merge($rules, [
-                    'alias' => 'required|string|max:255|unique:core_seo',
-                    'translations.*.slug' => 'nullable|slug|unique:core_seo_translations',
-                    'translations.*.keyword' => 'string|unique:core_seo_translations|nullable',
-                ]);
+        if ($this->alias === 'home') {
+            $rules = array_merge($rules, [
+                'translations.*.slug' => 'nullable|slug|unique:core_seo_translations',
+            ]);
+        }
+
+        switch (request()->method) {
             case 'PUT':
-                return array_merge($rules, [
+                $rules = array_merge($rules, [
                     'alias' => [
-                        'required',
-                        'string',
-                        'max:255',
+                        'nullable', 'string', 'max:255',
                         Rule::unique('core_seo')->ignore($this['id'], 'id'),
                     ],
                     'translations.*.slug' => [
-                        'nullable',
-                        'slug',
+                        'required', 'slug',
                         Rule::unique('core_seo_translations')->ignore($this['seo']['id'], 'seo_id'),
                     ],
                     'translations.*.keyword' => [
-                        'string',
-                        'nullable',
+                        'nullable', 'string',
                         Rule::unique('core_seo_translations')->ignore($this['id'], 'seo_id'),
                     ],
                 ]);
+
+                if ($this->alias === 'home') {
+                    $rules = array_merge($rules, [
+                        'translations.*.slug' => [
+                            'nullable',
+                            'slug',
+                            Rule::unique('core_seo_translations')->ignore($this['seo']['id'], 'seo_id'),
+                        ],
+                    ]);
+                }
         }
+
+        return $rules;
     }
 }

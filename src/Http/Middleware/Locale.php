@@ -17,17 +17,6 @@ class Locale
     {
         if ($request->session()->has('applocale')) {
             app()->setLocale(session()->get('applocale'));
-        } else {
-            $locales = config('core.locales', []);
-            $user_locale = preg_split('/,|;/', $request->server('HTTP_ACCEPT_LANGUAGE'));
-            $user_iso = preg_replace('/-/', '_', $user_locale[0]);
-            foreach ($locales as $locale) {
-                if ($locale['iso'] === $user_iso) {
-                    app()->setLocale($locale['code']);
-                    $request->session()->put('applocale', $locale['code']);
-                    break;
-                }
-            }
         }
 
         return $next($request);

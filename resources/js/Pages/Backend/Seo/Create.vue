@@ -69,7 +69,7 @@ const submit = () => {
                 <div class="grid grid-cols-6 p-6">
                     <div class="col-span-6 sm:col-span-6 lg:col-span-5 xl:col-span-4 mb-6">
                         <Input v-model="form.alias"
-                               :errors="errors"
+                               :errors="errors.seo"
                                :label="__('Alias')"
                                autofocus
                                name="alias"/>

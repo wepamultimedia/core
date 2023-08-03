@@ -19,6 +19,7 @@ class LocaleController extends \App\Http\Controllers\Controller
 
         if ($exist) {
             $request->session()->put('applocale', $locale);
+            $request->session()->flash('switchLocale');
         }
 
         return redirect()->back();

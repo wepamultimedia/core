@@ -64,7 +64,9 @@ const sections = reactive({
 });
 const showSeoAnalysis = ref(false);
 const showReadability = ref(false);
+
 const selected_locale = ref();
+
 const values = reactive({
     title: "",
     facebook_title: "",
@@ -331,7 +333,7 @@ onMounted(() => {
                     <div class="mt-2">
                         <a :href="usePage().props.default.baseUrl + '/' + values.slug"
                            class="text-sm"
-                           target="_blank">{{ usePage().props.default.baseUrl + "/" + values.slug }}
+                           target="_blank">{{ usePage().props.default.baseUrl + "/" }}{{ values.slug !== null ? values.slug : ''}}
                         </a>
                     </div>
                     <div class="py-4">
@@ -614,13 +616,13 @@ onMounted(() => {
                 </div>
                 <div>
                     <div class="font-arial text-[20px] text-[#1a0dab] dark:text-[#8ab4f8]">{{
-                            values.title.length > googleLimits.title.max
+                            values.title?.length > googleLimits.title.max
                             ? values.title.substring(0, googleLimits.title.max - 1) + "..."
                             : values.title
                         }}
                     </div>
                     <div class="font-arial leading-[1.58rem] text-[14px]">{{
-                            values.description.length > googleLimits.description.max
+                            values.description?.length > googleLimits.description.max
                             ? values.description.substring(0, googleLimits.description.max - 1) + "..."
                             : values.description
                         }}
@@ -670,13 +672,13 @@ onMounted(() => {
                 <div>
                     <div class="font-arial text-[20px] text-[#1a0dab] dark:text-[#8ab4f8]">
                         {{
-                            values.title.length > googleLimits.title.max
+                            values.title?.length > googleLimits.title.max
                             ? values.title.substring(0, googleLimits.title.max - 1) + "..."
                             : values.title
                         }}
                     </div>
                     <div class="font-arial leading-[1.58rem] text-[14px]">{{
-                            values.description.length > googleLimits.description.max
+                            values.description?.length > googleLimits.description.max
                             ? values.description.substring(0, googleLimits.description.max - 1) + "..."
                             : values.description
                         }}

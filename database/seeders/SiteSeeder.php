@@ -2,9 +2,9 @@
 
 namespace Wepa\Core\Database\seeders;
 
+use App\Http\Controllers\MainController;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use Wepa\Core\Http\Controllers\Backend\SiteController;
 use Wepa\Core\Models\Site;
 
 class SiteSeeder extends Seeder
@@ -31,8 +31,8 @@ class SiteSeeder extends Seeder
                 'description' => 'Your description',
                 'model_type' => Site::class,
                 'model_id' => $site->id,
-                'controller' => SiteController::class,
-                'action' => 'edit',
+                'controller' => MainController::class,
+                'action' => 'home',
             ]);
 
             $site->save();

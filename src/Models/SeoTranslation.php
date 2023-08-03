@@ -3,6 +3,7 @@
 namespace Wepa\Core\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Wepa\Core\Models\SeoTranslation
@@ -50,4 +51,9 @@ class SeoTranslation extends Model
     ];
 
     protected $table = 'core_seo_translations';
+
+    public function seo(): BelongsTo
+    {
+        return $this->belongsTo(Seo::class, 'seo_id', 'id');
+    }
 }

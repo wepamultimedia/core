@@ -7,6 +7,7 @@ use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Wepa\Core\Http\Traits\TranslationsTrait;
 
@@ -171,5 +172,10 @@ class Seo extends Model implements TranslatableContract
                 'company', 'email', 'phone', 'mobile', 'address', 'latitude', 'longitude',
             ]),
         );
+    }
+
+    public function translation(): HasOne
+    {
+        return $this->hasOne(SeoTranslation::class, 'seo_id', 'id')->where('locale', app()->getLocale());
     }
 }

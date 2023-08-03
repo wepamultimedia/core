@@ -15,8 +15,8 @@ export default {
 };
 </script>
 <script setup>
-import { onBeforeMount, ref, toRefs } from "vue";
-import { router } from "@inertiajs/vue3";
+import {onBeforeMount, ref, toRefs} from "vue";
+import {router} from "@inertiajs/vue3";
 import Input from "@/Vendor/Core/Components/Form/Input.vue";
 import Modal from "@/Vendor/Core/Components/Modal.vue";
 import SeoForm from "@/Vendor/Core/Components/Backend/SeoForm.vue";
@@ -45,7 +45,7 @@ const loading = ref(false);
 const submit = () => {
     loading.value = true;
     router.put(route("admin.seo.update", {id: seo.value?.id}), form.value, {
-        onFinish(){
+        onFinish() {
             loading.value = false;
         }
     });
@@ -64,7 +64,7 @@ onBeforeMount(() => {
         <span class="dark:text-light font-medium text-xl">{{ __("edit_title") }}</span>
     </div>
     <form @submit.prevent="submit">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 text-skin-base  mb-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 text-skin-base mb-8">
             <div class="col-span-1">
                 <p class="text-sm">{{ __("edit_summary") }}</p>
             </div>
@@ -79,23 +79,26 @@ onBeforeMount(() => {
                     <div class="col-span-6 sm:col-span-6 lg:col-span-5 xl:col-span-4 mb-6">
                         <Input v-model="form.alias"
                                :disabled="form.alias === 'home'"
-                               :errors="errors"
+                               :errors="errors.seo"
                                :label="__('Alias')"
                                autofocus
                                name="alias"/>
                     </div>
                 </div>
-                <div v-if="form.alias !== 'home'"
-                     class="rounded-b-lg overflow-hidden">
+                <div class="rounded-b-lg overflow-hidden">
                     <div class="p-3 bg-gray-200 dark:bg-gray-500 flex justify-end">
-                        <SaveFormButton :form="form" :loading="loading"/>
+                        <SaveFormButton :form="form"
+                                        :loading="loading"/>
                     </div>
                 </div>
             </div>
         </div>
-        <SeoForm v-model:seo="form"
+        <div class="my-14">
+        <SeoForm
+                 v-model:seo="form"
                  :errors="errors"/>
-        <div class="my-14 flex justify-end">
+        </div>
+        <div class="my-14 flex justify-end" v-if="form.alias !== 'home'">
             <Modal :href="route('admin.seo.destroy', {id:seo?.id})"
                    :message="__('delete_message')"
                    :title="__('delete_seo_route')"
