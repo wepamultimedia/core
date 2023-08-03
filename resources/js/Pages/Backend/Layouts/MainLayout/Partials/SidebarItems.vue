@@ -79,7 +79,7 @@ const show = computed(() => {
                 <div v-else-if="!minimized" class="w-full">
                     <div class="flex items-center justify-between w-full">
                         <Link :class="{'active': item.isActive}"
-                              :disabled="loading || item.isActive"
+                              :disabled="loading"
                               :href="route(item.route)"
                               :preserve-scroll="true"
                               :preserve-state="true"
@@ -128,7 +128,7 @@ const show = computed(() => {
                               class="absolute w-2 h-2 left-2 top-3 rounded-full bg-skin-base "></span>
                         <button class="flex items-center justify-between w-full">
                             <Link :class="[{'font-bold': subitem.isActive}]"
-                                  :disabled="loading || subitem.isActive"
+                                  :disabled="loading"
                                   :href="route(subitem.route)"
                                   :preserve-scroll="true"
                                   :preserve-state="true"
