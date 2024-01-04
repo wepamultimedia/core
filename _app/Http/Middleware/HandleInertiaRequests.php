@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
+use Wepa\Core\Models\Seo;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -37,6 +38,9 @@ class HandleInertiaRequests extends Middleware
                     'query' => $request->query(),
                 ]);
             },
+            'aliasSlug' => function () {
+                return Seo::whereNotNull('alias')->get()->pluck('slug', 'alias')->toArray();
+            }
         ]);
     }
 }
