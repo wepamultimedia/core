@@ -47,11 +47,7 @@ class SeoModelListener
 
     protected function buildData(SeoModelSavedEvent $event): array
     {
-        $data = collect([
-            'model_type' => $event->model::class,
-            'model_id' => $event->model->id,
-            'last_mod' => Carbon::now(),
-        ]);
+        $data = collect([]);
 
         if ($request = request('seo')) {
             $data = $data->merge($request)
@@ -64,6 +60,12 @@ class SeoModelListener
                     ->except(['translations']);
             }
         }
+
+        $data = $data->merge([
+            'model_type' => $event->model::class,
+            'model_id' => $event->model->id,
+            'last_mod' => Carbon::now(),
+        ]);
 
         $event->model->seoAddParams($data->toArray());
 
