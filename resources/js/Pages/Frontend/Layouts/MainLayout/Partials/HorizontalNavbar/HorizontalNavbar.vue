@@ -18,7 +18,8 @@ const props = defineProps({
     fixed: Boolean,
     shadow: Boolean,
     transparent: Boolean,
-    textColor: String
+    textColor: String,
+    lineClass: String
 });
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
@@ -111,7 +112,7 @@ onBeforeUnmount(() => {
                             </slot>
                         </div>
                         <!--Hamburguer icon-->
-                        <HamburguerButton v-model="open"/>
+                        <HamburguerButton v-model="open" :line-calss="lineClass"/>
                     </div>
                     <!-- Menu -->
                     <template v-if="!smallerMd">
