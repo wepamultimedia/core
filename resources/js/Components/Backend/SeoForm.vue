@@ -1,44 +1,45 @@
 <script setup>
-import { computed, onBeforeMount, onMounted, reactive, ref, toRefs, watch } from "vue";
-import Textarea from "@/Vendor/Core/Components/Form/Textarea.vue";
-import Input from "@/Vendor/Core/Components/Form/Input.vue";
-import InputImage from "@/Vendor/Core/Components/Form/InputImage.vue";
-import Icon from "@/Vendor/Core/Components/Heroicon.vue";
-import Select from "@/Vendor/Core/Components/Select.vue";
-import ToggleButton from "@/Vendor/Core/Components/Form/ToggleButton.vue";
-import { usePage } from "@inertiajs/vue3";
+import Input from "@core/Components/Form/Input.vue";
+import InputImage from "@core/Components/Form/InputImage.vue";
+import Textarea from "@core/Components/Form/Textarea.vue";
+import ToggleButton from "@core/Components/Form/ToggleButton.vue";
+import Icon from "@core/Components/Heroicon.vue";
+import Select from "@core/Components/Select.vue";
+import {usePage} from "@inertiajs/vue3";
 import axios from "axios";
+import {computed, onBeforeMount, onMounted, reactive, ref, toRefs, watch} from "vue";
+import {useStore} from "vuex";
 
 const props = defineProps({
     seo: Object,
     locale: String,
     autocomplete: Boolean,
-    alias: String,
     image: Object,
+    imageTitle: String,
+    imageAlt: String,
     title: String,
     description: String,
     pageType: String,
     articleType: String,
     changeFreq: String,
     priority: Number,
-    robots: Array
+    robots: Array,
+    slugPrefix: Object,
 });
-
 const {
-          seo,
-          locale,
-          autocomplete,
-          image,
-          title,
-          description,
-          robots,
-          pageType,
-          articleType
-      } = toRefs(props);
-
-
+    seo,
+    locale,
+    autocomplete,
+    image,
+    imageTitle,
+    imageAlt,
+    title,
+    description,
+    robots,
+    pageType,
+    articleType
+} = toRefs(props);
 const emit = defineEmits(["update:locale", "update:seo"]);
-
 const form = reactive({
     id: null,
     controller: null,
@@ -46,7 +47,7 @@ const form = reactive({
     action: null,
     page_type: props.pageType || "website",
     article_type: props.articleType || "website",
-    image: {},
+    image: null,
     facebook_image: null,
     twitter_image: null,
     canonical: false,
@@ -64,9 +65,6 @@ const sections = reactive({
 });
 const showSeoAnalysis = ref(false);
 const showReadability = ref(false);
-
-const selected_locale = ref();
-
 const values = reactive({
     title: "",
     facebook_title: "",
@@ -76,12 +74,15 @@ const values = reactive({
     twitter_description: "",
     slug: "",
     image: {},
+    image_url: "",
     image_title: "",
     image_alt: "",
     facebook_image: "",
+    facebook_image_url: "",
     facebook_image_title: "",
     facebook_image_alt: "",
     twitter_image: "",
+    twitter_image_url: "",
     twitter_image_title: "",
     twitter_image_alt: ""
 });
@@ -176,13 +177,30 @@ const site_seo = ref({
     image_alt: null,
     slug: null
 });
-const googleLimits = {
-    title: {min: 40, max: 60},
-    description: {min: 140, max: 160}
-};
+const googleLimits = {title: {min: 40, max: 60}, description: {min: 140, max: 160}};
+const errors = computed(() => usePage().props.errors.seo);
 
-const errors = computed(() => {
-    return usePage().props.errors.seo;
+const formattedSlugWithUrl = computed(() => {
+    let slug = [usePage().props.default.baseUrl];
+
+    if (usePage().props.default.locales.length > 1 &&
+        (
+            (form.alias === "home" && useStore().getters["backend/formLocale"] !== usePage().props.default.defaultLocale)
+            || (usePage().props.default.locales.length > 1 && form.alias !== "home")
+        )) {
+        let formLocale = useStore().getters["backend/formLocale"];
+        slug.push(formLocale);
+    }
+
+    if (props.slugPrefix) {
+        slug.push(formatSlug(props.slugPrefix[useStore().getters["backend/formLocale"]]));
+    }
+
+    if (values.slug) {
+        slug.push(values.slug);
+    }
+
+    return slug.join("/");
 });
 
 function activeSeccion(section) {
@@ -192,71 +210,110 @@ function activeSeccion(section) {
     sections[section] = true;
 }
 
-function generateSlug(text) {
-    values.slug = text
-    .toString()
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]+/g, "")
-    .replace(/\_/g, "-")
-    .replace(/--+/g, "-")
-    .replace(/\-$/g, "");
+function formatSlug(text) {
+    return text
+        .toString()
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w-]+/g, "")
+        .replace(/\_/g, "-")
+        .replace(/--+/g, "-")
+        .replace(/\-$/g, "");
 }
 
 onBeforeMount(() => {
-    Object.keys(seo.value).filter(key => key in form).forEach(key => form[key] = seo.value[key]);
-    emit("update:seo", form);
+    Object.keys(seo.value).forEach(key => {
+        if (key === "translations") {
+            form[key] = Array.isArray(seo.value[key]) ? {} : seo.value[key];
+        } else {
+            form[key] = seo.value[key];
+        }
+    });
+    Object.keys(seo.value).filter(key => key in values).forEach(key => values[key] = seo.value[key]);
 });
 
 onMounted(() => {
-    watch(locale, value => {
-        if (selected_locale.value !== value) {
-            selected_locale.value = value;
-        }
-    });
-    watch(selected_locale, value => {
-        if (selected_locale.value !== locale.value) {
-            emit("update:locale", value);
-        }
-    });
     watch(image, value => {
         if (form.autocomplete) {
-            values.image = value;
-            form.image = value.url;
+            values.imageObject = value;
         }
     });
-    watch(() => form.image, (value, oldValue) => {
-        values.image_title = values.image.name;
-        values.image_alt = values.image.alt_name;
+
+    watch(imageTitle, (value, oldValue) => {
+        if (form.autocomplete) {
+            values.image_title = value;
+
+            if (!values.facebook_image_title || values.facebook_image_title === oldValue || form.autocomplete) {
+                values.facebook_image_title = value;
+            }
+
+            if (!values.twitter_image_title || values.twitter_image_title === oldValue || form.autocomplete) {
+                values.twitter_image_title = value;
+            }
+        }
+    });
+
+    watch(imageAlt, (value, oldValue) => {
+        if (form.autocomplete) {
+            values.image_alt = value;
+
+            if (!values.facebook_image_alt || values.facebook_image_alt === oldValue || form.autocomplete) {
+                values.facebook_image_alt = value;
+            }
+
+            if (!values.twitter_image_alt || values.twitter_image_alt === oldValue || form.autocomplete) {
+                values.twitter_image_alt = value;
+            }
+        }
+    });
+
+    watch(() => values.imageObject, (value, oldValue) => {
+        form.image = value.file;
+        values.image_title = values.imageObject.name;
+        values.image_alt = values.imageObject.alt_name;
+        values.image_url = values.imageObject.url;
 
         if (!form.facebook_image || form.facebook_image === oldValue || form.autocomplete) {
-            form.facebook_image = values.image.url;
-            values.facebook_image_title = values.image.name;
-            values.facebook_image_alt = values.image.alt_name;
+            form.facebook_image = values.imageObject.file;
+            values.facebook_image_title = values.imageObject.name;
+            values.facebook_image_alt = values.imageObject.alt_name;
+            values.facebook_image_url = values.imageObject.url;
         }
 
         if (!form.twitter_image || form.twitter_image === oldValue || form.autocomplete) {
-            form.twitter_image = values.image.url;
-            values.twitter_image_title = values.image.name;
-            values.twitter_image_alt = values.image.alt_name;
+            form.twitter_image = values.imageObject.file;
+            values.twitter_image_title = values.imageObject.name;
+            values.twitter_image_alt = values.imageObject.alt_name;
+            values.twitter_image_url = values.imageObject.url;
         }
     });
-    watch(title, value => {
+
+    watch(title, (value, oldValue) => {
         if (form.autocomplete) {
-            values.title = value;
-            generateSlug(value);
+            if ((values.title !== null && values.title !== "") || oldValue === values.title) {
+                values.title = value;
+            }
+
+            if ((values.slug !== null && values.slug !== "") || oldValue === values.slug) {
+                values.slug = value;
+            }
         }
     });
+
     watch(description, value => {
         if (form.autocomplete) {
-            values.description = value;
+            if ((values.description !== null && values.description !== "") || oldValue === values.description) {
+                values.description = value;
+            }
         }
     });
+
     watch(() => values.title, (value, oldValue) => {
         values.facebook_title = values.facebook_title === null ? "" : values.facebook_title;
+
         if (values.facebook_title === oldValue) {
             values.facebook_title = value;
         }
@@ -266,6 +323,7 @@ onMounted(() => {
             values.twitter_title = value;
         }
     });
+
     watch(() => values.description, (value, oldValue) => {
         values.facebook_description = values.facebook_description === null ? "" : values.facebook_description;
         if (values.facebook_description === oldValue) {
@@ -276,6 +334,11 @@ onMounted(() => {
             values.twitter_description = value;
         }
     });
+
+    watch(() => values.slug, value => {
+        values.slug = formatSlug(value);
+    });
+
     watch(form, value => {
         emit("update:seo", value);
     });
@@ -316,7 +379,8 @@ onMounted(() => {
     <div class="bg-white dark:bg-gray-600 border border-t-0 border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-t-none">
         <div class="p-6 border-b border-gray-300 dark:border-gray-700">
             <ToggleButton v-model="form.autocomplete"
-                          :label="__('autocomplete')"/>
+                          :label="__('autocomplete')"
+                          xs/>
         </div>
         <!-- general -->
         <div v-show="sections.general"
@@ -324,7 +388,6 @@ onMounted(() => {
             <div class="lg:w-1/2 p-6">
                 <div class="">
                     <Input v-model="form"
-                           v-model:locale="selected_locale"
                            v-model:value="values.slug"
                            :errors="errors"
                            :label="__('slug')"
@@ -333,7 +396,7 @@ onMounted(() => {
                     <div class="mt-2">
                         <a :href="usePage().props.default.baseUrl + '/' + values.slug"
                            class="text-sm"
-                           target="_blank">{{ usePage().props.default.baseUrl + "/" }}{{ values.slug !== null ? values.slug : ''}}
+                           target="_blank">{{ formattedSlugWithUrl }}
                         </a>
                     </div>
                     <div class="py-4">
@@ -343,7 +406,6 @@ onMounted(() => {
                 </div>
                 <div class="mb-4">
                     <Input v-model="form"
-                           v-model:locale="selected_locale"
                            :errors="errors"
                            :label="__('keyword')"
                            name="keyword"
@@ -351,7 +413,6 @@ onMounted(() => {
                 </div>
                 <div class="mb-4">
                     <Input v-model="form"
-                           v-model:locale="selected_locale"
                            v-model:value="values.title"
                            :errors="errors"
                            :label="__('seo_title')"
@@ -362,7 +423,6 @@ onMounted(() => {
                 </div>
                 <div class="mb-4">
                     <Textarea v-model="form"
-                              v-model:locale="selected_locale"
                               v-model:value="values.description"
                               :autoresize="false"
                               :errors="errors"
@@ -377,14 +437,14 @@ onMounted(() => {
             <div class="lg:w-1/2 p-6">
                 <div class="sm:w-1/2 lg:w-3/4 xl:w-1/2">
                     <InputImage v-model="form.image"
-                                v-model:image="values.image"
+                                v-model:image="values.imageObject"
+                                v-model:url="values.image_url"
                                 :errors="errors"
                                 :label="__('cover_image')"
                                 name="image"/>
                 </div>
                 <div class="mt-4">
                     <Input v-model="form"
-                           v-model:locale="selected_locale"
                            v-model:value="values.image_title"
                            :errors="errors"
                            :label="__('cover_title')"
@@ -393,7 +453,6 @@ onMounted(() => {
                 </div>
                 <div class="mt-4">
                     <Textarea v-model="form"
-                              v-model:locale="selected_locale"
                               v-model:value="values.image_alt"
                               :autoresize="false"
                               :errors="errors"
@@ -431,7 +490,6 @@ onMounted(() => {
                 <div class="p-6">
                     <div class="mt-4">
                         <Input v-model="form"
-                               v-model:locale="selected_locale"
                                v-model:value="values.facebook_title"
                                :errors="errors"
                                :label="__('facebook_title')"
@@ -440,7 +498,6 @@ onMounted(() => {
                     </div>
                     <div class="mt-4">
                         <Textarea v-model="form"
-                                  v-model:locale="selected_locale"
                                   v-model:value="values.facebook_description"
                                   :autoresize="false"
                                   :errors="errors"
@@ -456,11 +513,11 @@ onMounted(() => {
                             <InputImage v-model="form.facebook_image"
                                         v-model:alt="values.facebook_image_alt"
                                         v-model:title="values.facebook_image_title"
+                                        v-model:url="values.facebook_image_url"
                                         :label="__('cover_image')"/>
                         </div>
                         <div class="mt-4">
                             <Input v-model="form"
-                                   v-model:locale="selected_locale"
                                    v-model:value="values.facebook_image_title"
                                    :errors="errors"
                                    :label="__('cover_title')"
@@ -469,7 +526,6 @@ onMounted(() => {
                         </div>
                         <div class="mt-4">
                             <Textarea v-model="form"
-                                      v-model:locale="selected_locale"
                                       v-model:value="values.facebook_image_alt"
                                       :autoresize="false"
                                       :errors="errors"
@@ -485,7 +541,6 @@ onMounted(() => {
                 <div class="p-6">
                     <div class="mt-4">
                         <Input v-model="form"
-                               v-model:locale="selected_locale"
                                v-model:value="values.twitter_title"
                                :errors="errors"
                                :label="__('twitter_title')"
@@ -494,7 +549,6 @@ onMounted(() => {
                     </div>
                     <div class="mt-4">
                         <Textarea v-model="form"
-                                  v-model:locale="selected_locale"
                                   v-model:value="values.twitter_description"
                                   :autoresize="false"
                                   :errors="errors"
@@ -510,11 +564,11 @@ onMounted(() => {
                             <InputImage v-model="form.twitter_image"
                                         v-model:alt="values.twitter_image_alt"
                                         v-model:title="values.twitter_image_title"
+                                        v-model:url="values.twitter_image_url"
                                         :label="__('cover_image')"/>
                         </div>
                         <div class="mt-4">
                             <Input v-model="form"
-                                   v-model:locale="selected_locale"
                                    v-model:value="values.twitter_image_title"
                                    :errors="errors"
                                    :label="__('cover_title')"
@@ -523,7 +577,6 @@ onMounted(() => {
                         </div>
                         <div class="mt-4">
                             <Textarea v-model="form"
-                                      v-model:locale="selected_locale"
                                       v-model:value="values.twitter_image_alt"
                                       :autoresize="false"
                                       :errors="errors"
@@ -617,14 +670,14 @@ onMounted(() => {
                 <div>
                     <div class="font-arial text-[20px] text-[#1a0dab] dark:text-[#8ab4f8]">{{
                             values.title?.length > googleLimits.title.max
-                            ? values.title.substring(0, googleLimits.title.max - 1) + "..."
-                            : values.title
+                                ? values.title.substring(0, googleLimits.title.max - 1) + "..."
+                                : values.title
                         }}
                     </div>
                     <div class="font-arial leading-[1.58rem] text-[14px]">{{
                             values.description?.length > googleLimits.description.max
-                            ? values.description.substring(0, googleLimits.description.max - 1) + "..."
-                            : values.description
+                                ? values.description.substring(0, googleLimits.description.max - 1) + "..."
+                                : values.description
                         }}
                     </div>
                 </div>
@@ -673,14 +726,14 @@ onMounted(() => {
                     <div class="font-arial text-[20px] text-[#1a0dab] dark:text-[#8ab4f8]">
                         {{
                             values.title?.length > googleLimits.title.max
-                            ? values.title.substring(0, googleLimits.title.max - 1) + "..."
-                            : values.title
+                                ? values.title.substring(0, googleLimits.title.max - 1) + "..."
+                                : values.title
                         }}
                     </div>
                     <div class="font-arial leading-[1.58rem] text-[14px]">{{
                             values.description?.length > googleLimits.description.max
-                            ? values.description.substring(0, googleLimits.description.max - 1) + "..."
-                            : values.description
+                                ? values.description.substring(0, googleLimits.description.max - 1) + "..."
+                                : values.description
                         }}
                     </div>
                 </div>

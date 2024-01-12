@@ -59,9 +59,7 @@ class SeoFormRequest extends FormRequest
         if (! Arr::exists($this->input('translations'), $locale)) {
             return [
                 'alias' => 'required|string|max:255|unique:core_seo',
-
                 "translations.$locale.slug" => 'required|slug|unique:core_seo_translations',
-
                 "translations.$locale.title" => 'required|string|max:255',
                 "translations.$locale.description" => 'required|string|max:255',
             ];
@@ -72,10 +70,7 @@ class SeoFormRequest extends FormRequest
             'controller' => 'nullable|string|max:255',
             'action' => 'nullable|string|max:255',
 
-            'translations.*.slug' => 'required|slug|unique:core_seo_translations',
-
             'translations.*.keyword' => 'nullable|string|unique:core_seo_translations',
-
             'translations.*.title' => 'required|string|max:255',
             'translations.*.description' => 'required|string|max:255',
         ];

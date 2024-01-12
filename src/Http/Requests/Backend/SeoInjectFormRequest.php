@@ -57,62 +57,102 @@ class SeoInjectFormRequest extends FormRequest
 
         $locale = app()->getLocale();
 
-        if (! Arr::exists($this->input('seo.translations'), $locale)) {
+        if (!Arr::exists($this->input('seo.translations'), $locale)) {
             return [
-                'seo.alias' => 'required|string|max:255|unique:core_seo',
-
                 "seo.translations.$locale.slug" => 'required|slug|unique:core_seo_translations',
-
                 "seo.translations.$locale.title" => 'required|string|max:255',
                 "seo.translations.$locale.description" => 'required|string|max:255',
             ];
         }
 
         $rules = [
-            'seo.alias' => 'nullable|string|max:255|unique:core_seo',
             'seo.controller' => 'nullable|string|max:255',
             'seo.action' => 'nullable|string|max:255',
 
-            'seo.translations.*.slug' => 'required|slug|unique:core_seo_translations',
-
             'seo.translations.*.keyword' => 'nullable|string|unique:core_seo_translations',
-
             'seo.translations.*.title' => 'required|string|max:255',
             'seo.translations.*.description' => 'required|string|max:255',
         ];
 
-        if ($this->alias === 'home') {
+        if (!$this->input('seo.id')) {
+            foreach ($this->input('seo.translations') as $loc => $translation) {
+                if ($this->input('seo.alias') === 'home' and $loc === config('core.default_locale', 'en')) {
+                    $rules = array_merge($rules, [
+                        "seo.translations.$loc.slug" => [
+                            'nullable',
+                            'slug',
+                            Rule::unique('core_seo_translations', 'slug')
+                                ->where('locale', $loc)
+                                ->where('slug_prefix', $translation['slug_prefix'] ?? null)
+                        ],
+                    ]);
+                } else if ($this->input('seo.alias') === 'home' and $loc !== config('core.default_locale', 'en')) {
+                    $rules = array_merge($rules, [
+                        "seo.translations.$loc.slug" => [
+                            'nullable',
+                            'slug',
+                            Rule::unique('core_seo_translations', 'slug')
+                                ->where('locale', $loc)
+                                ->where('slug_prefix', $translation['slug_prefix'] ?? null)
+                        ],
+                    ]);
+                } else {
+                    $rules = array_merge($rules, [
+                        "seo.translations.$loc.slug" => [
+                            'required',
+                            'slug',
+                            Rule::unique('core_seo_translations', 'slug')
+                                ->where('locale', $loc)
+                                ->where('slug_prefix', $translation['slug_prefix'] ?? null)
+                        ],
+                    ]);
+                }
+            }
+        } else {
             $rules = array_merge($rules, [
-                'seo.translations.*.slug' => 'nullable|slug|unique:core_seo_translations',
-            ]);
-        }
-
-        if (Arr::exists($this['seo'], 'id')) {
-            $rules = array_merge($rules, [
-                'seo.alias' => [
-                    'nullable', 'string', 'max:255',
-                    Rule::unique('core_seo')->ignore($this['id'], 'id'),
-                ],
-                'seo.translations.*.slug' => [
-                    'required',
-                    'slug',
-                    Rule::unique('core_seo_translations')->ignore($this['seo']['id'], 'seo_id'),
-                ],
                 'seo.translations.*.keyword' => [
                     'string',
                     'nullable',
-                    Rule::unique('core_seo_translations')->ignore($this['seo']['id'], 'seo_id'),
+                    Rule::unique('core_seo_translations')->ignore($this->input('seo.id'), 'seo_id'),
                 ],
             ]);
 
-            if ($this->alias === 'home') {
-                $rules = array_merge($rules, [
-                    'seo.translations.*.slug' => [
-                        'nullable',
-                        'slug',
-                        Rule::unique('core_seo_translations')->ignore($this['seo']['id'], 'seo_id'),
-                    ],
-                ]);
+            foreach ($this->input('seo.translations') as $loc => $translation) {
+                if ($this->input('seo.alias') === 'home' and $loc === config('core.default_locale', 'en')) {
+                    $rules = array_merge($rules, [
+                        "seo.translations.$loc.slug" => [
+                            'nullable',
+                            'slug',
+                            Rule::unique('core_seo_translations', 'slug')
+                                ->where('locale', $loc)
+                                ->where('slug_prefix', $translation['slug_prefix'] ?? null)
+                                ->ignore($this->input('seo.id'), 'seo_id')
+
+                        ],
+                    ]);
+                } else if ($this->input('seo.alias') === 'home' and $loc !== config('core.default_locale', 'en')) {
+                    $rules = array_merge($rules, [
+                        "seo.translations.$loc.slug" => [
+                            'nullable',
+                            'slug',
+                            Rule::unique('core_seo_translations', 'slug')
+                                ->where('locale', $loc)
+                                ->where('slug_prefix', $translation['slug_prefix'] ?? null)
+                                ->ignore($this->input('seo.id'), 'seo_id')
+                        ],
+                    ]);
+                } else {
+                    $rules = array_merge($rules, [
+                        "seo.translations.$locale.slug" => [
+                            'required',
+                            'slug',
+                            Rule::unique('core_seo_translations', 'slug')
+                                ->where('locale', $loc)
+                                ->where('slug_prefix', $translation['slug_prefix'] ?? null)
+                                ->ignore($this->input('seo.id'), 'seo_id')
+                        ],
+                    ]);
+                }
             }
         }
 

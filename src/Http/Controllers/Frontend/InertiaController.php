@@ -21,12 +21,13 @@ class InertiaController extends \Wepa\Core\Http\Controllers\InertiaController
     protected function addThemeNameToViewPath(string &$view): void
     {
         if ($theme = config('core.theme.frontend') and $theme !== '') {
-            $themeView = 'Themes/'.ucfirst($theme).'/'.$view;
+            $themeView = 'Themes/' . ucfirst($theme) . '/' . $view;
             if ($this->checkViewExist($themeView)) {
                 $view = $themeView;
             }
         }
     }
+
 
     /**
      * @return Application|RedirectResponse|Redirector|void
@@ -34,12 +35,12 @@ class InertiaController extends \Wepa\Core\Http\Controllers\InertiaController
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    protected function slugRedirect(Request $request, string $slug = null)
+    protected function slugRedirect(Request $request, string $slug = null, string $locale = null, string $prefix = null)
     {
         $seoQuery = Seo::with('translation');
 
         if ($slug) {
-            if($seoTranslation = SeoTranslation::select(['locale', 'seo_id'])->whereSlug($slug)->first()){
+            if ($seoTranslation = SeoTranslation::select(['locale', 'seo_id'])->whereSlug($slug)->first()) {
                 $seoQuery->whereHas('translations', function ($query) use ($slug) {
                     $query->where('slug', '<>', null)->where('slug', $slug);
                 });
@@ -47,9 +48,11 @@ class InertiaController extends \Wepa\Core\Http\Controllers\InertiaController
                 abort(404);
             }
         } else {
-            $seoTranslation = SeoTranslation::whereNull('slug')->whereHas('seo', function ($query) {
-                $query->whereAlias('home');
-            })->first();
+            $seoTranslation = SeoTranslation::whereNull('slug')
+                ->whereHas('seo', function ($query) {
+                    $query->whereAlias('home');
+                })->first();
+
             $seoQuery->whereAlias('home');
         }
 
@@ -66,6 +69,7 @@ class InertiaController extends \Wepa\Core\Http\Controllers\InertiaController
         }
 
         $seo = $seoQuery->first();
+        dd($seo->toArray());
 
         return $this->buildSlugRedirect($request, $seo);
     }

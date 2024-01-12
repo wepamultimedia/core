@@ -27,6 +27,14 @@ Route::middleware([
 });
 
 Route::middleware(['web', 'core.locale'])->group(function () {
-    // Add custom routes
-    Route::get('{slug}', [InertiaController::class, 'slugRedirect']);
+
+    // Multilanguage
+    if(count(config('core.locales')) > 1){
+        Route::get('{locale}/{slug?}', [InertiaController::class, 'slugRedirect'])->where('slug', '[a-z]{2}');
+        Route::get('{locale}/{prefix}/{slug?}', [InertiaController::class, 'slugRedirect'])->where('slug', '[a-z]{2}');
+    } else {
+        Route::get('{prefix}/{slug?}', [InertiaController::class, 'slugRedirect'])->where('slug', '[a-z]{2}');
+        Route::get('{slug?}', [InertiaController::class, 'slugRedirect']);
+
+    }
 });
