@@ -92,6 +92,9 @@ class SiteController extends InertiaController
     public function update(Request $request): void
     {
         $site = Site::find(1);
-        $site->update($request->all());
+        $data = collect($request->all())
+            ->except(['seo'])->toArray();
+
+        $site->update($data);
     }
 }
