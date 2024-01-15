@@ -14,10 +14,6 @@ const props = defineProps(["title"]);
 const pageProps = usePage().props.default;
 const selectedLocale = ref(pageProps.locales.find(locale => locale.code === pageProps.locale));
 
-const site = computed(() => {
-    return store.getters["frontend/site"];
-});
-
 onMounted(() => {
     store.dispatch("frontend/loadSite");
 })

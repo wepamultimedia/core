@@ -1,9 +1,12 @@
+import {usePage} from "@inertiajs/vue3";
+
 export default {
     namespaced: true,
     state: {
         loading: false,
         alerts: [],
-        menu: []
+        menu: [],
+        formLocale: "",
     },
     actions: {
         async menu({commit, dispatch}, app) {
@@ -36,18 +39,23 @@ export default {
         },
         removeAlert({commit}, alert) {
             commit("REMOVE_ALERT", alert);
+        },
+        formLocale({commit}, value) {
+            commit("SET_FORM_LOCALE", value);
         }
 
     }, getters: {
-        menu: state => {
-            return state.menu;
-        },
-        loading: state => {
-            return state.loading;
-        },
-        alerts: state => {
-            return state.alerts;
+        menu: state => state.menu,
+        loading: state => state.loading,
+        alerts: state => state.alerts,
+        formLocale: state => {
+            if (state.formLocale === "") {
+                state.formLocale = usePage().props.default.locale
+            }
+
+            return state.formLocale;
         }
+
     }, mutations: {
         SET_MENU(state, value) {
             state.menu = value;
@@ -72,6 +80,9 @@ export default {
         REMOVE_ALERT(state, alert) {
             let index = state.alerts.indexOf(state.alerts.find(a => a.id === alert.id));
             state.alerts[index].show = false;
+        },
+        SET_FORM_LOCALE(state, value) {
+            state.formLocale = value;
         }
     }
 };

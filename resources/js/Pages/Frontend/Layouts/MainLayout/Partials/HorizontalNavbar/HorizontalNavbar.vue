@@ -112,7 +112,7 @@ onBeforeUnmount(() => {
                             </slot>
                         </div>
                         <!--Hamburguer icon-->
-                        <HamburguerButton v-model="open" :line-calss="lineClass"/>
+                        <HamburguerButton v-model="open" :line-class="lineClass"/>
                     </div>
                     <!-- Menu -->
                     <template v-if="!smallerMd">

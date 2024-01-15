@@ -15,16 +15,17 @@ export default {
 };
 </script>
 <script setup>
-import { ref, toRefs} from "vue";
-import { router } from "@inertiajs/vue3";
+import {onBeforeMount, ref, toRefs} from "vue";
+import {router, usePage} from "@inertiajs/vue3";
 import Input from "@/Vendor/Core/Components/Form/Input.vue";
 import SeoForm from "@/Vendor/Core/Components/Backend/SeoForm.vue";
 import SaveFormButton from "@/Vendor/Core/Components/Form/SaveFormButton.vue";
+import {useStore} from "vuex";
 
 const props = defineProps(["errors"]);
 
+const store = useStore();
 const {seo} = toRefs(props);
-
 const form = ref({
     alias: null,
     controller: null,
@@ -43,11 +44,15 @@ const loading = ref(false);
 const submit = () => {
     loading.value = true;
     router.post(route("admin.seo.store"), form.value, {
-        onFinish(){
+        onFinish() {
             loading.value = false;
         }
     });
 };
+
+onBeforeMount(() => {
+    store.dispatch("backend/formLocale", usePage().props.default.locale);
+});
 </script>
 <template>
     <!--Title-->
@@ -77,7 +82,8 @@ const submit = () => {
                 </div>
                 <div class="rounded-b-lg overflow-hidden">
                     <div class="p-3 bg-gray-200 dark:bg-gray-500 flex justify-end">
-                        <SaveFormButton :form="form" :loading="loading"/>
+                        <SaveFormButton :form="form"
+                                        :loading="loading"/>
                     </div>
                 </div>
             </div>

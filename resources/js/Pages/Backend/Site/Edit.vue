@@ -12,18 +12,19 @@ export default {
 };
 </script>
 <script setup>
-import { onMounted, reactive, ref, toRefs } from "vue";
+import {onBeforeMount, onMounted, reactive, ref, toRefs} from "vue";
 import { useForm, usePage, router } from "@inertiajs/vue3";
-import Input from "@/Vendor/Core/Components/Form/Input.vue";
-import SeoForm from "@/Vendor/Core/Components/Backend/SeoForm.vue";
-import SaveFormButton from "@/Vendor/Core/Components/Form/SaveFormButton.vue";
+import Input from "@core/Components/Form/Input.vue";
+import SeoForm from "@core/Components/Backend/SeoForm.vue";
+import SaveFormButton from "@core/Components/Form/SaveFormButton.vue";
 import { useStore } from "vuex";
-import { __ } from "@/Vendor/Core/Mixins/translations";
-import iconSizes from "@/Vendor/Core/Mixins/iconSizes";
+import { __ } from "@core/Mixins/translations";
+import iconSizes from "@core/Mixins/iconSizes";
 
 const props = defineProps(["site", "errors"]);
 const store = useStore();
-const {site, seo, errors} = toRefs(props);
+
+const {site, errors} = toRefs(props);
 
 const form = reactive({
     id: site.value.id,
@@ -106,9 +107,14 @@ function activeSeccion(section) {
     sections[section] = true;
 }
 
+onBeforeMount(() => {
+    store.dispatch("backend/formLocale", usePage().props.default.locale);
+});
+
 onMounted(() => {
     checkIcons();
 })
+
 </script>
 <template>
     <!--Title-->
@@ -198,7 +204,6 @@ onMounted(() => {
                                 <div class="mb-4">
                                     <Input v-model="form.facebook"
                                            :errors="errors"
-                                           autofocus
                                            name="facebook">
                                         <template #icon>
                                             <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
@@ -209,7 +214,6 @@ onMounted(() => {
                                 <div class="mb-4">
                                     <Input v-model="form.twitter"
                                            :errors="errors"
-                                           autofocus
                                            name="twitter">
                                         <template #icon>
                                             <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
@@ -220,7 +224,6 @@ onMounted(() => {
                                 <div class="mb-4">
                                     <Input v-model="form.youtube"
                                            :errors="errors"
-                                           autofocus
                                            name="youtube">
                                         <template #icon>
                                             <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
@@ -231,7 +234,6 @@ onMounted(() => {
                                 <div class="mb-4">
                                     <Input v-model="form.skype"
                                            :errors="errors"
-                                           autofocus
                                            name="skype">
                                         <template #icon>
                                             <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
@@ -242,7 +244,6 @@ onMounted(() => {
                                 <div class="mb-4">
                                     <Input v-model="form.linkedin"
                                            :errors="errors"
-                                           autofocus
                                            name="linkedin">
                                         <template #icon>
                                             <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
@@ -253,7 +254,6 @@ onMounted(() => {
                                 <div class="mb-4">
                                     <Input v-model="form.instagram"
                                            :errors="errors"
-                                           autofocus
                                            name="instagram">
                                         <template #icon>
                                             <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
@@ -264,7 +264,6 @@ onMounted(() => {
                                 <div class="mb-4">
                                     <Input v-model="form.vimeo"
                                            :errors="errors"
-                                           autofocus
                                            name="vimeo">
                                         <template #icon>
                                             <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
@@ -275,7 +274,6 @@ onMounted(() => {
                                 <div class="mb-4">
                                     <Input v-model="form.twitch"
                                            :errors="errors"
-                                           autofocus
                                            name="twitch">
                                         <template #icon>
                                             <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
@@ -286,7 +284,6 @@ onMounted(() => {
                                 <div class="mb-4">
                                     <Input v-model="form.whatsapp"
                                            :errors="errors"
-                                           autofocus
                                            name="whatsapp">
                                         <template #icon>
                                             <inline-svg class="w-5 h-5 fill-skin-base stroke-skin-base"
@@ -308,7 +305,7 @@ onMounted(() => {
             <!-- SEO -->
             <div class="pb-8">
                 <h2 class="uppercase">{{ __("seo") }}</h2>
-                <SeoForm v-model:seo="form.seo"/>
+                <SeoForm v-model:seo="form.seo" autocomplete/>
             </div>
             <!-- Icons -->
             <div class="pb-8">

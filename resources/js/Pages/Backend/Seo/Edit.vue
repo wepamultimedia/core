@@ -16,16 +16,17 @@ export default {
 </script>
 <script setup>
 import {onBeforeMount, ref, toRefs} from "vue";
-import {router} from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
 import Input from "@/Vendor/Core/Components/Form/Input.vue";
 import Modal from "@/Vendor/Core/Components/Modal.vue";
 import SeoForm from "@/Vendor/Core/Components/Backend/SeoForm.vue";
 import SaveFormButton from "@/Vendor/Core/Components/Form/SaveFormButton.vue";
+import {useStore} from "vuex";
 
 const props = defineProps(["seo", "errors"]);
 
 const {seo} = toRefs(props);
-
+const store = useStore();
 const form = ref({
     id: null,
     alias: "",
@@ -56,7 +57,10 @@ onBeforeMount(() => {
         form["id"] = seo.value.id;
     }
     Object.keys(seo.value).filter(key => key in form.value).forEach(key => form.value[key] = seo.value[key]);
+
+    store.dispatch("backend/formLocale", usePage().props.default.locale);
 });
+
 </script>
 <template>
     <!--Title-->
@@ -94,11 +98,10 @@ onBeforeMount(() => {
             </div>
         </div>
         <div class="my-14">
-        <SeoForm
-                 v-model:seo="form"
-                 :errors="errors"/>
+            <SeoForm v-model:seo="form"/>
         </div>
-        <div class="my-14 flex justify-end" v-if="form.alias !== 'home'">
+        <div v-if="form.alias !== 'home'"
+             class="my-14 flex justify-end">
             <Modal :href="route('admin.seo.destroy', {id:seo?.id})"
                    :message="__('delete_message')"
                    :title="__('delete_seo_route')"
