@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref, toRefs, useAttrs, watch } from "vue";
 import Flap from "@/Vendor/Core/Components/Flap.vue";
-import FileManager from "@/Vendor/Core/Components/Backend/FileManager.vue";
+import FileManager from "@core/Components/Backend/FileManager.vue";
 
 const props = defineProps({
     buttonLabel: String,
@@ -11,6 +11,7 @@ const props = defineProps({
         default: "btn btn-secondary"
     },
     modelValue: String,
+    url: String,
     label: String,
     errors: Object,
     extensions: {
@@ -19,7 +20,7 @@ const props = defineProps({
     }
 });
 
-const emits = defineEmits(["update:modelValue", "update:file", "change"]);
+const emits = defineEmits(["update:modelValue", "update:url", "update:file", "change"]);
 
 const attrs = useAttrs();
 const error = ref();
@@ -53,7 +54,7 @@ const fileManager = reactive({
         fileManager.selectedImage = file;
         emits("update:file", file);
         emits("change", file);
-        emits("update:modelValue", file.url);
+        emits("update:modelValue", file.file);
         emits("update:name", file.name);
     }
 });

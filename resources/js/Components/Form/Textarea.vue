@@ -1,7 +1,8 @@
 <script setup>
-import { computed, onMounted, ref, toRefs, useAttrs, watch } from "vue";
+import {computed, onMounted, ref, toRefs, useAttrs, watch} from "vue";
 import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
-import { usePage } from "@inertiajs/vue3";
+import _ from "lodash";
+import {useStore} from "vuex";
 
 const props = defineProps({
     modelValue: [String, Object],
@@ -17,12 +18,25 @@ const props = defineProps({
         default: {}
     },
     label: String,
-    locale: String,
     translation: Boolean,
     debug: Boolean,
     limit: Array,
     limitLabel: Boolean
 });
+
+const store = useStore();
+const textarea = ref();
+const attrs = useAttrs();
+const inputId = computed(() => {
+    if (attrs.id) {
+        return attrs.id;
+    } else if (attrs.name) {
+        return attrs.name + "-" + Math.floor(Math.random() * 1000);
+    }
+});
+const selectedLocale = computed(() => store.getters["backend/formLocale"]);
+const emit = defineEmits(["update:modelValue", "update:value"]);
+const {translation, errors, locale, value, autoresize} = toRefs(props);
 
 const proxyModelValue = computed({
     get() {
@@ -33,21 +47,58 @@ const proxyModelValue = computed({
     }
 });
 
-const attrs = useAttrs();
-const selectedLocale = ref(usePage().props.default.locale);
-const inputId = ref(null);
-const inputValue = ref();
-const textarea = ref();
-const emit = defineEmits(["update:modelValue", "update:locale", "update:value"]);
-const {
-          translation,
-          errors,
-          locale,
-          value,
-          autoresize
-      } = toRefs(props);
+const proxyValue = computed({
+    get() {
+        if (typeof proxyModelValue.value === "object" && proxyModelValue.value) {
+            if (props.translation) {
+                if (proxyModelValue.value.hasOwnProperty('translations')
+                    && proxyModelValue.value.translations.hasOwnProperty(selectedLocale.value)
+                    && proxyModelValue.value.translations[selectedLocale.value][attrs["name"]]) {
 
-const error = computed(() =>{
+                    emit("update:value", proxyModelValue.value.translations[selectedLocale.value][attrs["name"]]);
+
+                    return proxyModelValue.value.translations[selectedLocale.value][attrs["name"]];
+                }
+
+                return null
+
+            } else if (proxyModelValue.value.hasOwnProperty(attrs["name"])) {
+
+                emit("update:value", proxyModelValue.value[attrs["name"]]);
+
+                return proxyModelValue.value[attrs["name"]];
+            }
+            return null;
+        }
+
+        emit("update:value", proxyModelValue.value);
+        return proxyModelValue.value
+    },
+    set(value) {
+        if (typeof proxyModelValue.value === "object" && proxyModelValue.value) {
+            if (props.translation) {
+                if (value) {
+                    buildTranslations();
+                    proxyModelValue.value.translations[selectedLocale.value][attrs["name"]] = value;
+
+                } else if (proxyModelValue.value.translations.hasOwnProperty(selectedLocale.value)) {
+                    proxyModelValue.value.translations[selectedLocale.value][attrs["name"]] = value;
+                    removeEmptyTranslations();
+                }
+            } else {
+                proxyModelValue.value[attrs["name"]] = value;
+            }
+        } else {
+            proxyModelValue.value = value;
+        }
+
+        emit("update:value", value);
+        resize();
+    }
+});
+
+
+const error = computed(() => {
     let found = false;
     for (const [errorKey, errorValue] of Object.entries(errors.value)) {
         const re = new RegExp("[.]" + attrs.name + "$", 'g');
@@ -60,124 +111,76 @@ const error = computed(() =>{
             return errorValue;
         }
     }
-    if(!found){
+    if (!found) {
         return null;
     }
 });
+
+function buildTranslations() {
+    if (typeof proxyModelValue.value === "object" && proxyModelValue.value && props.translation) {
+        if (!proxyModelValue.value.hasOwnProperty("translations")) {
+            proxyModelValue.value["translations"] = {};
+        }
+
+        if (!proxyModelValue.value.translations.hasOwnProperty(selectedLocale.value)) {
+            proxyModelValue.value.translations[selectedLocale.value] = {};
+            proxyModelValue.value.translations[selectedLocale.value][attrs["name"]] = "";
+        }
+    }
+}
+
+const removeEmptyTranslations = _.throttle(() => {
+    Object.keys(proxyModelValue.value.translations).forEach(locale => {
+        let any = false;
+        Object.keys(proxyModelValue.value.translations[locale]).forEach(property => {
+            if (proxyModelValue.value.translations[locale][property]) {
+                any = true;
+
+                return true;
+            }
+        });
+        if (!any) {
+            delete proxyModelValue.value.translations[locale];
+        }
+    });
+}, 5000);
+
 const progressbar = computed(() => {
-    if (inputValue.value?.length > 0) {
-        const percent = (inputValue.value?.length / props.limit[1]) * 100;
+    if (proxyValue.value?.length > 0) {
+        const percent = (proxyValue.value?.length / props.limit[1]) * 100;
 
         return Math.round(percent) > 100 ? 100 : Math.round(percent);
     }
     return 0;
 });
 
-const buildInputValue = () => {
-    if (attrs.id) {
-        inputId.value = attrs.id;
-    } else if (attrs.name) {
-        inputId.value = attrs.name + "-" + Math.floor(Math.random() * 1000);
-    }
-
-    if (typeof proxyModelValue.value === "object" && proxyModelValue.value !== null) {
-        if (translation.value) {
-            if (!proxyModelValue.value.hasOwnProperty("translations")) {
-                proxyModelValue.value["translations"] = {};
-            }
-
-            proxyModelValue.value["translations"] = Object.assign({}, proxyModelValue.value["translations"]);
-
-            if (proxyModelValue.value.translations.hasOwnProperty(selectedLocale.value)) {
-                inputValue.value = proxyModelValue.value.translations[selectedLocale.value].hasOwnProperty(attrs.name)
-                                   ? proxyModelValue.value.translations[selectedLocale.value][attrs.name] : value.value
-                                                                                                            ? value.value
-                                                                                                            : "";
-            } else {
-                inputValue.value = "";
-            }
-        } else {
-            inputValue.value = proxyModelValue.value[attrs["name"]];
-        }
-    } else {
-        inputValue.value = proxyModelValue.value;
-    }
-    emit("update:value", inputValue.value);
-};
-const setInputValue = (value) => {
-    if (typeof proxyModelValue.value === "object" && proxyModelValue.value) {
-        if (translation.value) {
-            if (value) {
-                if (!proxyModelValue.value["translations"].hasOwnProperty(selectedLocale.value)) {
-                    proxyModelValue.value["translations"][selectedLocale.value] = {};
-                }
-                proxyModelValue.value["translations"][selectedLocale.value][attrs["name"]] = value;
-            } else if (proxyModelValue.value.translations.hasOwnProperty(selectedLocale.value)) {
-                if (proxyModelValue.value["translations"][selectedLocale.value].hasOwnProperty(attrs["name"])) {
-                    proxyModelValue.value["translations"][selectedLocale.value][attrs["name"]] = null;
-                    Object.keys(proxyModelValue.value.translations).forEach(locale => {
-                        let any = false;
-                        Object.keys(proxyModelValue.value.translations[locale]).forEach(property => {
-                            if (proxyModelValue.value.translations[locale][property]) {
-                                any = true;
-                                return true;
-                            }
-                        });
-                        if (!any) {
-                            delete proxyModelValue.value.translations[locale];
-                        }
-                    });
-                }
-            }
-        } else {
-            proxyModelValue.value[attrs["name"]] = value;
-        }
-    } else {
-        proxyModelValue.value = value;
-    }
-};
 const resize = () => {
     if (autoresize.value) {
         textarea.value.style.height = "auto";
-        if (inputValue.value) {
+        if (proxyValue.value) {
             textarea.value.style.height = `${textarea.value.scrollHeight + 2}px`;
         }
     }
 };
 
-watch(locale, value => {
-    if (selectedLocale.value !== value) {
-        selectedLocale.value = value;
-    }
-});
-watch(selectedLocale, value => {
-    if (selectedLocale.value !== locale.value) {
-        emit("update:locale", value);
-    }
-    buildInputValue();
-});
 
 onMounted(() => {
     if (autoresize.value) resize();
+
     watch(value, value => {
         resize();
-        inputValue.value = value;
-    });
-    watch(inputValue, value => {
-        emit("update:value", value);
-        setInputValue(value);
-        resize();
+        proxyValue.value = value;
     });
 });
 
-buildInputValue();
+defineExpose({focus: () => textarea.value.focus()});
 </script>
 <template>
     <template v-if="!inputId">id or name attribute is not defined</template>
     <template v-else>
         <div>
             <label :for="inputId"
-                   class="block font-medium text-sm mb-0.5">
+                   class="block font-bold text-sm mb-0.5">
                 <span>{{ label }}</span>
                 <span v-if="required"
                       class="px-1">*
@@ -187,18 +190,18 @@ buildInputValue();
                 <div class="w-full">
                     <textarea :id="inputId"
                               ref="textarea"
-                              v-model="inputValue"
+                              v-model="proxyValue"
                               :class="{'resize-none overflow-hidden' : autoresize}"
                               :rows="autoresize ? 1 : $attrs.rows"
                               class="input"
                               v-bind="$attrs"/>
                     <div v-if="limit"
                          class="w-full mt-2">
-                        <div :class="{'bg-green-700': inputValue?.length >= limit[0] && inputValue?.length <= limit[1], 'bg-orange-600': inputValue?.length < limit[0], 'bg-red-600' : inputValue?.length > limit[1]}"
+                        <div :class="{'bg-green-700': proxyValue?.length >= limit[0] && proxyValue?.length <= limit[1], 'bg-orange-600': proxyValue?.length < limit[0], 'bg-red-600' : proxyValue?.length > limit[1]}"
                              :style="`width: ${progressbar}%`"
                              class="h-1"></div>
                         <span v-if="limitLabel"
-                              class="text-xs">{{ progressbar }}% | {{ inputValue?.length }} / {{ limit[1] }}
+                              class="text-xs">{{ progressbar }}% | {{ proxyValue?.length }} / {{ limit[1] }}
                         </span>
                     </div>
                     <div v-if="legend"
@@ -223,7 +226,7 @@ buildInputValue();
                                 v-show="loc.code !== selectedLocale"
                                 class="px-4 py-2 text-sm hover:dark:bg-gray-900"
                                 type="button"
-                                @click="selectedLocale=loc.code">
+                                @click="store.dispatch('backend/formLocale', loc.code)">
                             {{ loc.name }}
                         </button>
                     </div>

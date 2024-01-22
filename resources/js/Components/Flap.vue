@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, toRef, watch } from "vue";
+import {onMounted, onUnmounted, toRef, watch} from "vue";
 
 const props = defineProps({
     modelValue: Boolean,
@@ -15,6 +15,7 @@ const props = defineProps({
         }
     },
     title: String,
+    titleClass: String,
     sm: Boolean,
     md: Boolean,
     lg: Boolean,
@@ -66,14 +67,31 @@ onUnmounted(() => {
     </transition>
     <transition name="flap-content">
         <div v-if="modelValue"
-             :class="[containerClass, {'w-[95%] sm:w-3/5 md:w-[50%] lg:w-1/3 xl:w-1/4 2xl:w-1/6' : sm || (!sm && !md && !lg && !xl) },
+             :class="[containerClass, {'w-[70%] sm:w-3/5 md:w-[50%] lg:w-1/3 xl:w-1/4 2xl:w-1/6' : sm || (!sm && !md && !lg && !xl) },
                  {'w-[95%] sm:w-2/3 md:w-[50%] lg:w-2/5 xl:w-1/3 2xl:w-1/4' : md},
                  {'w-[95%] sm:w-5/6 md:w-3/4 lg:w-2/3 xl:w-3/5 2xl:w-1/2' : lg},
                  {'w-[95%] sm:w-5/6 md:w-4/5 lg:w-3/4 xl:w-2/3 2xl:w-3/5' : xl}]"
              class="fixed right-0 top-0 bottom-0 shadow-2xl p-6 z-30 transition-all ease-in-out overflow-y-auto">
-            <h2 v-if="title"
-                class="mb-4">{{ title }}
-            </h2>
+            <slot name="title">
+                <div v-if="title"
+                     class="mb-4 flex justify-between items-center">
+                    <h2 :class="[titleClass]">{{ title }}</h2>
+                    <button class="btn" @click.prevent="close">
+                        <svg aria-hidden="true"
+                             class="w-6 h-6 stroke-gray-900 dark:stroke-white"
+                             data-slot="icon"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.5"
+                             viewBox="0 0 24 24"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 18 18 6M6 6l12 12"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"></path>
+                        </svg>
+                    </button>
+                </div>
+            </slot>
             <slot :toogle="toggle"/>
         </div>
     </transition>

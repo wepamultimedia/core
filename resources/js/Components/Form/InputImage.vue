@@ -1,7 +1,7 @@
 <script setup>
-import { reactive, computed, toRefs, useAttrs, watch } from "vue";
 import Flap from "@/Vendor/Core/Components/Flap.vue";
-import FileManager from "@/Vendor/Core/Components/Backend/FileManager.vue";
+import {computed, reactive, toRefs, useAttrs} from "vue";
+import FileManager from "@core/Components/Backend/FileManager.vue";
 
 const props = defineProps({
     showImage: {
@@ -11,8 +11,8 @@ const props = defineProps({
     buttonLabel: String,
     image: Object,
     buttonClass: {
-      type: String,
-      default: 'btn btn-secondary'
+        type: String,
+        default: "btn btn-secondary"
     },
     showInfo: {
         type: Boolean,
@@ -20,8 +20,13 @@ const props = defineProps({
     },
     reduce: Boolean,
     modelValue: String,
-    alt: String,
+    file_name: String,
     title: String,
+    alt_name: String,
+    url: {
+        type: String,
+        default: ""
+    },
     description: String,
     label: String,
     errors: {
@@ -36,21 +41,20 @@ const props = defineProps({
 
 const emits = defineEmits([
     "update:modelValue",
+    "update:url",
+    "update:file_name",
     "update:image",
     "update:title",
-    "update:alt",
+    "update:alt_name",
     "update:description",
     "change"
 ]);
 
 const attrs = useAttrs();
 
-const {
-          errors,
-          modelValue
-      } = toRefs(props);
+const {errors, modelValue} = toRefs(props);
 
-const error = computed(() =>{
+const error = computed(() => {
     for (const [errorKey, errorValue] of Object.entries(errors.value)) {
         const re = new RegExp("[.]" + attrs.name + "$");
         const rex = new RegExp("^" + attrs.name + "$");
@@ -66,47 +70,40 @@ const error = computed(() =>{
     }
 });
 
-watch(errors, value => {
-    for (const [errorKey, errorValue] of Object.entries(value)) {
-        const re = new RegExp("[.]" + attrs.name + "$");
-        const rex = new RegExp("^" + attrs.name + "$");
-        if (re.test(errorKey) || rex.test(errorKey)) {
-            if (typeof errorValue === "object") {
-                error.value = errorValue[0];
-            } else {
-                error.value = errorValue;
-            }
-            return;
-        } else {
-            error.value = null;
-        }
-    }
-});
-
 const fileManager = reactive({
     open: false,
-    selectedImage: null,
+    selectedImage: {},
     insert: image => {
         fileManager.open = false;
         fileManager.selectedImage = image;
         emits("update:image", image);
         emits("change", image);
         emits("update:modelValue", image.url);
+        emits("update:file_name", image.file);
+        emits("update:url", image.url);
         emits("update:title", image.name);
-        emits("update:alt", image.alt_name);
+        emits("update:alt_name", image.alt_name);
         emits("update:description", image.description);
     }
+});
+
+const proxyUrl = computed(() => {
+    if (fileManager.selectedImage.hasOwnProperty("url")) {
+        return fileManager.selectedImage.url;
+    }
+
+    return props.modelValue;
 });
 </script>
 <template>
     <div>
         <label v-if="label"
-               class="text-sm">{{ label }}
+               class="text-sm font-bold mr-2">{{ label }}
         </label>
-        <figure v-if="modelValue && showImage"
+        <figure v-if="proxyUrl !==  '' && showImage"
                 class="mb-4 mt-1">
-            <img :alt="alt"
-                 :src="modelValue"
+            <img :alt="alt_name"
+                 :src="proxyUrl"
                  class="rounded-lg">
         </figure>
         <button :class="[buttonClass, {'mt-1': label}]"
@@ -119,7 +116,8 @@ const fileManager = reactive({
         <Flap v-model="fileManager.open"
               close-background
               xl>
-            <FileManager @change="fileManager.insert" :extensions="extensions"></FileManager>
+            <FileManager :extensions="extensions"
+                         @change="fileManager.insert"></FileManager>
         </Flap>
     </div>
 </template>

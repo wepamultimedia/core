@@ -6,6 +6,7 @@ const props = defineProps({
     property: String,
     name: String,
     lg: Boolean,
+    xs: Boolean,
     label: [
         String,
         Array
@@ -90,12 +91,12 @@ const toggle = (event) => {
                    class="sr-only">
             <!-- line -->
             <div class="relative flex items-center w-[40px] h-[1.5rem]  rounded-full transition"
-                 :class="{'w-[60px] h-[2rem]': lg, 'bg-green-600 dark:bg-green-600': proxyModelValue, 'bg-gray-400 dark:bg-gray-900': !proxyModelValue}">
+                 :class="{'w-[60px] h-[2rem]': lg, 'w-[30px] h-[1rem]': xs, 'bg-green-600 dark:bg-green-600': proxyModelValue, 'bg-gray-400 dark:bg-gray-500': !proxyModelValue}">
                 <!-- dot -->
                 <div class="bg-white translate-x-1 w-4 h-4 rounded-full transition duration-500"
                      :class="[
-                         {'translate-x-[20px]': proxyModelValue && !lg, 'bg-skin-primary-0 ': proxyModelValue},
-                         {'w-[1.5rem] h-[1.5rem]': lg, 'translate-x-[32px]': proxyModelValue && lg}]"></div>
+                         {'translate-x-[20px]': proxyModelValue && !lg && !xs, 'bg-skin-primary-0 ': proxyModelValue},
+                         { 'w-[0.6rem] h-[0.6rem]': xs, 'translate-x-[16px]': proxyModelValue && xs, 'w-[1.5rem] h-[1.5rem]': lg, 'translate-x-[32px]': proxyModelValue && lg}]"></div>
             </div>
         </div>
         <!-- label On -->

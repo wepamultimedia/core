@@ -162,7 +162,7 @@ onMounted(() => {
     <div class="font-medium relative"
          v-bind="$attrs">
         <label v-if="label"
-               class="text-sm"
+               class="text-sm font-bold"
                @click.stop="open = !open">
             {{ label }}
             <span v-if="required">*</span>

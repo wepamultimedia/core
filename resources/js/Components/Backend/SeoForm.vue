@@ -1,44 +1,47 @@
 <script setup>
-import { computed, onBeforeMount, onMounted, reactive, ref, toRefs, watch } from "vue";
-import Textarea from "@/Vendor/Core/Components/Form/Textarea.vue";
-import Input from "@/Vendor/Core/Components/Form/Input.vue";
-import InputImage from "@/Vendor/Core/Components/Form/InputImage.vue";
-import Icon from "@/Vendor/Core/Components/Heroicon.vue";
-import Select from "@/Vendor/Core/Components/Select.vue";
-import ToggleButton from "@/Vendor/Core/Components/Form/ToggleButton.vue";
-import { usePage } from "@inertiajs/vue3";
+import Input from "@core/Components/Form/Input.vue";
+import InputImage from "@core/Components/Form/InputImage.vue";
+import Textarea from "@core/Components/Form/Textarea.vue";
+import ToggleButton from "@core/Components/Form/ToggleButton.vue";
+import Icon from "@core/Components/Heroicon.vue";
+import Select from "@core/Components/Select.vue";
+import {usePage} from "@inertiajs/vue3";
 import axios from "axios";
+import {computed, onBeforeMount, onMounted, reactive, ref, toRefs, watch} from "vue";
+import {useStore} from "vuex";
 
 const props = defineProps({
     seo: Object,
     locale: String,
     autocomplete: Boolean,
-    alias: String,
-    image: Object,
+    image: String,
+    imageUrl: String,
+    imageTitle: String,
+    imageAlt: String,
     title: String,
     description: String,
     pageType: String,
     articleType: String,
     changeFreq: String,
     priority: Number,
-    robots: Array
+    robots: Array,
+    slugPrefix: Object,
 });
-
 const {
-          seo,
-          locale,
-          autocomplete,
-          image,
-          title,
-          description,
-          robots,
-          pageType,
-          articleType
-      } = toRefs(props);
-
-
+    seo,
+    locale,
+    autocomplete,
+    image,
+    imageUrl,
+    imageTitle,
+    imageAlt,
+    title,
+    description,
+    robots,
+    pageType,
+    articleType
+} = toRefs(props);
 const emit = defineEmits(["update:locale", "update:seo"]);
-
 const form = reactive({
     id: null,
     controller: null,
@@ -46,7 +49,7 @@ const form = reactive({
     action: null,
     page_type: props.pageType || "website",
     article_type: props.articleType || "website",
-    image: {},
+    image: null,
     facebook_image: null,
     twitter_image: null,
     canonical: false,
@@ -64,9 +67,6 @@ const sections = reactive({
 });
 const showSeoAnalysis = ref(false);
 const showReadability = ref(false);
-
-const selected_locale = ref();
-
 const values = reactive({
     title: "",
     facebook_title: "",
@@ -75,7 +75,7 @@ const values = reactive({
     facebook_description: "",
     twitter_description: "",
     slug: "",
-    image: {},
+    image: "",
     image_title: "",
     image_alt: "",
     facebook_image: "",
@@ -176,13 +176,30 @@ const site_seo = ref({
     image_alt: null,
     slug: null
 });
-const googleLimits = {
-    title: {min: 40, max: 60},
-    description: {min: 140, max: 160}
-};
+const googleLimits = {title: {min: 40, max: 60}, description: {min: 140, max: 160}};
+const errors = computed(() => usePage().props.errors.seo);
 
-const errors = computed(() => {
-    return usePage().props.errors.seo;
+const formattedSlugWithUrl = computed(() => {
+    let slug = [usePage().props.default.baseUrl];
+
+    if (usePage().props.default.locales.length > 1 &&
+        (
+            (form.alias === "home" && useStore().getters["backend/formLocale"] !== usePage().props.default.defaultLocale)
+            || (usePage().props.default.locales.length > 1 && form.alias !== "home")
+        )) {
+        let formLocale = useStore().getters["backend/formLocale"];
+        slug.push(formLocale);
+    }
+
+    if (props.slugPrefix) {
+        slug.push(formatSlug(props.slugPrefix[useStore().getters["backend/formLocale"]]));
+    }
+
+    if (values.slug) {
+        slug.push(values.slug);
+    }
+
+    return slug.join("/");
 });
 
 function activeSeccion(section) {
@@ -192,90 +209,143 @@ function activeSeccion(section) {
     sections[section] = true;
 }
 
-function generateSlug(text) {
-    values.slug = text
-    .toString()
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]+/g, "")
-    .replace(/\_/g, "-")
-    .replace(/--+/g, "-")
-    .replace(/\-$/g, "");
+function formatSlug(text) {
+    return text
+        .toString()
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w-]+/g, "")
+        .replace(/\_/g, "-")
+        .replace(/--+/g, "-")
+        .replace(/\-$/g, "");
 }
 
 onBeforeMount(() => {
-    Object.keys(seo.value).filter(key => key in form).forEach(key => form[key] = seo.value[key]);
-    emit("update:seo", form);
+    Object.keys(seo.value).forEach(key => {
+        if (key === "translations") {
+            form[key] = Array.isArray(seo.value[key]) ? {} : seo.value[key];
+        } else {
+            form[key] = seo.value[key];
+        }
+    });
+    Object.keys(seo.value).filter(key => key in values).forEach(key => values[key] = seo.value[key]);
 });
 
 onMounted(() => {
-    watch(locale, value => {
-        if (selected_locale.value !== value) {
-            selected_locale.value = value;
-        }
-    });
-    watch(selected_locale, value => {
-        if (selected_locale.value !== locale.value) {
-            emit("update:locale", value);
-        }
-    });
-    watch(image, value => {
+    watch(image, (value, oldValue) => {
         if (form.autocomplete) {
-            values.image = value;
-            form.image = value.url;
-        }
-    });
-    watch(() => form.image, (value, oldValue) => {
-        values.image_title = values.image.name;
-        values.image_alt = values.image.alt_name;
+            let old = oldValue === null ? "" : oldValue;
 
-        if (!form.facebook_image || form.facebook_image === oldValue || form.autocomplete) {
-            form.facebook_image = values.image.url;
-            values.facebook_image_title = values.image.name;
-            values.facebook_image_alt = values.image.alt_name;
+            if(!values.image_url || values.image_url === old){
+                values.image = value;
+            }
+        }
+    });
+
+    watch(imageTitle, (value, oldValue) => {
+        if (form.autocomplete) {
+            values.image_title = value;
+            let old = oldValue === null ? "" : oldValue;
+
+            if (!values.facebook_image_title || values.facebook_image_title === old) {
+                values.facebook_image_title = value;
+            }
+
+            if (!values.twitter_image_title || values.twitter_image_title === old) {
+                values.twitter_image_title = value;
+            }
+        }
+    });
+
+    watch(imageAlt, (value, oldValue) => {
+        if (form.autocomplete) {
+            values.image_alt = value;
+            let old = oldValue === null ? "" : oldValue;
+
+            if (!values.facebook_image_alt || values.facebook_image_alt === old) {
+                values.facebook_image_alt = value;
+            }
+
+            if (!values.twitter_image_alt || values.twitter_image_alt === old) {
+                values.twitter_image_alt = value;
+            }
+        }
+    });
+
+    watch(() => values.image, (value, oldValue) => {
+        form.image = value;
+        let old = oldValue === null ? "" : oldValue;
+        //values.image_title = values.image.name;
+        //values.image_alt = values.image.alt_name;
+        //values.image_url = values.image.url;
+
+        if (!form.facebook_image_url || form.facebook_image_url === old) {
+            form.facebook_image = value;
+            values.facebook_image_title = values.image_title;
+            values.facebook_image_alt = values.image_alt;
+            values.facebook_image = value;
         }
 
-        if (!form.twitter_image || form.twitter_image === oldValue || form.autocomplete) {
-            form.twitter_image = values.image.url;
-            values.twitter_image_title = values.image.name;
-            values.twitter_image_alt = values.image.alt_name;
+        if (!form.twitter_image_url || form.twitter_image_url === old) {
+            form.twitter_image = value;
+            values.twitter_image_title = values.image_title;
+            values.twitter_image_alt = values.image_alt;
+            values.twitter_image = value;
         }
     });
-    watch(title, value => {
+
+    watch(title, (value, oldValue) => {
+        let old = oldValue === null ? "" : oldValue;
+
         if (form.autocomplete) {
-            values.title = value;
-            generateSlug(value);
+            if ((values.title === null || values.title !== "") || old === values.title) {
+                values.title = value;
+                values.slug = value;
+            }
         }
     });
-    watch(description, value => {
+
+    watch(description, (value, oldValue) => {
+        let old = oldValue === null ? "" : oldValue;
         if (form.autocomplete) {
-            values.description = value;
+            if ((values.description === null || values.description !== "") || old === values.description) {
+                values.description = value;
+            }
         }
     });
+
     watch(() => values.title, (value, oldValue) => {
+        let old = oldValue === null ? "" : oldValue;
         values.facebook_title = values.facebook_title === null ? "" : values.facebook_title;
-        if (values.facebook_title === oldValue) {
+        if (values.facebook_title === old) {
             values.facebook_title = value;
         }
 
         values.twitter_title = values.twitter_title === null ? "" : values.twitter_title;
-        if (values.twitter_title === oldValue) {
+        if (values.twitter_title === old) {
             values.twitter_title = value;
         }
     });
+
     watch(() => values.description, (value, oldValue) => {
+        let old = oldValue === null ? "" : oldValue;
         values.facebook_description = values.facebook_description === null ? "" : values.facebook_description;
-        if (values.facebook_description === oldValue) {
+        if (values.facebook_description === old) {
             values.facebook_description = value;
         }
         values.twitter_description = values.twitter_description === null ? "" : values.twitter_description;
-        if (values.twitter_description === oldValue) {
+        if (values.twitter_description === old) {
             values.twitter_description = value;
         }
     });
+
+    watch(() => values.slug, value => {
+        values.slug = formatSlug(value);
+    });
+
     watch(form, value => {
         emit("update:seo", value);
     });
@@ -316,53 +386,54 @@ onMounted(() => {
     <div class="bg-white dark:bg-gray-600 border border-t-0 border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-t-none">
         <div class="p-6 border-b border-gray-300 dark:border-gray-700">
             <ToggleButton v-model="form.autocomplete"
-                          :label="__('autocomplete')"/>
+                          :label="__('autocomplete')"
+            />
         </div>
         <!-- general -->
         <div v-show="sections.general"
-             class="flex flex-col lg:flex-row divide-y lg:divide-x lg:divide-y-0 divice-gray-300 dark:divide-gray-700">
-            <div class="lg:w-1/2 p-6">
-                <div class="">
-                    <Input v-model="form"
-                           v-model:locale="selected_locale"
-                           v-model:value="values.slug"
-                           :errors="errors"
-                           :label="__('slug')"
-                           name="slug"
-                           translation></Input>
-                    <div class="mt-2">
-                        <a :href="usePage().props.default.baseUrl + '/' + values.slug"
-                           class="text-sm"
-                           target="_blank">{{ usePage().props.default.baseUrl + "/" }}{{ values.slug !== null ? values.slug : ''}}
-                        </a>
+             class="grid divide-y divice-gray-300 dark:divide-gray-700">
+            <div class="grid lg:grid-cols-2 divide-y lg:divide-x lg:divide-y-0 divice-gray-300 dark:divide-gray-700">
+                <div class="p-6">
+                    <div class="mb-8">
+                        <Input v-model="form"
+                               v-model:value="values.slug"
+                               :errors="errors"
+                               :label="__('slug')"
+                               name="slug"
+                               translation></Input>
+                        <div class="mt-2">
+                            <a :href="usePage().props.default.baseUrl + '/' + values.slug"
+                               class="text-sm"
+                               target="_blank">{{ formattedSlugWithUrl }}
+                            </a>
+                        </div>
+                        <div class="py-4">
+                            <ToggleButton v-model="form.canonical"
+                                          :label="__('canonical_url')"/>
+                        </div>
                     </div>
-                    <div class="py-4">
-                        <ToggleButton v-model="form.canonical"
-                                      :label="__('canonical_url')"/>
+
+                </div>
+                <div class="p-6">
+                    <div class="mb-4">
+                        <Input v-model="form"
+                               :errors="errors"
+                               :label="__('keyword')"
+                               name="keyword"
+                               translation></Input>
                     </div>
-                </div>
-                <div class="mb-4">
-                    <Input v-model="form"
-                           v-model:locale="selected_locale"
-                           :errors="errors"
-                           :label="__('keyword')"
-                           name="keyword"
-                           translation></Input>
-                </div>
-                <div class="mb-4">
-                    <Input v-model="form"
-                           v-model:locale="selected_locale"
-                           v-model:value="values.title"
-                           :errors="errors"
-                           :label="__('seo_title')"
-                           :limit="[googleLimits.title.min,googleLimits.title.max]"
-                           limit-label
-                           name="title"
-                           translation></Input>
-                </div>
-                <div class="mb-4">
+                    <div class="mb-4">
+                        <Input v-model="form"
+                               v-model:value="values.title"
+                               :errors="errors"
+                               :label="__('seo_title')"
+                               :limit="[googleLimits.title.min,googleLimits.title.max]"
+                               limit-label
+                               name="title"
+                               translation></Input>
+                    </div>
+                    <div class="mb-4">
                     <Textarea v-model="form"
-                              v-model:locale="selected_locale"
                               v-model:value="values.description"
                               :autoresize="false"
                               :errors="errors"
@@ -372,34 +443,34 @@ onMounted(() => {
                               name="description"
                               rows="4"
                               translation></Textarea>
-                </div>
-            </div>
-            <div class="lg:w-1/2 p-6">
-                <div class="sm:w-1/2 lg:w-3/4 xl:w-1/2">
-                    <InputImage v-model="form.image"
-                                v-model:image="values.image"
-                                :errors="errors"
-                                :label="__('cover_image')"
-                                name="image"/>
-                </div>
-                <div class="mt-4">
-                    <Input v-model="form"
-                           v-model:locale="selected_locale"
-                           v-model:value="values.image_title"
-                           :errors="errors"
-                           :label="__('cover_title')"
-                           name="facebook_image_title"
-                           translation/>
-                </div>
-                <div class="mt-4">
-                    <Textarea v-model="form"
-                              v-model:locale="selected_locale"
-                              v-model:value="values.image_alt"
-                              :autoresize="false"
-                              :errors="errors"
-                              :label="__('cover_alt')"
-                              name="image_alt"
-                              translation/>
+                    </div>
+                    <div>
+                        <div class="sm:w-1/2 lg:w-3/4 xl:w-1/2 mb-4">
+                            <InputImage v-model:alt_name="values.image_alt"
+                                        v-model="form.image"
+                                        v-model:title="values.image_title"
+                                        v-model:url="values.image"
+                                        :errors="errors"
+                                        :label="__('cover_image')"
+                                        name="image"/>
+                        </div>
+                        <div>
+                            <Input v-model="form"
+                                   v-model:value="values.image_title"
+                                   :errors="errors"
+                                   :label="__('cover_title')"
+                                   class="mb-4"
+                                   name="facebook_image_title"
+                                   translation/>
+                            <Textarea v-model="form"
+                                      v-model:value="values.image_alt"
+                                      :autoresize="false"
+                                      :errors="errors"
+                                      :label="__('cover_alt')"
+                                      name="image_alt"
+                                      translation/>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -427,20 +498,18 @@ onMounted(() => {
         <!-- social -->
         <div v-show="sections.social">
             <div class="grid lg:grid-cols-2 divide-y  lg:divide-y-0 divide-gray-300 dark:divide-gray-700">
-                <h3 class="lg:col-span-full p-4 lg:border-b border-gray-300 dark:border-gray-700">Facebook</h3>
-                <div class="p-6">
-                    <div class="mt-4">
+                <div class="p-6 grid gap-6">
+                    <h3 class="lg:col-span-full lg:border-b border-gray-300 dark:border-gray-700">Facebook</h3>
+                    <div>
                         <Input v-model="form"
-                               v-model:locale="selected_locale"
                                v-model:value="values.facebook_title"
                                :errors="errors"
                                :label="__('facebook_title')"
                                name="facebook_title"
                                translation></Input>
                     </div>
-                    <div class="mt-4">
+                    <div>
                         <Textarea v-model="form"
-                                  v-model:locale="selected_locale"
                                   v-model:value="values.facebook_description"
                                   :autoresize="false"
                                   :errors="errors"
@@ -449,27 +518,24 @@ onMounted(() => {
                                   rows="4"
                                   translation></Textarea>
                     </div>
-                </div>
-                <div class="p-6">
-                    <div class="mb-4">
+                    <div class="grid gap-6">
                         <div class="sm:w-1/2 lg:w-3/4 xl:w-1/2">
-                            <InputImage v-model="form.facebook_image"
-                                        v-model:alt="values.facebook_image_alt"
+                            <InputImage v-model:alt="values.facebook_image_alt"
+                                        v-model="form.facebook_image"
                                         v-model:title="values.facebook_image_title"
+                                        v-model:url="values.facebook_image"
                                         :label="__('cover_image')"/>
                         </div>
-                        <div class="mt-4">
+                        <div>
                             <Input v-model="form"
-                                   v-model:locale="selected_locale"
                                    v-model:value="values.facebook_image_title"
                                    :errors="errors"
                                    :label="__('cover_title')"
                                    name="facebook_image_title"
                                    translation/>
                         </div>
-                        <div class="mt-4">
+                        <div>
                             <Textarea v-model="form"
-                                      v-model:locale="selected_locale"
                                       v-model:value="values.facebook_image_alt"
                                       :autoresize="false"
                                       :errors="errors"
@@ -479,22 +545,18 @@ onMounted(() => {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 border-gray-300 dark:border-gray-700 divide-y  lg:divide-y-0 divide-gray-300 dark:divide-gray-700">
-                <h3 class="lg:col-span-full p-4 lg:border-b border-gray-300 dark:border-gray-700">Twitter</h3>
-                <div class="p-6">
-                    <div class="mt-4">
+                <div class="p-6 grid gap-6">
+                    <h3 class="lg:col-span-full lg:border-b border-gray-300 dark:border-gray-700">Twitter</h3>
+                    <div>
                         <Input v-model="form"
-                               v-model:locale="selected_locale"
                                v-model:value="values.twitter_title"
                                :errors="errors"
                                :label="__('twitter_title')"
                                name="twitter_title"
                                translation></Input>
                     </div>
-                    <div class="mt-4">
+                    <div>
                         <Textarea v-model="form"
-                                  v-model:locale="selected_locale"
                                   v-model:value="values.twitter_description"
                                   :autoresize="false"
                                   :errors="errors"
@@ -503,27 +565,24 @@ onMounted(() => {
                                   rows="4"
                                   translation></Textarea>
                     </div>
-                </div>
-                <div class="p-6">
-                    <div class="mb-4">
+                    <div class="grid gap-6">
                         <div class="sm:w-1/2 lg:w-3/4 xl:w-1/2">
-                            <InputImage v-model="form.twitter_image"
-                                        v-model:alt="values.twitter_image_alt"
+                            <InputImage v-model:alt="values.twitter_image_alt"
+                                        v-model="form.twitter_image"
                                         v-model:title="values.twitter_image_title"
+                                        v-model:url="values.twitter_image"
                                         :label="__('cover_image')"/>
                         </div>
-                        <div class="mt-4">
+                        <div class="">
                             <Input v-model="form"
-                                   v-model:locale="selected_locale"
                                    v-model:value="values.twitter_image_title"
                                    :errors="errors"
                                    :label="__('cover_title')"
                                    name="twitter_image_title"
                                    translation/>
                         </div>
-                        <div class="mt-4">
+                        <div class="">
                             <Textarea v-model="form"
-                                      v-model:locale="selected_locale"
                                       v-model:value="values.twitter_image_alt"
                                       :autoresize="false"
                                       :errors="errors"
@@ -573,141 +632,151 @@ onMounted(() => {
             </div>
         </div>
         <!-- google preview -->
-        <div class="p-6 border-t border-gray-300 dark:border-gray-700 ">
-            <h2 class="pb-4">{{ __("preview_google") }}</h2>
-            <!-- desktop -->
-            <h3>{{ __("desktop") }}</h3>
-            <div class="max-w-[600px]">
-                <div class="mb-[12px] flex items-center overflow-ellipsis pt-[1px] leading-[16px] text-[14px]">
-                    <div class="w-[28px] h-[28px] flex items-center justify-center mr-[12px]">
-                        <img :src="`${$page.props.default.storageUrl}/icons/android-icon-48x48.png`"
-                             alt=""
-                             class="w-[18px] h-[18px]">
-                    </div>
-                    <div class="flex-auto">
-                        <div class="text-[14px] font-arial">{{ site_seo.title }}</div>
-                        <div class="text-[12px] font-arial min-w-max">{{ $page.props.default.baseUrl }}
-                            <svg v-if="values.slug"
-                                 aria-hidden="true"
-                                 class="w-2.5 h-2.5 inline-block"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="1.5"
-                                 viewBox="0 0 24 24"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"></path>
-                            </svg>
-                            {{ values.slug }}
-                            <svg aria-hidden="true"
-                                 class="inline-block w-5 h-5 ml-2"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="1.5"
-                                 viewBox="0 0 24 24"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div class="font-arial text-[20px] text-[#1a0dab] dark:text-[#8ab4f8]">{{
-                            values.title?.length > googleLimits.title.max
-                            ? values.title.substring(0, googleLimits.title.max - 1) + "..."
-                            : values.title
-                        }}
-                    </div>
-                    <div class="font-arial leading-[1.58rem] text-[14px]">{{
-                            values.description?.length > googleLimits.description.max
-                            ? values.description.substring(0, googleLimits.description.max - 1) + "..."
-                            : values.description
-                        }}
-                    </div>
-                </div>
-            </div>
-            <!-- mobile -->
-            <h3 class="mt-10">{{ __("mobile") }}</h3>
-            <div class="max-w-[400px]">
-                <div class="mb-[12px] flex items-center overflow-ellipsis pt-[1px] leading-[16px] text-[14px]">
-                    <div class="w-[28px] h-[28px] flex items-center justify-center mr-[12px]">
-                        <img :src="`${$page.props.default.storageUrl}/icons/android-icon-48x48.png`"
-                             alt=""
-                             class="w-[18px] h-[18px]">
-                    </div>
-                    <div class="flex-auto">
-                        <div class="text-[14px] font-arial">{{ site_seo.title }}</div>
-                        <div class="text-[12px] font-arial min-w-max">
-                            {{ $page.props.default.baseUrl }}
-                            <svg v-if="values.slug"
-                                 aria-hidden="true"
-                                 class="w-2.5 h-2.5 inline-block"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="1.5"
-                                 viewBox="0 0 24 24"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"></path>
-                            </svg>
-                            {{ values.slug }}
-                            <svg aria-hidden="true"
-                                 class="inline-block w-5 h-5 ml-2"
-                                 fill="none"
-                                 stroke="currentColor"
-                                 stroke-width="1.5"
-                                 viewBox="0 0 24 24"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div class="font-arial text-[20px] text-[#1a0dab] dark:text-[#8ab4f8]">
-                        {{
-                            values.title?.length > googleLimits.title.max
-                            ? values.title.substring(0, googleLimits.title.max - 1) + "..."
-                            : values.title
-                        }}
-                    </div>
-                    <div class="font-arial leading-[1.58rem] text-[14px]">{{
-                            values.description?.length > googleLimits.description.max
-                            ? values.description.substring(0, googleLimits.description.max - 1) + "..."
-                            : values.description
-                        }}
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="border-t dark:border-gray-700">
             <div class="flex items-center justify-between cursor-pointer bg-gray-300 dark:bg-gray-700 p-4"
                  @click="showSeoAnalysis = !showSeoAnalysis">
-                <h3>{{ __("seo_analysis") }}</h3>
+                <h3>{{ __("preview_google") }}</h3>
                 <Icon :icon="!showSeoAnalysis ? 'chevron-up' : 'chevron-down'"
                       class="dark:fill-white"></Icon>
             </div>
             <div v-if="showSeoAnalysis"
-                 class="p-4">...
+                 class="p-4">
+                <div>
+                    <!-- desktop -->
+                    <h3>{{ __("desktop") }}</h3>
+                    <div class="max-w-[600px]">
+                        <div class="mb-[12px] flex items-center overflow-ellipsis pt-[1px] leading-[16px] text-[14px]">
+                            <div class="w-[28px] h-[28px] flex items-center justify-center mr-[12px]">
+                                <img :src="`${$page.props.default.storageUrl}/icons/android-icon-48x48.png`"
+                                     alt=""
+                                     class="w-[18px] h-[18px]">
+                            </div>
+                            <div class="flex-auto">
+                                <div class="text-[14px] font-arial">{{ site_seo.title }}</div>
+                                <div class="text-[12px] font-arial min-w-max">{{ $page.props.default.baseUrl }}
+                                    <svg v-if="values.slug"
+                                         aria-hidden="true"
+                                         class="w-2.5 h-2.5 inline-block"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="1.5"
+                                         viewBox="0 0 24 24"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                                              stroke-linecap="round"
+                                              stroke-linejoin="round"></path>
+                                    </svg>
+                                    {{ values.slug }}
+                                    <svg aria-hidden="true"
+                                         class="inline-block w-5 h-5 ml-2"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="1.5"
+                                         viewBox="0 0 24 24"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
+                                              stroke-linecap="round"
+                                              stroke-linejoin="round"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="font-arial text-[20px] text-[#1a0dab] dark:text-[#8ab4f8]">{{
+                                    values.title?.length > googleLimits.title.max
+                                        ? values.title.substring(0, googleLimits.title.max - 1) + "..."
+                                        : values.title
+                                }}
+                            </div>
+                            <div class="font-arial leading-[1.58rem] text-[14px]">{{
+                                    values.description?.length > googleLimits.description.max
+                                        ? values.description.substring(0, googleLimits.description.max - 1) + "..."
+                                        : values.description
+                                }}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- mobile -->
+                    <h3 class="mt-10">{{ __("mobile") }}</h3>
+                    <div class="max-w-[400px]">
+                        <div class="mb-[12px] flex items-center overflow-ellipsis pt-[1px] leading-[16px] text-[14px]">
+                            <div class="w-[28px] h-[28px] flex items-center justify-center mr-[12px]">
+                                <img :src="`${$page.props.default.storageUrl}/icons/android-icon-48x48.png`"
+                                     alt=""
+                                     class="w-[18px] h-[18px]">
+                            </div>
+                            <div class="flex-auto">
+                                <div class="text-[14px] font-arial">{{ site_seo.title }}</div>
+                                <div class="text-[12px] font-arial min-w-max">
+                                    {{ $page.props.default.baseUrl }}
+                                    <svg v-if="values.slug"
+                                         aria-hidden="true"
+                                         class="w-2.5 h-2.5 inline-block"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="1.5"
+                                         viewBox="0 0 24 24"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                                              stroke-linecap="round"
+                                              stroke-linejoin="round"></path>
+                                    </svg>
+                                    {{ values.slug }}
+                                    <svg aria-hidden="true"
+                                         class="inline-block w-5 h-5 ml-2"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="1.5"
+                                         viewBox="0 0 24 24"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
+                                              stroke-linecap="round"
+                                              stroke-linejoin="round"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="font-arial text-[20px] text-[#1a0dab] dark:text-[#8ab4f8]">
+                                {{
+                                    values.title?.length > googleLimits.title.max
+                                        ? values.title.substring(0, googleLimits.title.max - 1) + "..."
+                                        : values.title
+                                }}
+                            </div>
+                            <div class="font-arial leading-[1.58rem] text-[14px]">{{
+                                    values.description?.length > googleLimits.description.max
+                                        ? values.description.substring(0, googleLimits.description.max - 1) + "..."
+                                        : values.description
+                                }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="border-t dark:border-gray-700 rounded-b-lg">
-            <div class="flex items-center justify-between cursor-pointer bg-gray-300 dark:bg-gray-700 p-4 rounded-b-lg"
-                 @click="showReadability = !showReadability">
-                <h3>{{ __("readability") }}</h3>
-                <Icon :icon="!showReadability ? 'chevron-up' : 'chevron-down'"
-                      class="dark:fill-white"></Icon>
-            </div>
-            <div v-if="showReadability"
-                 class="p-4">...
-            </div>
-        </div>
+        <!--        <div class="border-t dark:border-gray-700">-->
+        <!--            <div class="flex items-center justify-between cursor-pointer bg-gray-300 dark:bg-gray-700 p-4"-->
+        <!--                 @click="showSeoAnalysis = !showSeoAnalysis">-->
+        <!--                <h3>{{ __("seo_analysis") }}</h3>-->
+        <!--                <Icon :icon="!showSeoAnalysis ? 'chevron-up' : 'chevron-down'"-->
+        <!--                      class="dark:fill-white"></Icon>-->
+        <!--            </div>-->
+        <!--            <div v-if="showSeoAnalysis"-->
+        <!--                 class="p-4">...-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--        <div class="border-t dark:border-gray-700 rounded-b-lg">-->
+        <!--            <div class="flex items-center justify-between cursor-pointer bg-gray-300 dark:bg-gray-700 p-4 rounded-b-lg"-->
+        <!--                 @click="showReadability = !showReadability">-->
+        <!--                <h3>{{ __("readability") }}</h3>-->
+        <!--                <Icon :icon="!showReadability ? 'chevron-up' : 'chevron-down'"-->
+        <!--                      class="dark:fill-white"></Icon>-->
+        <!--            </div>-->
+        <!--            <div v-if="showReadability"-->
+        <!--                 class="p-4">...-->
+        <!--            </div>-->
+        <!--        </div>-->
     </div>
 </template>
 <style scoped></style>

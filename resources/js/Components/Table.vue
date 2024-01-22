@@ -158,7 +158,7 @@ onMounted(() => {
                         </template>
                         <td v-if="showActions()"
                             :class="{'div-y' : divideY || divide}"
-                            class="px-2 py-3 text-center">
+                            class="px-2 py-3 text-center w-[1%]">
                             <slot :item="item"
                                   name="action">
                                 <slot :item="item"
