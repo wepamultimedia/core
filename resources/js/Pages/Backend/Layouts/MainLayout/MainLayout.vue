@@ -1,14 +1,15 @@
 <script setup>
-import { Head, Link } from "@inertiajs/vue3";
-import { Inertia } from "@inertiajs/inertia";
-import Sidebar from "@pages/Vendor/Core/Backend/Layouts/MainLayout/Partials/Sidebar.vue";
+import DarkModeToggle from "@/Vendor/Core/Components/DarkModeToggle.vue";
 import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
 import FlashAlertQueue from "@/Vendor/Core/Components/FlashAlert/FlashAlertQueue.vue";
-import DarkModeToggle from "@/Vendor/Core/Components/DarkModeToggle.vue";
-import { computed, onMounted, ref } from "vue";
-import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
-import { useStore } from "vuex";
 import SeoInject from "@core/Components/Frontend/SeoInject.vue";
+import Heroicon from "@core/Components/Heroicon.vue";
+import {Inertia} from "@inertiajs/inertia";
+import {Link} from "@inertiajs/vue3";
+import Sidebar from "@pages/Vendor/Core/Backend/Layouts/MainLayout/Partials/Sidebar.vue";
+import {breakpointsTailwind, useBreakpoints} from "@vueuse/core";
+import {computed, onMounted, ref} from "vue";
+import {useStore} from "vuex";
 
 const props = defineProps({
     title: String,
@@ -61,7 +62,7 @@ const logout = () => {
                 <button :class="{'-rotate-90' : !showDesktop}"
                         class="h-6 w-6 ease-in-out duration-500 hidden md:block"
                         @click="showDesktop = !showDesktop">
-                    <icon class="w-6 stroke-skin-base  fill-skin-base "
+                    <Heroicon class="w-6 stroke-skin-base  fill-skin-base "
                           icon="menu"
                           outline/>
                 </button>
@@ -70,7 +71,7 @@ const logout = () => {
                         v-show="!showMobile"
                         class="h-6 w-6 ease-in-out duration-500 md:hidden"
                         @click="showMobile = !showMobile">
-                    <icon class="w-6 stroke-skin-base  fill-skin-base "
+                    <Heroicon class="w-6 stroke-skin-base  fill-skin-base "
                           icon="menu"
                           outline/>
                 </button>
@@ -165,17 +166,17 @@ const logout = () => {
 </template>
 <style scoped>
 .logo-white {
-    background-image : url("/vendor/core/images/logo-white.svg");
+    background-image: url("/vendor/core/images/logo-white.svg");
     @apply bg-contain bg-left-bottom bg-no-repeat h-10
 }
 
 .dark .logo {
-    background-image : url("/vendor/core/images/logo-white.svg");
+    background-image: url("/vendor/core/images/logo-white.svg");
     @apply bg-contain bg-left-bottom bg-no-repeat h-10
 }
 
 .logo {
-    background-image : url("/vendor/core/images/logo.svg");
+    background-image: url("/vendor/core/images/logo.svg");
     @apply bg-contain bg-left-bottom bg-no-repeat h-10
 }
 </style>

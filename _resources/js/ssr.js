@@ -4,11 +4,11 @@ import {createInertiaApp} from "@inertiajs/vue3";
 import createServer from "@inertiajs/vue3/server";
 import {resolvePageComponent} from "laravel-vite-plugin/inertia-helpers";
 import {ZiggyVue} from "../../vendor/tightenco/ziggy/dist/vue.m";
-import Heroicon from "@/Vendor/Core/Components/Heroicon.vue";
+import Heroicon from "@core/Components/Heroicon.vue";
 import InlineSvg from "vue-inline-svg";
 import store from "@/Store/index";
 import {translations} from "@core/Mixins/translations";
-import {aliasSlug} from "@/Vendor/Core/Mixins/alias";
+import {aliasSlug} from "@core/Mixins/alias";
 
 createServer((page) =>
     createInertiaApp({
@@ -24,10 +24,10 @@ createServer((page) =>
                     ...page.props.ziggy,
                     location: new URL(page.props.ziggy.location)
                 })
-                .mixin(translations)
-                .mixin(aliasSlug)
                 .component("inline-svg", InlineSvg)
-                .component("icon", Heroicon);
+                .component("icon", Heroicon)
+                .mixin(translations)
+                .mixin(aliasSlug);
         }
     })
 );

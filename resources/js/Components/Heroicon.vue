@@ -1,6 +1,6 @@
 <script setup>
+import {computed, toRefs} from "vue";
 import InlineSvg from "vue-inline-svg";
-import { computed, toRefs } from "vue";
 
 const props = defineProps({
     icon: String,
@@ -12,10 +12,10 @@ const props = defineProps({
 });
 
 const {
-          outline,
-          icon,
-          size
-      } = toRefs(props);
+    outline,
+    icon,
+    size
+} = toRefs(props);
 
 const src = computed(() => {
     if (!outline.value) {
@@ -35,7 +35,7 @@ const defaultClass = computed(() => {
 </script>
 <template>
     <InlineSvg v-if="icon"
-               :src="src"
-               :class="[defaultClass]"/>
+               :class="[defaultClass]"
+               :src="src"/>
 </template>
 <style scoped></style>

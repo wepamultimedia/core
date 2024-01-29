@@ -1,12 +1,12 @@
 <script setup>
 import HorizontalNavbar from "@pages/Vendor/Core/Frontend/Layouts/MainLayout/Partials/HorizontalNavbar/HorizontalNavbar.vue";
-import MenuButton from "@/Vendor/Core/Components/Frontend/HorizontalNavbar/Partials/MenuButton.vue";
-import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
+import MenuButton from "@core/Components/Frontend/HorizontalNavbar/Partials/MenuButton.vue";
+import Dropdown from "@core/Components/Dropdown.vue";
 import { Link, usePage } from "@inertiajs/vue3";
 import { onMounted, ref } from "vue";
-import DarkModeToggle from "@/Vendor/Core/Components/DarkModeToggle.vue";
-import SeoInject from "@/Vendor/Core/Components/Frontend/SeoInject.vue";
-import SocialNetworks from "@/Vendor/Core/Components/Frontend/SocialNetworks.vue"
+import DarkModeToggle from "@core/Components/DarkModeToggle.vue";
+import SeoInject from "@core/Components/Frontend/SeoInject.vue";
+import SocialNetworks from "@core/Components/Frontend/SocialNetworks.vue"
 import { useStore } from "vuex";
 
 const store = useStore();

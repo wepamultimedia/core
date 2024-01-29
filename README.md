@@ -26,8 +26,9 @@ npm install -D vue-screen@next
 npm install -D @inertiajs/progress
 npm install -D tailwind-scrollbar,
 npm install -D sass
+npm install -D ckeditor5-classic-core
 
-npm i -D vuex@next @vueuse/core vue-inline-svg@next vue-screen@next @inertiajs/progress tailwind-scrollbar sass
+npm i -D vuex@next @vueuse/core vue-inline-svg@next vue-screen@next @inertiajs/progress tailwind-scrollbar sass ckeditor5-classic-core
 ```
 
 ### Vendor Publish
@@ -93,5 +94,9 @@ DO_DEFAULT_REGION=ams3
 DO_BUCKET=wepaspace
 DO_ENDPOINT=https://ams3.digitaloceanspaces.com
 DO_ROOT=
+
+```
+## Heroku
+```
 
 ```
