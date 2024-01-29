@@ -2,13 +2,13 @@
 
 namespace Wepa\Core;
 
-use Config;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Inertia\Ssr\HttpGateway;
 use Laravel\Fortify\Fortify;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -23,6 +23,7 @@ use Wepa\Core\Events\SeoModelDestroyedEvent;
 use Wepa\Core\Events\SeoModelRequestEvent;
 use Wepa\Core\Events\SeoModelSavedEvent;
 use Wepa\Core\Events\SitemapUpdatedEvent;
+use Wepa\Core\Http\Inertia\InertiaHttpGateway;
 use Wepa\Core\Http\Middleware\Backend;
 use Wepa\Core\Http\Middleware\Frontend;
 use Wepa\Core\Http\Middleware\Locale;
@@ -32,6 +33,10 @@ use Wepa\Core\Models\Permission;
 
 class CoreServiceProvider extends PackageServiceProvider
 {
+    public $bindings = [
+        HttpGateway::class => InertiaHttpGateway::class
+    ];
+
     public function bootingPackage()
     {
         Event::listen(SitemapUpdatedEvent::class, GenerateSitemapJob::class);
@@ -48,65 +53,65 @@ class CoreServiceProvider extends PackageServiceProvider
         ], ['core', 'core-assets']);
 
         $this->publishes([
-            __DIR__.'/../src/CoreServiceProvider.php' => app_path('Providers/CoreServiceProvider.php'),
+            __DIR__ . '/../src/CoreServiceProvider.php' => app_path('Providers/CoreServiceProvider.php'),
         ], ['core-provider']);
 
         // Migrations
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->publishes([
-            __DIR__.'/../database/migrations/' => database_path('migrations'),
+            __DIR__ . '/../database/migrations/' => database_path('migrations'),
         ], ['core', 'core-migrations']);
 
         // JS Components
         $this->publishes([
-            __DIR__.'/../resources/js/Components' => resource_path('js/Vendor/Core/Components'),
+            __DIR__ . '/../resources/js/Components' => resource_path('js/Vendor/Core/Components'),
         ], ['core', 'core-components']);
 
         // JS Mixins
         $this->publishes([
-            __DIR__.'/../resources/js/Mixins' => resource_path('js/Vendor/Core/Mixins'),
+            __DIR__ . '/../resources/js/Mixins' => resource_path('js/Vendor/Core/Mixins'),
         ], ['core', 'core-mixins']);
 
         // JS Store
         $this->publishes([
-            __DIR__.'/../_resources/js/Store' => resource_path('js/Store'),
+            __DIR__ . '/../_resources/js/Store' => resource_path('js/Store'),
         ], ['core', 'core-store']);
 
         // JS Pages
         $this->publishes([
-            __DIR__.'/../resources/js/Pages' => resource_path('js/Pages/Vendor/Core'),
+            __DIR__ . '/../resources/js/Pages' => resource_path('js/Pages/Vendor/Core'),
         ], ['core', 'core-pages']);
 
         // JS Backend
         $this->publishes([
-            __DIR__.'/../resources/js/Pages/Backend' => resource_path('js/Pages/Vendor/Core/Backend'),
+            __DIR__ . '/../resources/js/Pages/Backend' => resource_path('js/Pages/Vendor/Core/Backend'),
         ], ['core', 'core-backend']);
 
         $this->publishes([
-            __DIR__.'/../resources/js/Pages/Frontend' => resource_path('js/Pages/Vendor/Core/Frontend'),
+            __DIR__ . '/../resources/js/Pages/Frontend' => resource_path('js/Pages/Vendor/Core/Frontend'),
         ], ['core', 'core-frontend']);
 
         // Framework files
         $this->publishes([
-            __DIR__.'/../_app' => base_path('core/app'),
+            __DIR__ . '/../_app' => base_path('core/app'),
         ], ['core']);
 
         $this->publishes([
-            __DIR__.'/../_config' => base_path('core/config'),
+            __DIR__ . '/../_config' => base_path('core/config'),
         ], ['core']);
 
         $this->publishes([
-            __DIR__.'/../_resources' => base_path('core/resources'),
+            __DIR__ . '/../_resources' => base_path('core/resources'),
         ], ['core']);
 
         $this->publishes([
-            __DIR__.'/../_root/.env.example' => base_path('core/.env.example'),
-            __DIR__.'/../_root/tailwind.config.js' => base_path('core/tailwind.config.js'),
-            __DIR__.'/../_root/vite.config.js' => base_path('core/vite.config.js'),
+            __DIR__ . '/../_root/.env.example' => base_path('core/.env.example'),
+            __DIR__ . '/../_root/tailwind.config.js' => base_path('core/tailwind.config.js'),
+            __DIR__ . '/../_root/vite.config.js' => base_path('core/vite.config.js'),
         ], ['core']);
 
         $this->publishes([
-            __DIR__.'/../_routes' => base_path('core/routes'),
+            __DIR__ . '/../_routes' => base_path('core/routes'),
         ], ['core']);
     }
 
@@ -210,7 +215,7 @@ class CoreServiceProvider extends PackageServiceProvider
          * If the config file is also publishable, it will merge with that file
          */
         $this->mergeConfigFrom(
-            __DIR__.'/../config/core.php',
+            __DIR__ . '/../config/core.php',
             'core'
         );
 
