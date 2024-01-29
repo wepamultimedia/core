@@ -1,13 +1,11 @@
 <script setup>
-import {computed, reactive, ref, toRefs, useAttrs, watch} from "vue";
-import Dropdown from "@/Vendor/Core/Components/Dropdown.vue";
-import {component as CKEditor} from "@ckeditor/ckeditor5-vue";
-import Editor from "wepa-ckeditor5-filemanager";
-import Flap from "@/Vendor/Core/Components/Flap.vue";
-import FileManager from "@/Vendor/Core/Components/Backend/FileManager.vue";
+import FileManager from "@core/Components/Backend/FileManager.vue";
+import Dropdown from "@core/Components/Dropdown.vue";
+import Flap from "@core/Components/Flap.vue";
 import {usePage} from "@inertiajs/vue3";
-import {useStore} from "vuex";
 import _ from "lodash";
+import {computed, onMounted, reactive, toRefs, useAttrs} from "vue";
+import {useStore} from "vuex";
 
 const props = defineProps({
     modelValue: [String, Object],
@@ -30,122 +28,40 @@ const props = defineProps({
     },
     debug: Boolean
 });
-
-
 const defaultLocale = usePage().props.default.locale;
 switch (defaultLocale) {
     case "es":
-        import("wepa-ckeditor5-filemanager/build/translations/es.js");
+        import("ckeditor5-classic-core/build/translations/es");
+        break;
+    case "fr":
+        import("ckeditor5-classic-core/build/translations/fr");
+        break;
+    case "de":
+        import("ckeditor5-classic-core/build/translations/de");
         break;
 }
+
 const ckconfig = {
     ...props.config,
     language: defaultLocale,
-    "fontSize": {
-        options: [
-            {
-                title: "xs",
-                model: "text-xs",
-                view: {
-                    name: 'span',
-                    classes: ['text-xs']
-                }
-            },
-            {
-                title: "small",
-                model: "text-sm",
-                view: {
-                    name: 'span',
-                    classes: ['text-sm']
-                }
-            },
-            {
-                title: "default",
-                model: "text-md",
-                view: {
-                    name: 'span',
-                    classes: ['text-xs']
-                }
-            },
-            {
-                title: "Large",
-                model: "text-lg",
-                view: {
-                    name: 'span',
-                    classes: ['text-lg']
-                }
-            },
-            {
-                title: "Extra large",
-                model: "text-xl",
-                view: {
-                    name: 'span',
-                    classes: ['text-xl']
-                }
-            },
-            {
-                title: "2 Extra large",
-                model: "text-2xl",
-                view: {
-                    name: 'span',
-                    classes: ['text-2xl']
-                }
-            },
-            {
-                title: "3 Extra large",
-                model: "text-3xl",
-                view: {
-                    name: 'span',
-                    classes: ['text-3xl']
-                }
-            },
-            {
-                title: "4 Extra large",
-                model: "text-4xl",
-                view: {
-                    name: 'span',
-                    classes: ['text-4xl']
-                }
-            },
-        ],
-    },
-    toolbar: {
-        items: [
-            "undo",
-            "redo",
-            "|",
-            "heading",
-            "|",
-            "fontSize",
-            "bold",
-            "italic",
-            "link",
-            "bulletedList",
-            "numberedList",
-            "|",
-            "outdent",
-            "indent",
-            "|",
-            "filemanager",
-            "blockQuote",
-            "insertTable",
-            "mediaEmbed",
-
-            "sourceEditing"
-        ]
-    },
-    filemanager: editor => {
-        fileManager.instance = editor;
-        fileManager.open = true;
+    filemanager: {
+        open: () => fileManager.open = true,
+        classes: 'float-right float-left float-left float-right mr-2 my-2 w-1/2'
     }
 };
+
+function editorReady(editor) {
+    fileManager.editor = editor;
+}
+
 const fileManager = reactive({
-    instance: null,
+    editor: null,
     open: false,
     selectedImage: null,
     insert: image => {
         fileManager.open = false;
-        fileManager.instance.execute("insertImage", {
+        fileManager.editor?.execute("insertImage", {
+            //window?.editor.execute("insertImage", {
             source: {
                 src: image.url,
                 title: image.name,
@@ -154,6 +70,7 @@ const fileManager = reactive({
         });
     }
 });
+
 const inputId = computed(() => {
     if (attrs.id) {
         return attrs.id;
@@ -181,13 +98,13 @@ const proxyValue = computed({
     get() {
         if (typeof proxyModelValue.value === "object" && proxyModelValue.value) {
             if (props.translation) {
-                if (proxyModelValue.value.hasOwnProperty('translations')
+                if (proxyModelValue.value.hasOwnProperty("translations")
                     && proxyModelValue.value.translations.hasOwnProperty(selectedLocale.value)
                     && proxyModelValue.value.translations[selectedLocale.value][attrs["name"]]) {
                     return proxyModelValue.value.translations[selectedLocale.value][attrs["name"]];
                 }
 
-                return ""
+                return "";
 
             } else if (proxyModelValue.value.hasOwnProperty(attrs["name"])) {
                 return proxyModelValue.value[attrs["name"]];
@@ -195,7 +112,7 @@ const proxyValue = computed({
             return "";
         }
 
-        return proxyModelValue.value
+        return proxyModelValue.value;
     },
     set(value) {
         if (typeof proxyModelValue.value === "object" && proxyModelValue.value) {
@@ -222,8 +139,8 @@ const proxyValue = computed({
 const error = computed(() => {
     let found = false;
     for (const [errorKey, errorValue] of Object.entries(errors.value)) {
-        const re = new RegExp("[.]" + attrs.name + "$", 'g');
-        const rex = new RegExp("^" + attrs.name + "$", 'g');
+        const re = new RegExp("[.]" + attrs.name + "$", "g");
+        const rex = new RegExp("^" + attrs.name + "$", "g");
         if (re.test(errorKey) || rex.test(errorKey)) {
             found = true;
             if (typeof errorValue === "object") {
@@ -265,6 +182,19 @@ const removeEmptyTranslations = _.throttle(() => {
         }
     });
 }, 5000);
+
+onMounted(() => {
+    import("ckeditor5-classic-core").then(e => {
+        e.default.create(document.querySelector("#editor"), ckconfig)
+            .then(editor => {
+                fileManager.editor = editor;
+                editor.model.document.on("change:data", () => {
+                    proxyValue.value = editor.getData();
+                });
+                editor.setData(proxyValue.value);
+            });
+    });
+});
 </script>
 <template>
     <div>
@@ -275,12 +205,9 @@ const removeEmptyTranslations = _.throttle(() => {
                   class="px-1">*
             </span>
         </label>
-        <div class="mt-1 text-gray-800"
+        <div class="mt-1 text-gray-800 ckeditor"
              style="--ck-border-radius: 0.40rem">
-            <CKEditor :id="inputId"
-                      v-model="proxyValue"
-                      :config="ckconfig"
-                      :editor="Editor"></CKEditor>
+            <div id="editor"></div>
         </div>
         <div v-if="translation"
              class="flex justify-end mt-2">
@@ -316,9 +243,9 @@ const removeEmptyTranslations = _.throttle(() => {
     </div>
 </template>
 <style>
-.ck-editor__editable {
+.ck.ck-editor__editable {
     max-height: v-bind(maxHeight+ "px");
-    @apply min-h-[260px]
+    @apply min-h-[400px]
 }
 
 .ck.ck-content ul {
@@ -327,5 +254,9 @@ const removeEmptyTranslations = _.throttle(() => {
 
 .ck.ck-content ol {
     @apply ml-2 list-decimal list-outside [&>li]:ml-4;
+}
+
+.ck.ck-powered-by {
+    display: none;
 }
 </style>
