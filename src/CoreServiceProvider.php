@@ -34,7 +34,7 @@ use Wepa\Core\Models\Permission;
 class CoreServiceProvider extends PackageServiceProvider
 {
     public $bindings = [
-        //HttpGateway::class => InertiaHttpGateway::class
+        HttpGateway::class => InertiaHttpGateway::class
     ];
 
     public function bootingPackage()
