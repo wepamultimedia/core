@@ -28,5 +28,5 @@ Route::middleware([
 
 Route::middleware(['web', 'core.locale'])->group(function () {
     // Add custom routes
-    Route::get('{slug}', [InertiaController::class, 'slugRedirect']);
+    Route::get('{slug?}', [InertiaController::class, 'slugRedirect']);
 });

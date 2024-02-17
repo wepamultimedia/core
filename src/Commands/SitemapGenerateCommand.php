@@ -27,22 +27,10 @@ class SitemapGenerateCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
      */
     public function handle()
     {
-        $site = Site::first();
-
         $sitemap = Sitemap::create();
-        $url = Url::create(route('home'))
-            ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-            ->setPriority(1);
-
-        if ($site->seo->image) {
-            $url->addImage($site->seo->image, $site->seo->image_alt);
-        }
-
-        $sitemap->add($url);
 
         Seo::all()->each(function ($seoItem) use ($sitemap) {
             if (! $seoItem->robots || ! in_array('noindex', $seoItem->robots)) {

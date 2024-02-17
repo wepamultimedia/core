@@ -93,26 +93,17 @@ class CoreServiceProvider extends PackageServiceProvider
 
         // Framework files
         $this->publishes([
-            __DIR__ . '/../_app' => base_path('core/app'),
-        ], ['core']);
-
-        $this->publishes([
+            __DIR__ . '/../_app' => base_path('app'),
             __DIR__ . '/../_config' => base_path('core/config'),
-        ], ['core']);
-
-        $this->publishes([
             __DIR__ . '/../_resources' => base_path('core/resources'),
-        ], ['core']);
-
-        $this->publishes([
-            __DIR__ . '/../_root/.env.example' => base_path('core/.env.example'),
-            __DIR__ . '/../_root/tailwind.config.js' => base_path('core/tailwind.config.js'),
-            __DIR__ . '/../_root/vite.config.js' => base_path('core/vite.config.js'),
-        ], ['core']);
-
-        $this->publishes([
-            __DIR__ . '/../_routes' => base_path('core/routes'),
-        ], ['core']);
+            __DIR__ . '/../_root' => base_path('/'),
+            __DIR__ . '/../_root/tailwind.config.js' => base_path('tailwind.config.js'),
+            __DIR__ . '/../_root/vite.config.js' => base_path('vite.config.js'),
+            __DIR__ . '/../_app/Providers/AppServiceProvider.php' => base_path('App/Providers/AppServiceProvider.php'),
+            __DIR__ . '/../_app/Providers/AuthServiceProvider.php' => base_path('App/Providers/AuthServiceProvider.php'),
+            __DIR__ . '/../_app/Models/User.php' => base_path('App/Models/User.php'),
+            __DIR__ . '/../_routes' => base_path('routes'),
+        ], ['core', 'core-laravel']);
     }
 
     protected function hasSeeders(array $seeders): void
