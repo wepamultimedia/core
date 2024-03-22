@@ -103,7 +103,7 @@ class CoreServiceProvider extends PackageServiceProvider
             __DIR__ . '/../_app/Providers/AuthServiceProvider.php' => base_path('App/Providers/AuthServiceProvider.php'),
             __DIR__ . '/../_app/Models/User.php' => base_path('App/Models/User.php'),
             __DIR__ . '/../_routes' => base_path('routes'),
-        ], ['core', 'core-laravel']);
+        ], ['core', 'core-install']);
     }
 
     protected function hasSeeders(array $seeders): void
