@@ -30,10 +30,6 @@ const socialNetworks = ref([
     {name: "twitch", url: "https://twitch.com"},
     {name: "whatsapp", url: "https://wa.me"}
 ]);
-
-onBeforeMount(() => {
-    store.dispatch("frontend/loadSite");
-});
 </script>
 <template>
     <nav>
