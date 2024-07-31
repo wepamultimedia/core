@@ -28,9 +28,9 @@ class InertiaController extends Controller
     protected array $translations = [];
 
     public function jetrender(Request $request,
-                              string $view,
-                              mixed $tranlation = [],
-                              array $props = []): Response
+                              string  $view,
+                              mixed   $tranlation = [],
+                              array   $props = []): Response
     {
         $this->buildRender($view, $tranlation);
 
@@ -38,7 +38,7 @@ class InertiaController extends Controller
     }
 
     protected function buildRender(string &$view,
-                                   mixed $translation = []): void
+                                   mixed  $translation = []): void
     {
         $this->buildViewPath($view);
         $defatultShare = [
@@ -61,8 +61,8 @@ class InertiaController extends Controller
     protected function buildViewPath(string &$view): void
     {
         $this->addThemeNameToViewPath($view);
-        if (! $this->checkViewExist($view)) {
-            abort(501, 'The view file { "'.$view.'" } does not exist');
+        if (!$this->checkViewExist($view)) {
+            abort(501, 'The view file { "' . $view . '" } does not exist');
         }
     }
 
@@ -80,7 +80,7 @@ class InertiaController extends Controller
 
     protected function checkViewExist(string $view): bool
     {
-        if (File::exists(resource_path('js/Pages/'.$view.'.vue'))) {
+        if (File::exists(resource_path('js/Pages/' . $view . '.vue'))) {
             return true;
         }
 
@@ -91,7 +91,7 @@ class InertiaController extends Controller
     {
         $locale = app()->getLocale();
         $translations = [];
-        $prefix = $this->packageName !== '' ? $this->packageName.'::' : '';
+        $prefix = $this->packageName !== '' ? $this->packageName . '::' : '';
 
         if ($files) {
             if (is_array($files)) {
@@ -99,7 +99,7 @@ class InertiaController extends Controller
                     if (Str::contains($file, '::')) {
                         $translation = Lang::get($file);
                     } else {
-                        $translation = Lang::get($prefix.$file);
+                        $translation = Lang::get($prefix . $file);
                     }
                     if (is_array($translation)) {
                         $translations = array_merge($translations,
@@ -107,7 +107,7 @@ class InertiaController extends Controller
                     }
                 }
             } else {
-                $translation = Lang::get($prefix.$files);
+                $translation = Lang::get($prefix . $files);
 
                 if (is_array($translation)) {
                     $translations = $translation;
@@ -129,7 +129,7 @@ class InertiaController extends Controller
         $packageTranslation = [];
 
         if ($this->packageName !== '') {
-            $packageTranslation = is_array($packageTranslation = Lang::get($this->packageName.'::default'))
+            $packageTranslation = is_array($packageTranslation = Lang::get($this->packageName . '::default'))
                 ? $packageTranslation : [];
         }
 
@@ -147,8 +147,8 @@ class InertiaController extends Controller
     }
 
     public function render(string $view,
-                           mixed $translation = [],
-                           array $props = []): Response
+                           mixed  $translation = [],
+                           array  $props = []): Response
     {
         $this->beforeRender();
         $this->buildRender($view, $translation);
@@ -158,7 +158,7 @@ class InertiaController extends Controller
 
     protected function beforeRender()
     {
-        if (! self::$seoLoaded) {
+        if (!self::$seoLoaded) {
             $this->addSeo(request()->route()->getName());
         }
     }
@@ -166,19 +166,28 @@ class InertiaController extends Controller
     public function addSeo(string $alias = null): void
     {
         self::$seoLoaded = true;
+        $mainSeo = cache()
+            ->tags('core_seo')
+            ->remember('seo_home', config('core.cache_ttl', 3600), function () {
+                return Seo::where('alias', 'home')->first();
+            });
 
-        $mainSeo = Seo::where('alias', 'home')->first();
+        $seo = cache()
+            ->tags('core_seo')
+            ->remember("core_seo.alias.{$alias}", config('core.cache_ttl', 3600), function () use ($alias) {
+                return Seo::where('alias', $alias)->first();
+            });
 
-        if ($alias and $seo = Seo::where('alias', $alias)->first()) {
+        if ($alias and $seo) {
             // Si tiene seo y no tiene la etiqueta noindex o nofollow defino lo contrario
-            if (! $seo->robots) {
+            if (!$seo->robots) {
                 $seo->robots = ['index', 'follow'];
             } else {
-                if (! in_array('noindex', $seo->robots)) {
+                if (!in_array('noindex', $seo->robots)) {
                     $seo->robots = array_merge($seo->robots, ['index']);
                 }
 
-                if (! in_array('nofollow', $seo->robots)) {
+                if (!in_array('nofollow', $seo->robots)) {
                     $seo->robots = array_merge($seo->robots, ['follow']);
                 }
             }
@@ -195,7 +204,7 @@ class InertiaController extends Controller
                 $title = trim($title);
 
                 if ($prefix !== '' and $prefix !== null) {
-                    $title = $prefix.' '.$title;
+                    $title = $prefix . ' ' . $title;
                 }
 
                 $title = Str::title($title);
@@ -207,12 +216,15 @@ class InertiaController extends Controller
             ]);
         }
 
-        $seo->image = $seo->image ?? $mainSeo->image;
-        $seo->facebook_image = $seo->facebook_image ?? $seo->image ?? $mainSeo->image;
-        $seo->twitter_image = $seo->twitter_image ?? $seo->image ?? $mainSeo->image;
+        $seo = cache()->tags('core_seo')->remember('core_seo_rrss', config('core.cache_ttl', 3600), function () use($seo, $mainSeo){
+            $seo->image = $seo->image ?? $mainSeo->image;
+            $seo->facebook_image = $seo->facebook_image ?? $seo->image ?? $mainSeo->image;
+            $seo->twitter_image = $seo->twitter_image ?? $seo->image ?? $mainSeo->image;
 
-        $seo->facebook_description = $seo->facebook_description ?? $seo->description ?? $mainSeo->description;
-        $seo->twitter_description = $seo->twitter_description ?? $seo->description ?? $mainSeo->description;
+            $seo->facebook_description = $seo->facebook_description ?? $seo->description ?? $mainSeo->description;
+            $seo->twitter_description = $seo->twitter_description ?? $seo->description ?? $mainSeo->description;
+            return $seo;
+        });
 
         $this->addShare([
             'seo' => $seo->toArray(),

@@ -209,7 +209,6 @@ class CoreServiceProvider extends PackageServiceProvider
             __DIR__ . '/../config/core.php',
             'core'
         );
-
         // Configure middlewares
         app()['router']->aliasMiddleware('core.backend', Backend::class);
         app()['router']->aliasMiddleware('core.frontend', Frontend::class);

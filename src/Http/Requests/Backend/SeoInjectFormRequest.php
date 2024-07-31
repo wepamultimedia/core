@@ -65,7 +65,6 @@ class SeoInjectFormRequest extends FormRequest
                 ],
 
                 "seo.translations.$locale.slug" => 'required|slug|unique:core_seo_translations',
-
                 "seo.translations.$locale.title" => 'required|string|max:255',
                 "seo.translations.$locale.description" => 'required|string|max:255',
             ];

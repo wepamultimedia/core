@@ -70,6 +70,7 @@ class Menu extends Model implements TranslatableContract
     ];
 
     protected $table = 'core_menu';
+    public static string $cacheTag = 'core_menu';
 
     public static function loadPackageItems(string $package): void
     {
@@ -84,6 +85,8 @@ class Menu extends Model implements TranslatableContract
         $menu->addItems(config($package.'.backend_menu', []),
             $package,
             'backend');
+
+        cache()->forget(self::$cacheTag);
     }
 
     public function addItems(array $items,
@@ -180,5 +183,7 @@ class Menu extends Model implements TranslatableContract
     public static function removePackageItems(string $package): void
     {
         self::where(['package' => $package])->delete();
+
+        cache()->forget(self::$cacheTag);
     }
 }

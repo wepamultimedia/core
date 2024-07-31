@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
+use Wepa\Core\Events\SeoModelDestroyedEvent;
+use Wepa\Core\Events\SeoModelRequestEvent;
+use Wepa\Core\Events\SeoModelSavedEvent;
 use Wepa\Core\Http\Traits\TranslationsTrait;
 
 /**
@@ -137,6 +140,23 @@ class Seo extends Model implements TranslatableContract
     ];
 
     protected $table = 'core_seo';
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function (Model $model) {
+            cache()->tags('core_seo')->flush();
+        });
+
+        static::saving(function () {
+            cache()->tags('core_seo')->flush();
+        });
+
+        static::saved(function (Model $model) {
+            cache()->tags('core_seo')->flush();
+        });
+    }
 
     /**
      * @return $this

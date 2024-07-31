@@ -6,6 +6,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Str;
 use Inertia\Response;
 use Wepa\Core\Http\Requests\Backend\SeoFormRequest;
 use Wepa\Core\Http\Traits\Backend\SeoControllerTrait;
@@ -16,33 +17,55 @@ class SeoController extends InertiaController
     use SeoControllerTrait;
 
     public string $packageName = 'core';
+    private string $cacheTag = 'core_seo';
 
     public function destroy(Seo $seo): void
     {
         if ($seo->alias !== 'home') {
             $this->seoDestroy($seo->id);
+
+            cache()->tags($this->cacheTag)->flush();
         }
     }
 
-    public function edit(Seo $seo): Response
+    public function edit(int $seo): Response
     {
+        $seo = cache()
+            ->tags($this->cacheTag)
+            ->remember($this->cacheTag . ":" . $seo, 60 * 60 * 24, function () use ($seo) {
+           return Seo::find($seo);
+        });
+
         return $this->render('Vendor/Core/Backend/Seo/Edit', 'seo', compact(['seo']));
     }
 
     public function index(Request $request): Response
     {
-        $routes = Seo::when($request->search, function ($query, $search) {
-            $query->where('alias', 'LIKE', '%'.$search.'%')
-                ->orWhereTranslationLike('slug', '%'.$search.'%');
-        })
-            ->paginate();
+        $cacheName = $this->cacheTag;
+
+        if ($request->search !== null) {
+            $cacheName .= '.' . Str::slug($request->search);
+        }
+
+        if ($request->get('page')) {
+            $cacheName .= '.' . Str::slug($request->page);
+        }
+
+        $routes = cache()
+            ->tags($this->cacheTag)
+            ->remember($cacheName, 60 * 60 * 24, function () use ($request) {
+                return Seo::when($request->search, function ($query, $search) {
+                    $query->where('alias', 'LIKE', '%' . $search . '%')
+                        ->orWhereTranslationLike('slug', '%' . $search . '%');
+                })->paginate();
+            });
 
         return $this->render('Vendor/Core/Backend/Seo/Index', 'seo', compact(['routes']));
     }
 
     public function store(SeoFormRequest $request): Redirector|Application|RedirectResponse
     {
-        $excludeFilter = ['alias', 'canonical'];
+        $excludeFilter = ['alias', 'canonical', 'slug', 'route_params', 'request_params'];
 
         $params = collect($request->all())
             ->filter(function ($value, $key) use ($excludeFilter) {
@@ -58,6 +81,8 @@ class SeoController extends InertiaController
 
         Seo::create($params);
 
+        cache()->tags($this->cacheTag)->flush();
+
         return redirect(route('admin.seo.index'));
     }
 
@@ -66,9 +91,15 @@ class SeoController extends InertiaController
         return $this->render('Vendor/Core/Backend/Seo/Create', 'seo');
     }
 
-    public function update(SeoFormRequest $request, Seo $seo): Redirector|RedirectResponse|Application
+    public function update(SeoFormRequest $request, int $seo): Redirector|RedirectResponse|Application
     {
-        $excludeFilter = ['alias', 'canonical', 'slug'];
+        $seo = cache()
+            ->tags($this->cacheTag)
+            ->remember($this->cacheTag . ":" . $seo, 60 * 60 * 24, function () use ($seo) {
+                return Seo::find($seo);
+            });
+
+        $excludeFilter = ['alias', 'canonical', 'slug', 'route_params', 'request_params'];
 
         $params = collect($request->all())
             ->filter(function ($value, $key) use ($excludeFilter) {
@@ -83,6 +114,8 @@ class SeoController extends InertiaController
             ->toArray();
 
         $seo->update($params);
+
+        cache()->tags($this->cacheTag)->flush();
 
         if ($seo->alias === 'home') {
             return redirect()->back();

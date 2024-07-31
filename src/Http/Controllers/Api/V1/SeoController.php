@@ -16,8 +16,12 @@ class SeoController extends Controller
         return Str::slug($text, '-', $language);
     }
 
-    public function byAlias(string $alias): SeoResource
+    public function byAlias(string $alias): array
     {
-        return SeoResource::make(Seo::where('alias', $alias)->first());
+        return cache()
+            ->tags('core_seo')
+            ->remember("core_seo:{$alias}", config('core.cache_ttl', 3600), function () use ($alias) {
+                return SeoResource::make(Seo::where('alias', $alias)->first())->resolve();
+            });
     }
 }

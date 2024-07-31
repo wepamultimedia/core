@@ -39,7 +39,9 @@ class HandleInertiaRequests extends Middleware
                 ]);
             },
             'aliasSlug' => function () {
-                return Seo::whereNotNull('alias')->get()->pluck('slug', 'alias')->toArray();
+                return cache()->tags('core_seo')->remember('core_seo_inertia', config('core.cache_ttl', 3600), function(){
+                    return Seo::whereNotNull('alias')->get()->pluck('slug', 'alias')->toArray();
+                });
             }
         ]);
     }

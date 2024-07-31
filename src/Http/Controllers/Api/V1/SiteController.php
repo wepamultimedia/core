@@ -9,6 +9,8 @@ class SiteController extends Controller
 {
     public function site()
     {
-        return Site::first();
+        return cache()->remember('site', config('core.cache_ttl',  3600), function () {
+            return Site::first();
+        });
     }
 }

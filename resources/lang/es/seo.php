@@ -78,4 +78,9 @@ return [
     'desktop' => 'Ordenador',
     'mobile' => 'Móvil',
     'routes_list' => 'Lista de rutas',
+    'controller' => 'Controlador',
+    'action' => 'Acción o método en el controlador',
+    'request_params' => 'Parámetros de petición',
+    'route_params' => 'Parámetros en la ruta o url',
+    'target_options' => 'Opciones de destino',
 ];

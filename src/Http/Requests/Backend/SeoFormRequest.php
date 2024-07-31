@@ -72,7 +72,10 @@ class SeoFormRequest extends FormRequest
             'controller' => 'nullable|string|max:255',
             'action' => 'nullable|string|max:255',
 
-            'translations.*.slug' => 'required|slug|unique:core_seo_translations',
+            'translations.*.slug' => [
+                'required', 'slug',
+                Rule::unique('core_seo_translations')->ignore($this->get('id'), 'seo_id'),
+            ],
 
             'translations.*.keyword' => 'nullable|string|unique:core_seo_translations',
 
@@ -95,11 +98,11 @@ class SeoFormRequest extends FormRequest
                     ],
                     'translations.*.slug' => [
                         'required', 'slug',
-                        Rule::unique('core_seo_translations')->ignore($this['seo']['id'], 'seo_id'),
+                        Rule::unique('core_seo_translations')->ignore($this->get('id'), 'seo_id'),
                     ],
                     'translations.*.keyword' => [
                         'nullable', 'string',
-                        Rule::unique('core_seo_translations')->ignore($this['id'], 'seo_id'),
+                        Rule::unique('core_seo_translations')->ignore($this->get('id'), 'seo_id'),
                     ],
                 ]);
 
@@ -108,7 +111,7 @@ class SeoFormRequest extends FormRequest
                         'translations.*.slug' => [
                             'nullable',
                             'slug',
-                            Rule::unique('core_seo_translations')->ignore($this['seo']['id'], 'seo_id'),
+                            Rule::unique('core_seo_translations')->ignore($this->get('id'), 'seo_id'),
                         ],
                     ]);
                 }

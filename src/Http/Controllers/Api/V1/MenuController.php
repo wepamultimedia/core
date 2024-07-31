@@ -23,9 +23,14 @@ class MenuController extends Controller
                                      int $parentId = null): array
     {
         if (! $items) {
-            $items = Menu::orderBy('parent_id')
-                ->orderBy('position')
-                ->get()->toArray();
+            $cacheTag = Menu::$cacheTag;
+            $items = cache()
+                ->remember("{$cacheTag}.{$app}.{$parentId}", config('core.cache_ttl',  3600), function () use ($app, $parentId) {
+                return Menu::orderBy('parent_id')
+                    ->orderBy('position')
+                    ->get()
+                    ->toArray();
+            });
         }
 
         $menu = [];

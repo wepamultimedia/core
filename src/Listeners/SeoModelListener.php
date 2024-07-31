@@ -34,6 +34,7 @@ class SeoModelListener
             ->where('model_id', $event->model->id)
             ->first();
 
+
         $data = $this->buildData($event);
 
         if ($seo) {
