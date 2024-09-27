@@ -33,10 +33,16 @@ class SeoTranslation extends Model
 {
     public $timestamps = false;
 
+    public $casts = [
+        'slug_prefix' => 'array'
+    ];
+
     protected $fillable = [
         'keyword',
         'title',
         'slug',
+        'slug_prefix',
+        'slug_suffix',
         'description',
         'image_title',
         'image_alt',

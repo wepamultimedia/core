@@ -97,6 +97,8 @@ class Seo extends Model implements TranslatableContract
         'keyword',
         'title',
         'slug',
+        'slug_prefix',
+        'slug_suffix',
         'description',
         'image_title',
         'image_alt',
@@ -116,6 +118,7 @@ class Seo extends Model implements TranslatableContract
         'route_params' => 'array',
         'request_params' => 'array',
         'robots' => 'array',
+        'slug_prefix' => 'array'
     ];
 
     protected $fillable = [

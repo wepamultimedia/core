@@ -6,11 +6,13 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Inertia\Response;
 use Wepa\Core\Http\Requests\Backend\SeoFormRequest;
 use Wepa\Core\Http\Traits\Backend\SeoControllerTrait;
 use Wepa\Core\Models\Seo;
+use Wepa\Core\Models\SeoTranslation;
 
 class SeoController extends InertiaController
 {
@@ -68,6 +70,7 @@ class SeoController extends InertiaController
         $excludeFilter = ['alias', 'canonical', 'slug', 'route_params', 'request_params'];
 
         $params = collect($request->all())
+            ->merge(['package' => $this->packageName])
             ->filter(function ($value, $key) use ($excludeFilter) {
                 if ($value !== null or in_array($key, $excludeFilter)) {
                     return true;
@@ -79,11 +82,29 @@ class SeoController extends InertiaController
             ->except(['translations'])
             ->toArray();
 
-        Seo::create($params);
+        $seo = Seo::create($params);
+
+        $this->updateSlugs($seo);
 
         cache()->tags($this->cacheTag)->flush();
 
         return redirect(route('admin.seo.index'));
+    }
+
+    public function updateSlugs(Seo $seo): void
+    {
+        $translations = SeoTranslation::where('seo_id', $seo->id)->get();
+        $request = request();
+        foreach ($translations as $translation) {
+            if($request['slug_prefix']){
+                $translation->slug_prefix = $request['slug_prefix'];
+                $translation->slug = Arr::join($request['slug_prefix'], '/') . '/' . $translation->slug_suffix;
+                $translation->save();
+            } else {
+                $translation->slug = $translation->slug_suffix;
+                $translation->save();
+            }
+        }
     }
 
     public function create(): Response
@@ -114,6 +135,8 @@ class SeoController extends InertiaController
             ->toArray();
 
         $seo->update($params);
+
+        $this->updateSlugs($seo);
 
         cache()->tags($this->cacheTag)->flush();
 

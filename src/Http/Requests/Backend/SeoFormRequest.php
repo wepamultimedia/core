@@ -36,9 +36,9 @@ class SeoFormRequest extends FormRequest
         return [
             'translations.*.title.required' => __('core::seo.title_required', ['locale' => $locale]),
             'translations.*.description.required' => __('core::seo.description_required', ['locale' => $locale]),
-            'translations.*.slug.required' => __('core::seo.slug_required', ['locale' => $locale]),
-            'translations.*.slug.slug' => __('core::seo.slug_invalid_format'),
-            'translations.*.slug.unique' => __('core::seo.unique_slug'),
+            'translations.*.slug_suffix.required' => __('core::seo.slug_required', ['locale' => $locale]),
+            'translations.*.slug_suffix.slug' => __('core::seo.slug_invalid_format'),
+            'translations.*.slug_suffix.unique' => __('core::seo.unique_slug'),
             'translations.*.keyword.unique' => __('core::seo.unique_keyword'),
         ];
     }
@@ -51,17 +51,32 @@ class SeoFormRequest extends FormRequest
     public function rules()
     {
         Validator::extend('slug', function ($attribute, $value) {
-            return Str::slug($value, '-') === $value;
+            $slugs = Str::of($value)->explode('/');
+
+            foreach ($slugs as $slug) {
+                if(Str::slug($slug, '-') !== $slug){
+                    return false;
+                }
+            }
+
+            return true;
         });
 
         $locale = app()->getLocale();
 
-        if (! Arr::exists($this->input('translations'), $locale)) {
+        if (!Arr::exists($this->input('translations'), $locale)) {
             return [
                 'alias' => 'required|string|max:255|unique:core_seo',
-
-                "translations.$locale.slug" => 'required|slug|unique:core_seo_translations',
-
+                "translations.$locale.slug_suffix" => [
+                    'required', 'slug',
+                    Rule::unique('core_seo_translations', 'slug_suffix')->where(function ($query) {
+                        if($this->input('slug_prefix')) {
+                            return $query->whereJsonContains('slug_prefix', $this->input('slug_prefix'));
+                        }
+                        return null;
+                    })
+                ],
+                "translations.$locale.slug_suffix" => 'required|slug|unique:core_seo_translations',
                 "translations.$locale.title" => 'required|string|max:255',
                 "translations.$locale.description" => 'required|string|max:255',
             ];
@@ -72,9 +87,14 @@ class SeoFormRequest extends FormRequest
             'controller' => 'nullable|string|max:255',
             'action' => 'nullable|string|max:255',
 
-            'translations.*.slug' => [
+            'translations.*.slug_suffix' => [
                 'required', 'slug',
-                Rule::unique('core_seo_translations')->ignore($this->get('id'), 'seo_id'),
+                Rule::unique('core_seo_translations', 'slug_suffix')->where(function ($query) {
+                    if($this->input('slug_prefix')) {
+                        return $query->whereJsonContains('slug_prefix', $this->input('slug_prefix'));
+                    }
+                    return null;
+                })
             ],
 
             'translations.*.keyword' => 'nullable|string|unique:core_seo_translations',
@@ -96,9 +116,14 @@ class SeoFormRequest extends FormRequest
                         'nullable', 'string', 'max:255',
                         Rule::unique('core_seo')->ignore($this['id'], 'id'),
                     ],
-                    'translations.*.slug' => [
+                    'translations.*.slug_suffix' => [
                         'required', 'slug',
-                        Rule::unique('core_seo_translations')->ignore($this->get('id'), 'seo_id'),
+                        Rule::unique('core_seo_translations', 'slug_suffix')->where(function ($query) {
+                            if($this->input('slug_prefix')) {
+                                return $query->whereJsonContains('slug_prefix', $this->input('slug_prefix'));
+                            }
+                            return null;
+                        })->ignore($this->input('id'), 'seo_id'),
                     ],
                     'translations.*.keyword' => [
                         'nullable', 'string',
@@ -108,10 +133,15 @@ class SeoFormRequest extends FormRequest
 
                 if ($this->alias === 'home') {
                     $rules = array_merge($rules, [
-                        'translations.*.slug' => [
+                        'translations.*.slug_suffix' => [
                             'nullable',
                             'slug',
-                            Rule::unique('core_seo_translations')->ignore($this->get('id'), 'seo_id'),
+                            Rule::unique('core_seo_translations', 'slug_suffix')->where(function ($query) {
+                                if($this->input('slug_prefix')) {
+                                    return $query->whereJsonContains('slug_prefix', $this->input('slug_prefix'));
+                                }
+                                return null;
+                            })->ignore($this->input('id'), 'seo_id'),
                         ],
                     ]);
                 }
