@@ -35,8 +35,8 @@ class SeoController extends InertiaController
         $seo = cache()
             ->tags($this->cacheTag)
             ->remember($this->cacheTag . ":" . $seo, 60 * 60 * 24, function () use ($seo) {
-           return Seo::find($seo);
-        });
+                return Seo::find($seo);
+            });
 
         return $this->render('Vendor/Core/Backend/Seo/Edit', 'seo', compact(['seo']));
     }
@@ -91,25 +91,34 @@ class SeoController extends InertiaController
         return redirect(route('admin.seo.index'));
     }
 
+    public function create(): Response
+    {
+        return $this->render('Vendor/Core/Backend/Seo/Create', 'seo');
+    }
+
     public function updateSlugs(Seo $seo): void
     {
         $translations = SeoTranslation::where('seo_id', $seo->id)->get();
         $request = request();
+
         foreach ($translations as $translation) {
-            if($request['slug_prefix']){
+            $langPrefix = '';
+
+            if (count(config('core.locales')) > 1) {
+                if($translation->seo_id !== 1 or ($translation->seo_id === 1 and $translation->locale !== config('core.default_locale'))){
+                    $langPrefix = $translation->locale . '/';
+                }
+            }
+
+            if ($request['slug_prefix'] and array_key_exists($translation->locale, $request['slug_prefix'])) {
                 $translation->slug_prefix = $request['slug_prefix'];
-                $translation->slug = Arr::join($request['slug_prefix'], '/') . '/' . $translation->slug_suffix;
+                $translation->slug = $langPrefix . Arr::join($request['slug_prefix'], '/') . '/' . $translation->slug_suffix;
                 $translation->save();
             } else {
-                $translation->slug = $translation->slug_suffix;
+                $translation->slug = $langPrefix . $translation->slug_suffix;
                 $translation->save();
             }
         }
-    }
-
-    public function create(): Response
-    {
-        return $this->render('Vendor/Core/Backend/Seo/Create', 'seo');
     }
 
     public function update(SeoFormRequest $request, int $seo): Redirector|RedirectResponse|Application

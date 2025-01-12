@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Wepa\Core\Events\SeoModelDestroyedEvent;
 use Wepa\Core\Events\SeoModelSavedEvent;
-use Wepa\Core\Events\SeoModelUpdatedEvent;
 use Wepa\Core\Events\SitemapUpdatedEvent;
 use Wepa\Core\Http\Requests\Backend\SeoInjectFormRequest;
 use Wepa\Core\Models\Seo;
@@ -45,23 +44,6 @@ class SeoModelListener
         SitemapUpdatedEvent::dispatch();
     }
 
-    public function updateSlugs(Seo $seo): void
-    {
-        $translations = SeoTranslation::where('seo_id', $seo->id)->get();
-        $request = request('seo');
-
-        foreach ($translations as $translation) {
-            if($request['slug_prefix']){
-                $translation->slug_prefix = $request['slug_prefix'];
-                $translation->slug = Arr::join($request['slug_prefix'], '/') . '/' . $translation->slug_suffix;
-                $translation->save();
-            } else {
-                $translation->slug = $translation->slug_suffix;
-                $translation->save();
-            }
-        }
-    }
-
     protected function buildData(SeoModelSavedEvent $event): array
     {
         $data = collect([]);
@@ -86,5 +68,30 @@ class SeoModelListener
         $event->model->seoAddParams($data->toArray());
 
         return $event->model->seoParams;
+    }
+
+    public function updateSlugs(Seo $seo): void
+    {
+        $translations = SeoTranslation::where('seo_id', $seo->id)->get();
+        $request = request('seo');
+
+        foreach ($translations as $translation) {
+            $langPrefix = '';
+
+            if (count(config('core.locales')) > 1) {
+                if($translation->seo_id !== 1 or ($translation->seo_id === 1 and $translation->locale !== config('core.default_locale'))){
+                    $langPrefix = $translation->locale . '/';
+                }
+            }
+
+            if ($request['slug_prefix'] and array_key_exists($translation->locale, $request['slug_prefix'])) {
+                $translation->slug_prefix = $request['slug_prefix'][$translation->locale];
+                $translation->slug = $langPrefix . Arr::join($request['slug_prefix'], '/') . '/' . $translation->slug_suffix;
+                $translation->save();
+            } else {
+                $translation->slug = $langPrefix . $translation->slug_suffix;
+                $translation->save();
+            }
+        }
     }
 }

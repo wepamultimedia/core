@@ -44,6 +44,7 @@ trait InertiaControllerTrait
                 'env' => config('app.env'),
                 'theme' => config('core.theme'),
                 'locale' => app()->getLocale(),
+                'defaultLocale' => config('core.default_locale'),
                 'locales' => config('core.locales'),
                 'appName' => config('app.name'),
                 'baseUrl' => request()->root(),

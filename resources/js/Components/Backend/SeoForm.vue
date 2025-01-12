@@ -29,11 +29,13 @@ const props = defineProps({
 });
 
 const {
-    seo, locale, autocomplete, image, imageUrl, imageTitle, imageAlt, title, description, robots, pageType, articleType
+    seo, autocomplete, image, imageTitle, imageAlt, title, description, robots,
 } = toRefs(props);
 
 const emit = defineEmits(["update:locale", "update:seo"]);
-const slug = ref(".");
+const store = useStore();
+const page = usePage();
+
 const form = reactive({
     id: null,
     controller: null,
@@ -78,34 +80,36 @@ const values = reactive({
 const show_target_options = ref(false);
 const request_params = computed({
     get: () => {
-        if(form.request_params){
+        if (form.request_params) {
             return JSON.stringify(form.request_params);
         }
     },
     set: value => {
         try {
-            if(!value){
+            if (!value) {
                 form.request_params = null;
             } else {
                 form.request_params = JSON.parse(value);
             }
-        } catch (error){}
+        } catch (error) {
+        }
     }
 });
 const route_params = computed({
     get: () => {
-        if(form.route_params){
+        if (form.route_params) {
             return JSON.stringify(form.route_params);
         }
     },
     set: value => {
         try {
-            if(!value){
+            if (!value) {
                 form.route_params = null;
             } else {
                 form.route_params = JSON.parse(value);
             }
-        } catch (error){}
+        } catch (error) {
+        }
     }
 });
 const robots_options = [
@@ -201,19 +205,19 @@ const site_seo = ref({
 });
 const googleLimits = {title: {min: 40, max: 60}, description: {min: 140, max: 160}};
 const errors = computed(() => usePage().props.errors.seo);
+
 const formattedSlugWithUrl = computed(() => {
     let slug = [usePage().props.default.baseUrl];
-    if (usePage().props.default.locales.length > 1 &&
-        (
-            (form.alias === "home" && useStore().getters["backend/formLocale"] !== usePage().props.default.defaultLocale)
-            || (usePage().props.default.locales.length > 1 && form.alias !== "home")
-        )) {
-        let formLocale = useStore().getters["backend/formLocale"];
-        slug.push(formLocale);
+
+    if (usePage().props.default.locales.length > 1) {
+        if (props.seo.id !== 1
+            || (props.seo.id === 1 && store.getters["backend/formLocale"] !== page.props.default.defaultLocale)) {
+            slug.push(store.getters["backend/formLocale"]);
+        }
     }
 
     if (props.slugPrefix) {
-        slug.push(formatSlug(props.slugPrefix[useStore().getters["backend/formLocale"]]));
+        slug.push(formatSlug(props.slugPrefix[store.getters["backend/formLocale"]]));
     }
 
     if (values.slug_suffix) {
@@ -247,7 +251,7 @@ onBeforeMount(() => {
     Object.keys(seo.value).forEach(key => {
         if (key === "translations") {
             form[key] = Array.isArray(seo.value[key]) ? {} : seo.value[key];
-        } else if(key !== "slug_prefix"){
+        } else if (key !== "slug_prefix") {
             form[key] = seo.value[key];
         }
     });
@@ -355,8 +359,8 @@ onMounted(() => {
         }
     });
     watch(() => values.slug_suffix, (value, oldValue) => {
-        if (value !== oldValue){
-             values.slug_suffix = formatSlug(value);
+        if (value !== oldValue) {
+            values.slug_suffix = formatSlug(value);
         }
     });
     watch(form, value => {
@@ -403,17 +407,17 @@ onMounted(() => {
         <div class="bg-white dark:bg-gray-600 border border-t-0 border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-t-none">
             <div class="p-6 border-b border-gray-300 dark:border-gray-700">
                 <ToggleButton v-model="form.autocomplete"
-                              :label="__('autocomplete')"
-                />
+                              :label="__('autocomplete')"/>
             </div>
             <!-- general -->
             <div v-show="sections.general"
-                 class="grid divide-y divice-gray-300 dark:divide-gray-700">
+                 class="grid divide-y divide-gray-300 dark:divide-gray-700">
                 <div class="grid lg:grid-cols-2 divide-y lg:divide-x lg:divide-y-0 divice-gray-300 dark:divide-gray-700">
                     <div class="p-6">
                         <div class="mb-8">
                             <Input v-model="form"
                                    v-model:value="values.slug_suffix"
+                                   :disabled="seo.id === 1"
                                    :errors="errors"
                                    :label="__('slug')"
                                    name="slug_suffix"

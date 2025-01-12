@@ -9,9 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
-use Wepa\Core\Events\SeoModelDestroyedEvent;
-use Wepa\Core\Events\SeoModelRequestEvent;
-use Wepa\Core\Events\SeoModelSavedEvent;
 use Wepa\Core\Http\Traits\TranslationsTrait;
 
 /**
@@ -191,7 +188,7 @@ class Seo extends Model implements TranslatableContract
     public function site(): Attribute
     {
         return Attribute::make(
-            get: fn () => Site::first()->only([
+            get: fn() => Site::first()->only([
                 'company', 'email', 'phone', 'mobile', 'address', 'latitude', 'longitude',
             ]),
         );
