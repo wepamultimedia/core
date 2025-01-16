@@ -11,10 +11,13 @@ return [
         'frontend' => '',
         'backend' => '',
     ], // resources/views/themes/{theme}
-    'default_locale' => 'en',
     'pagination' => [
         'filemanager' => 50,
     ],
+    'routes' => [
+        'force_locale_prefix' => true
+    ],
+    'default_locale' => 'es',
     'locales' => [
         [
             'code' => 'es',

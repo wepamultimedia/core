@@ -216,7 +216,7 @@ const formattedSlugWithUrl = computed(() => {
         }
     }
 
-    if (props.slugPrefix) {
+    if (props.slugPrefix && props.slugPrefix.hasOwnProperty(store.getters["backend/formLocale"])) {
         slug.push(formatSlug(props.slugPrefix[store.getters["backend/formLocale"]]));
     }
 
