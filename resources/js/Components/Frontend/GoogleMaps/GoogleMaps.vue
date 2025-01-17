@@ -49,8 +49,6 @@ onMounted(() => {
     window.buildMap = () => {
         let map = new google.maps.Map(document.getElementById("google-map"), mapOptions);
 
-        console.log(props.markers instanceof Array, " - hola mundo");
-
         if (props.markers && props.markers instanceof Array) {
             props.markers.forEach(m => {
                 const markerOptions = {

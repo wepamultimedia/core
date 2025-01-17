@@ -26,10 +26,11 @@ const props = defineProps({
     priority: Number,
     robots: Array,
     slugPrefix: Object,
+    slug: String
 });
 
 const {
-    seo, autocomplete, image, imageTitle, imageAlt, title, description, robots,
+    seo, autocomplete, image, imageTitle, imageAlt, title, description, robots, slug
 } = toRefs(props);
 
 const emit = defineEmits(["update:locale", "update:seo"]);
@@ -323,6 +324,17 @@ onMounted(() => {
         if (form.autocomplete) {
             if ((values.title === null || values.title !== "") || old === values.title) {
                 values.title = value;
+                if(!slug.value){
+                    values.slug_suffix = value;
+                }
+            }
+        }
+    });
+    watch(slug, (value, oldValue) => {
+        let old = oldValue === null ? "" : oldValue;
+
+        if (form.autocomplete) {
+            if ((values.slug_suffix === null || values.slug_suffix !== "") || old === values.slug_suffix) {
                 values.slug_suffix = value;
             }
         }

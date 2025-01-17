@@ -86,7 +86,7 @@ class SeoModelListener
 
             if ($request['slug_prefix'] and array_key_exists($translation->locale, $request['slug_prefix'])) {
                 $translation->slug_prefix = $request['slug_prefix'][$translation->locale];
-                $translation->slug = $langPrefix . Arr::join($request['slug_prefix'], '/') . '/' . $translation->slug_suffix;
+                $translation->slug = $langPrefix . $translation->slug_prefix . '/' . $translation->slug_suffix;
                 $translation->save();
             } else {
                 $translation->slug = $langPrefix . $translation->slug_suffix;
