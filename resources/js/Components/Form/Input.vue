@@ -32,8 +32,7 @@ const inputId = computed(() => {
 });
 const selectedLocale = computed(() => store.getters["backend/formLocale"]);
 const emit = defineEmits(["update:modelValue", "update:value"]);
-const {translation, errors, locale, value} = toRefs(props);
-
+const {translation, errors, value} = toRefs(props);
 const proxyModelValue = computed({
     get() {
         return props.modelValue;
@@ -108,20 +107,6 @@ const error = computed(() => {
         return null;
     }
 });
-
-function buildTranslations() {
-    if (typeof proxyModelValue.value === "object" && proxyModelValue.value && props.translation) {
-        if (!proxyModelValue.value.hasOwnProperty("translations")) {
-            proxyModelValue.value["translations"] = {};
-        }
-
-        if (!proxyModelValue.value.translations.hasOwnProperty(selectedLocale.value)) {
-            proxyModelValue.value.translations[selectedLocale.value] = {};
-            proxyModelValue.value.translations[selectedLocale.value][attrs["name"]] = "";
-        }
-    }
-}
-
 const removeEmptyTranslations = _.throttle(() => {
     Object.keys(proxyModelValue.value.translations).forEach(locale => {
         let any = false;
@@ -137,8 +122,6 @@ const removeEmptyTranslations = _.throttle(() => {
         }
     });
 }, 5000);
-
-
 const progressbar = computed(() => {
     if (proxyValue.value?.length > 0) {
         const percent = (proxyValue.value.length / props.limit[1]) * 100;
@@ -147,8 +130,24 @@ const progressbar = computed(() => {
     return 0;
 });
 
+function buildTranslations() {
+    if (typeof proxyModelValue.value === "object" && proxyModelValue.value && props.translation) {
+        if (!proxyModelValue.value.hasOwnProperty("translations")) {
+            proxyModelValue.value["translations"] = {};
+        }
+
+        if (!proxyModelValue.value.translations.hasOwnProperty(selectedLocale.value)) {
+            proxyModelValue.value.translations[selectedLocale.value] = {};
+            proxyModelValue.value.translations[selectedLocale.value][attrs["name"]] = "";
+        }
+    }
+}
 
 onMounted(() => {
+    if(Array.isArray(props.modelValue.translations)){
+        props.modelValue.translations = {};
+    }
+
     if (input.value.hasAttribute("autofocus")) {
         input.value.focus();
     }
@@ -165,7 +164,7 @@ defineExpose({focus: () => input.value.focus()});
     <template v-else>
         <div>
             <label :for="inputId"
-                   class="block font-bold text-sm mb-0.5">
+                   class="block font-semibold text-sm mb-0.5">
                 <span>{{ label }}</span>
                 <span v-if="required"
                       class="px-1">*
