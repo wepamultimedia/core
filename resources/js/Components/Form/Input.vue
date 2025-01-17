@@ -144,7 +144,9 @@ function buildTranslations() {
 }
 
 onMounted(() => {
-    if(Array.isArray(props.modelValue.translations)){
+    if (props.modelValue
+        && props.modelValue.hasOwnProperty("translations")
+        && Array.isArray(props.modelValue.translations)) {
         props.modelValue.translations = {};
     }
 
