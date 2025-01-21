@@ -78,4 +78,7 @@ return [
     'mobile' => 'Mobile',
     'change_freq' => 'Change frequency',
     'routes_list' => 'Route list',
+    'redirect' => 'Redirect',
+    'type_redirect' => 'Type redirect',
+    'slug_redirect' => 'Slug or redirect url',
 ];

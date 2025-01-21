@@ -67,6 +67,10 @@ class InertiaController extends \Wepa\Core\Http\Controllers\InertiaController
 
         $seo = $seoQuery->first();
 
+        if($seo->translation->slug_redirect){
+            return redirect($seo->translation->slug_redirect, $seo->redirect);
+        }
+
         return $this->buildSlugRedirect($request, $seo);
     }
 

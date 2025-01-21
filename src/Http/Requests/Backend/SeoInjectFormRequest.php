@@ -105,7 +105,7 @@ class SeoInjectFormRequest extends FormRequest
                 })
             ],
             //'seo.translations.*.slug_suffix' => 'required|slug|unique:core_seo_translations',
-
+            'seo.translations.*.slug_redirect' => 'nullable|slug',
             'seo.translations.*.keyword' => 'nullable|string|unique:core_seo_translations',
 
             'seo.translations.*.title' => 'required|string|max:255',

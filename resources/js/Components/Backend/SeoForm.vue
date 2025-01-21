@@ -36,7 +36,6 @@ const {
 const emit = defineEmits(["update:locale", "update:seo"]);
 const store = useStore();
 const page = usePage();
-
 const form = reactive({
     id: null,
     controller: null,
@@ -68,6 +67,7 @@ const values = reactive({
     facebook_description: "",
     twitter_description: "",
     slug_suffix: "",
+    slug_redirect: "",
     image: "",
     image_title: "",
     image_alt: "",
@@ -78,7 +78,18 @@ const values = reactive({
     twitter_image_title: "",
     twitter_image_alt: ""
 });
-const show_target_options = ref(false);
+const showTargetOptions = ref(false);
+
+const isFilledTargetOption = computed(() => {
+    return !!(values.slug_redirect || form.controller || form.action || form.request_params || form.route_params);
+})
+const toggleTargetOptions = () => {
+    if(isFilledTargetOption.value)
+        showTargetOptions.value = true;
+    else
+        showTargetOptions.value = !showTargetOptions.value;
+}
+
 const request_params = computed({
     get: () => {
         if (form.request_params) {
@@ -210,6 +221,11 @@ const errors = computed(() => usePage().props.errors.seo);
 const formattedSlugWithUrl = computed(() => {
     let slug = [usePage().props.default.baseUrl];
 
+    if(/^\//.test(values.slug_suffix)){
+        slug.push(values.slug_suffix.slice(1))
+        return slug.join("/");
+    }
+
     if (usePage().props.default.locales.length > 1) {
         if (props.seo.id !== 1
             || (props.seo.id === 1 && store.getters["backend/formLocale"] !== page.props.default.defaultLocale)) {
@@ -257,6 +273,8 @@ onBeforeMount(() => {
         }
     });
     Object.keys(seo.value).filter(key => key in values).forEach(key => values[key] = seo.value[key]);
+
+
 });
 
 onMounted(() => {
@@ -324,7 +342,7 @@ onMounted(() => {
         if (form.autocomplete) {
             if ((values.title === null || values.title !== "") || old === values.title) {
                 values.title = value;
-                if(!slug.value){
+                if (!slug.value) {
                     values.slug_suffix = value;
                 }
             }
@@ -375,6 +393,11 @@ onMounted(() => {
             values.slug_suffix = formatSlug(value);
         }
     });
+    watch(() => values.slug_redirect, (value, oldValue) => {
+        if (value !== oldValue) {
+            values.slug_redirect = formatSlug(value);
+        }
+    });
     watch(form, value => {
         emit("update:seo", value);
     });
@@ -384,6 +407,10 @@ onMounted(() => {
     });
 
     emit("update:seo", form);
+
+    if(isFilledTargetOption.value) {
+        showTargetOptions.value = true;
+    }
 });
 </script>
 <template>
@@ -445,9 +472,9 @@ onMounted(() => {
                                               :label="__('canonical_url')"/>
                             </div>
                             <button class="btn btn-secondary mt-10 flex gap-2 items-center"
-                                    @click.prevent="show_target_options = !show_target_options">
+                                    @click.prevent="toggleTargetOptions">
                                 <span>{{ __("target_options") }}</span>
-                                <svg v-if="!show_target_options"
+                                <svg v-if="!showTargetOptions"
                                      aria-hidden="true"
                                      class="w-5 h-5"
                                      data-slot="icon"
@@ -474,7 +501,16 @@ onMounted(() => {
                                           stroke-linejoin="round"></path>
                                 </svg>
                             </button>
-                            <div v-if="show_target_options">
+                            <div v-show="showTargetOptions">
+                                <div class="py-8">
+                                    <Input v-model="form"
+                                           v-model:value="values.slug_redirect"
+                                           :errors="errors"
+                                           :label="__('slug_redirect')"
+                                           legend="/my-redirect or https://my-domain.com/my-redirect"
+                                           name="slug_redirect"
+                                           translation></Input>
+                                </div>
                                 <div class="py-4">
                                     <Input v-model="form"
                                            :errors="errors"
@@ -482,6 +518,8 @@ onMounted(() => {
                                            legend="App\Http\Controllers\MainController"
                                            name="controller"></Input>
                                 </div>
+
+
                                 <div class="py-4">
                                     <Input v-model="form"
                                            :errors="errors"

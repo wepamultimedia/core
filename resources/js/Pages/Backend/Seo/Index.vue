@@ -42,23 +42,32 @@ defineProps(["routes"]);
                 <a :href="$page.props.default.baseUrl + '/' + item.slug"
                    :title="$page.props.default.baseUrl + '/' + item.slug"
                    class="font-bold text-lg block"
-                   target="_blank">{{ item.slug }}
+                   :class="{'text-green-400': !item.slug_redirect, 'text-red-400': item.slug_redirect}"
+                   target="_blank">{{ item.slug ? item.slug : '/' }}
                 </a>
-                <div v-if="item.controller && item.action">
-                    <span class="text-sm">
-                        {{
-                            item.controller?.split("\\")[item.controller.split("\\").length - 1]
-                        }}
-                    </span>
-                    <span class="text-sm">/{{ item.action }}</span>
+                <div v-show="item.slug_redirect" class="mt-2">
+                    <span class="text-sm font-bold">{{ __("slug_redirect") }}: {{item.redirect}}</span>
+                    <a  :href="$page.props.default.baseUrl + '/' + item.slug_redirect"
+                       :title="$page.props.default.baseUrl + '/' + item.slug_redirect"
+                       class="font-bold text-lg block text-green-400"
+                       target="_blank">{{ item.slug_redirect }}
+                    </a>
                 </div>
-                <div v-if="item.route_params">
-                    <span class="text-sm font-bold">{{ __("route_params") }}:</span>
-                    <span class="text-sm">{{ item.route_params }}</span>
-                </div>
-                <div v-if="item.request_params">
-                    <span class="text-sm font-bold">{{ __("request_params") }}:</span>
-                    <span class="text-sm">{{ item.request_params }}</span>
+                <div class="mt-2">
+                    <div v-if="item.controller && item.action">
+                        <span class="text-sm">
+                            {{ item.controller?.split("\\")[item.controller.split("\\").length - 1] }}
+                        </span>
+                        <span class="text-sm">/{{ item.action }}</span>
+                    </div>
+                    <div v-if="item.route_params">
+                        <span class="text-sm font-bold">{{ __("route_params") }}:</span>
+                        <span class="text-sm">{{ item.route_params }}</span>
+                    </div>
+                    <div v-if="item.request_params">
+                        <span class="text-sm font-bold">{{ __("request_params") }}:</span>
+                        <span class="text-sm">{{ item.request_params }}</span>
+                    </div>
                 </div>
             </template>
         </Table>

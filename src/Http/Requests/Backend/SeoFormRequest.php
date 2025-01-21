@@ -66,7 +66,7 @@ class SeoFormRequest extends FormRequest
 
         if (!Arr::exists($this->input('translations'), $locale)) {
             return [
-                'alias' => 'required|string|max:255|unique:core_seo',
+                'alias' => 'nullable|string|max:255|unique:core_seo',
                 "translations.$locale.slug_suffix" => [
                     'required', 'slug',
                     Rule::unique('core_seo_translations', 'slug_suffix')->where(function ($query) {
@@ -83,7 +83,7 @@ class SeoFormRequest extends FormRequest
         }
 
         $rules = [
-            'alias' => 'required|string|max:255|unique:core_seo',
+            'alias' => 'nullable|string|max:255|unique:core_seo',
             'controller' => 'nullable|string|max:255',
             'action' => 'nullable|string|max:255',
 
@@ -96,9 +96,8 @@ class SeoFormRequest extends FormRequest
                     return null;
                 })
             ],
-
+            'translations.*.slug_redirect' => 'nullable|slug',
             'translations.*.keyword' => 'nullable|string|unique:core_seo_translations',
-
             'translations.*.title' => 'required|string|max:255',
             'translations.*.description' => 'required|string|max:255',
         ];

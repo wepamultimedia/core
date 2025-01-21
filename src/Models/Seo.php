@@ -22,6 +22,7 @@ use Wepa\Core\Http\Traits\TranslationsTrait;
  * @property array $request_params
  * @property array $package
  * @property array $alias
+ * @property int $redirect
  * @property string $canonical
  * @property string $robots
  * @property string $description
@@ -96,6 +97,7 @@ class Seo extends Model implements TranslatableContract
         'slug',
         'slug_prefix',
         'slug_suffix',
+        'slug_redirect',
         'description',
         'image_title',
         'image_alt',
@@ -122,6 +124,7 @@ class Seo extends Model implements TranslatableContract
         'controller',
         'package',
         'alias',
+        'redirect',
         'action',
         'route_params',
         'request_params',

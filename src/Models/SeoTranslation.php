@@ -43,6 +43,7 @@ class SeoTranslation extends Model
         'slug',
         'slug_prefix',
         'slug_suffix',
+        'slug_redirect',
         'description',
         'image_title',
         'image_alt',

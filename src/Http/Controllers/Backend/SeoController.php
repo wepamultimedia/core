@@ -103,21 +103,23 @@ class SeoController extends InertiaController
 
         foreach ($translations as $translation) {
             $langPrefix = '';
+            if (Str::startsWith($translation->slug_suffix, '/')) {
+                $translation->slug = Str::substr($translation->slug_suffix, 1);
+            } else {
+                if (count(config('core.locales')) > 1) {
+                    if ($translation->seo_id !== 1 or ($translation->seo_id === 1 and $translation->locale !== config('core.default_locale'))) {
+                        $langPrefix = $translation->locale . '/';
+                    }
+                }
 
-            if (count(config('core.locales')) > 1) {
-                if($translation->seo_id !== 1 or ($translation->seo_id === 1 and $translation->locale !== config('core.default_locale'))){
-                    $langPrefix = $translation->locale . '/';
+                if ($request['slug_prefix'] and array_key_exists($translation->locale, $request['slug_prefix'])) {
+                    $translation->slug_prefix = $request['slug_prefix'][$translation->locale];
+                    $translation->slug = $langPrefix . $translation->slug_prefix . '/' . $translation->slug_suffix;
+                } else {
+                    $translation->slug = $langPrefix . $translation->slug_suffix;
                 }
             }
-
-            if ($request['slug_prefix'] and array_key_exists($translation->locale, $request['slug_prefix'])) {
-                $translation->slug_prefix = $request['slug_prefix'];
-                $translation->slug = $langPrefix . Arr::join($request['slug_prefix'], '/') . '/' . $translation->slug_suffix;
-                $translation->save();
-            } else {
-                $translation->slug = $langPrefix . $translation->slug_suffix;
-                $translation->save();
-            }
+            $translation->save();
         }
     }
 

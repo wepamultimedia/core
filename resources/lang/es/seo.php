@@ -83,4 +83,7 @@ return [
     'request_params' => 'Parámetros de petición',
     'route_params' => 'Parámetros en la ruta o url',
     'target_options' => 'Opciones de destino',
+    'redirect' => 'Redireccionar',
+    'type_redirect' => 'Tipo de redirección',
+    'slug_redirect' => 'Slug o url de redirección',
 ];
