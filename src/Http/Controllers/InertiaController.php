@@ -52,7 +52,8 @@ class InertiaController extends Controller
                 'appName' => config('app.name'),
                 'baseUrl' => request()->root(),
                 'translation' => $this->translation($translation),
-                'storageUrl' => preg_replace('/\/$/', '', Storage::disk(config('filesystems.default'))->url('')),
+                'fileManagerUrl' => Storage::url(config('core.file_manager.dir', 'file-manager')),
+                'storageUrl' => preg_replace('/\/$/', '', Storage::url('')),
             ],
         ];
 

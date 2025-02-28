@@ -1,5 +1,6 @@
 <script setup>
-import Flap from "@/Vendor/Core/Components/Flap.vue";
+import Flap from "@core/Components/Flap.vue";
+import {usePage} from "@inertiajs/vue3";
 import {computed, reactive, toRefs, useAttrs} from "vue";
 import FileManager from "@core/Components/Backend/FileManager.vue";
 
@@ -52,10 +53,8 @@ const emits = defineEmits([
 
 const attrs = useAttrs();
 
-const {errors, modelValue} = toRefs(props);
-
 const error = computed(() => {
-    for (const [errorKey, errorValue] of Object.entries(errors.value)) {
+    for (const [errorKey, errorValue] of Object.entries(props.errors.value)) {
         const re = new RegExp("[.]" + attrs.name + "$");
         const rex = new RegExp("^" + attrs.name + "$");
         if (re.test(errorKey) || rex.test(errorKey)) {
@@ -74,13 +73,14 @@ const fileManager = reactive({
     open: false,
     selectedImage: {},
     insert: image => {
+        let imageUrl = usePage().props.default.fileManagerUrl + "/" + image.file
         fileManager.open = false;
         fileManager.selectedImage = image;
         emits("update:image", image);
         emits("change", image);
-        emits("update:modelValue", image.url);
+        emits("update:modelValue", image.file);
         emits("update:file_name", image.file);
-        emits("update:url", image.url);
+        emits("update:url", imageUrl);
         emits("update:title", image.name);
         emits("update:alt_name", image.alt_name);
         emits("update:description", image.description);
@@ -88,17 +88,26 @@ const fileManager = reactive({
 });
 
 const proxyUrl = computed(() => {
-    if (fileManager.selectedImage.hasOwnProperty("url")) {
-        return fileManager.selectedImage.url;
+    let propsDefault = usePage().props.default;
+    let baseUrl = propsDefault.fileManagerUrl + "/";
+
+    if (fileManager.selectedImage.hasOwnProperty("file")) {
+        return baseUrl + fileManager.selectedImage.file;
     }
 
-    return props.modelValue;
+    if(typeof props.modelValue === "string" && props.modelValue.startsWith('http')){
+        return props.modelValue;
+    } else if (props.modelValue){
+        return baseUrl + props.modelValue
+    }
+    return '';
 });
 </script>
 <template>
     <div>
         <label v-if="label"
-               class="text-sm font-bold mr-2">{{ label }}
+               class="text-sm font-bold mr-2">
+            {{ label }}
         </label>
         <figure v-if="proxyUrl !==  '' && showImage"
                 class="mb-4 mt-1">

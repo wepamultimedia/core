@@ -14,14 +14,14 @@ trait StorageControllerTrait
         $root = preg_replace(['/^\//', '/\/$/'], '', $root);
         $path = preg_replace(['/^\//', '/\/$/'], '', $path);
 
-        return $root.'/'.$path;
+        return $root . '/' . $path;
     }
 
     protected function storageDelete(string $path, string $fileName): bool
     {
         $path = preg_replace(['/^\//', '/\/$/'], '', $path);
-        if (Storage::disk($this->fileSystemDisk())->exists($path.'/'.$fileName)) {
-            return Storage::disk($this->fileSystemDisk())->delete($path.'/'.$fileName);
+        if (Storage::disk($this->fileSystemDisk())->exists($path . '/' . $fileName)) {
+            return Storage::disk($this->fileSystemDisk())->delete($path . '/' . $fileName);
         }
 
         return false;
@@ -36,16 +36,21 @@ trait StorageControllerTrait
      * @return array|false
      */
     protected function storageImage(UploadedFile $file,
-                                    string $path,
-                                    string $name = null,
-                                    int $maxSize = 0,
-                                    string $options = 'public'): bool|array
+                                    string       $path,
+                                    string       $name = null,
+                                    int          $maxSize = 0,
+                                    string       $options = 'public'): bool|array
     {
-        $name = $name ?? time().'.webp';
+        $name = $name ?? time() . '.webp';
 
-        if ($file->extension() === 'jpg' or $file->extension() === 'png' or $file->extension() === 'jpeg' or $file->extension() === 'webp') {
+        if ($file->extension() === 'jpg'
+            or $file->extension() === 'png'
+            or $file->extension() === 'jpeg'
+            or $file->extension() === 'webp') {
+
             $image = new InterventionImageHelper($file);
             $image->asWebp();
+
             if ($maxSize > 0) {
                 $image->resize($maxSize);
             }
@@ -72,11 +77,11 @@ trait StorageControllerTrait
      * @return array|false
      */
     protected function storageSave(UploadedFile $file,
-                                   string $path,
-                                   string $name = null,
-                                   string $options = 'public'): bool|array
+                                   string       $path,
+                                   string       $name = null,
+                                   string       $options = 'public'): bool|array
     {
-        $name = $name ? $name.'.'.$file->extension() : time().'.'.$file->extension();
+        $name = $name ? $name . '.' . $file->extension() : time() . '.' . $file->extension();
 
         if ($storage = Storage::disk($this->fileSystemDisk())->putFileAs($path, $file, $name, $options)) {
             $url = Storage::disk($this->fileSystemDisk())->url($storage);

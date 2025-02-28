@@ -32,34 +32,27 @@ class SeoModelListener
 
     public function saved(SeoModelSavedEvent $event): void
     {
-//        $seo = Seo::where('model_type', $event->model::class)
-//            ->where('model_id', $event->model->id)
-//            ->first();
-
-        $data = $this->buildData($event);
-
-        $seo = Seo::updateOrCreate(['model_type' => $event->model::class, 'model_id' => $event->model->id], $data);
-
-        $this->updateSlugs($seo);
-
-        SitemapUpdatedEvent::dispatch();
+        if($request = request('seo')){
+            $data = $this->buildData($event, $request);
+            $seo = Seo::updateOrCreate(['model_type' => $event->model::class, 'model_id' => $event->model->id], $data);
+            $this->updateSlugs($seo);
+            SitemapUpdatedEvent::dispatch();
+        }
     }
 
-    protected function buildData(SeoModelSavedEvent $event): array
+    protected function buildData(SeoModelSavedEvent $event, array $request): array
     {
         $data = collect([]);
 
-        if ($request = request('seo')) {
-            $data = $data->merge($request)
-                ->except('slug_prefix')
-                ->filter(function ($value, $key) {
-                    return $value or $key === 'canonical';
-                });
+        $data = $data->merge($request)
+            ->except('slug_prefix')
+            ->filter(function ($value, $key) {
+                return $value or $key === 'canonical';
+            });
 
-            if (Arr::exists($request, 'translations')) {
-                $data = $data->merge($request['translations'])
-                    ->except(['translations']);
-            }
+        if (Arr::exists($request, 'translations')) {
+            $data = $data->merge($request['translations'])
+                ->except(['translations']);
         }
 
         $data = $data->merge([

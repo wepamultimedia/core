@@ -21,16 +21,17 @@ class FileManagerController extends Controller
     public function destroy(File $file): void
     {
         $fileTypeName = strtolower($file->type->name);
+        $fmDir = config('core.file-manager.dir', 'file-manager');
 
         if ($fileTypeName === 'folder') {
             $file->delete();
-        } elseif ($fileTypeName === 'jpg' or $fileTypeName === 'jpeg' or $fileTypeName === 'png') {
-            if ($this->storageDelete('file-manager', $file->file)
-                and $this->storageDelete('file-manager/thumbnails', $file->file)) {
+        } elseif (in_array($fileTypeName, ['jpg', 'jpeg', 'png', 'webp', 'gif'])) {
+            if ($this->storageDelete($fmDir, $file->file)
+                and $this->storageDelete($fmDir . '/thumbnails', $file->file)) {
                 $file->delete();
             }
         } else {
-            if ($this->storageDelete('file-manager', $file->file)) {
+            if ($this->storageDelete($fmDir, $file->file)) {
                 $file->delete();
             }
         }
@@ -41,9 +42,7 @@ class FileManagerController extends Controller
      */
     public function folderStore(Request $request): array
     {
-        $this->validate($request, [
-            'name' => 'string|required',
-        ]);
+        $this->validate($request, ['name' => 'string|required']);
 
         $file = File::create(array_merge($request->all(), ['type_id' => 1]));
 
@@ -53,8 +52,8 @@ class FileManagerController extends Controller
     public function index(Request $request, int $parentId = null): array
     {
         $files = File::when($request->search, function ($query, $search) {
-            $query->where('name', 'LIKE', '%'.$search.'%')
-                ->orWhere('alt_name', 'LIKE', '%'.$search.'%');
+            $query->where('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('alt_name', 'LIKE', '%' . $search . '%');
         })
             ->where(['parent_id' => $parentId])
             ->when($request->extensions, function ($query, $extensions) {
@@ -73,14 +72,15 @@ class FileManagerController extends Controller
     }
 
     public function breadcrumb(
-        int $id = null,
+        int   $id = null,
         array $parents = [],
         array $files = []
-    ): array {
+    ): array
+    {
         $root = [];
         $firstLoop = false;
 
-        if (! $files) {
+        if (!$files) {
             $root = [['id' => null, 'name' => __('core::default.root')]];
             $files = File::get()->toArray();
             $firstLoop = true;
@@ -109,15 +109,16 @@ class FileManagerController extends Controller
     }
 
     /**
-     * @param  string|null  $parentId
+     * @param string|null $parentId
      *
      * @throws ValidationException
      */
     public function folderUpdate(
         Request $request,
-        File $file,
-        int $parentId = null
-    ): array {
+        File    $file,
+        int     $parentId = null
+    ): array
+    {
         $this->validate($request, [
             'name' => 'string|required',
         ]);
@@ -129,8 +130,9 @@ class FileManagerController extends Controller
 
     public function update(
         FileManagerFileRequest $request,
-        File $file
-    ): array {
+        File                   $file
+    ): array
+    {
         $file->update($request->all());
 
         return $this->index($request, $request->parent_id);
@@ -146,7 +148,7 @@ class FileManagerController extends Controller
             ->where('extension', '<>', '.')
             ->get()
             ->map(function ($type) {
-                return '.'.$type->extension;
+                return '.' . $type->extension;
             })->implode(',');
     }
 
@@ -161,14 +163,18 @@ class FileManagerController extends Controller
     public function store(FileManagerFileRequest $request): Response|array|Application|ResponseFactory
     {
         $file = $request->file('file');
+        $fmDir = config('core.file-manager.dir', 'file-manager');
 
-        if ($file->extension() === 'jpg' or $file->extension() === 'jpeg' or $file->extension() === 'png' or $file->extension() === 'webp') {
+        if ($file->extension() === 'jpg' or $file->extension() === 'jpeg'
+
+            or $file->extension() === 'png' or $file->extension() === 'webp') {
             $type = FileType::where('extension', 'webp')->first();
-            $name = Str::slug($request->name).'-'.time().'.webp';
-            if ($savedFile = $this->storageImage($file, 'file-manager', $name, $request->max_size)) {
+            $name = Str::slug($request->name) . '-' . time() . '.webp';
+
+            if ($savedFile = $this->storageImage($file, $fmDir, $name, $request->max_size)) {
                 $data = collect($request->all())->filter()
                     ->merge([
-                        'url' => $savedFile['url'],
+                        'url' => $savedFile['name'],
                         'file' => $savedFile['name'],
                         'type_id' => $type->id,
                     ])
@@ -176,14 +182,16 @@ class FileManagerController extends Controller
 
                 File::create($data);
 
-                $this->storageImage($file, 'file-manager/thumbnails', $name, 400);
+                $this->storageImage($file, $fmDir . '/thumbnails', $name, 400);
 
                 return $this->index($request, $request->parent_id);
             }
         } else {
+
             $type = FileType::where('extension', $file->extension())->first();
-            $name = Str::slug($request->name).'-'.time().'.'.$file->extension();
-            if ($savedFile = $this->storageSave($file, 'file-manager', $name)) {
+            $name = Str::slug($request->name) . '-' . time() . '.' . $file->extension();
+
+            if ($savedFile = $this->storageSave($file, $fmDir, $name)) {
                 $data = collect($request->all())->filter()
                     ->merge([
                         'url' => $savedFile['url'],

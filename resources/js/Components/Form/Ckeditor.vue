@@ -26,7 +26,13 @@ const props = defineProps({
         default: () => {
         }
     },
-    debug: Boolean
+    debug: Boolean,
+    limit: Array,
+    limitByWords: {
+        type: Boolean,
+        default: false
+    },
+    limitLabel: Boolean
 });
 const defaultLocale = usePage().props.default.locale;
 switch (defaultLocale) {
@@ -50,20 +56,15 @@ const ckconfig = {
     }
 };
 
-function editorReady(editor) {
-    fileManager.editor = editor;
-}
-
 const fileManager = reactive({
     editor: null,
     open: false,
     selectedImage: null,
     insert: image => {
         fileManager.open = false;
-        fileManager.editor?.execute("insertImage", {
-            //window?.editor.execute("insertImage", {
+        window?.editor.execute("insertImage", {
             source: {
-                src: image.url,
+                src: usePage().props.default.fileManagerUrl + '/' + image.file,
                 title: image.name,
                 alt: image.alt_name
             }
@@ -93,6 +94,14 @@ const proxyModelValue = computed({
         emit("update:modelValue", value);
     }
 });
+
+const counter = reactive({
+    words: 0,
+    characters: 0,
+    counter: computed(() => {
+        return props.limitByWords ? counter.words : counter.characters;
+    })
+})
 
 const proxyValue = computed({
     get() {
@@ -187,13 +196,23 @@ onMounted(() => {
     import("ckeditor5-classic-core").then(e => {
         e.default.create(document.querySelector("#editor"), ckconfig)
             .then(editor => {
-                fileManager.editor = editor;
+                window.editor = editor;
                 editor.model.document.on("change:data", () => {
                     proxyValue.value = editor.getData();
                 });
                 editor.setData(proxyValue.value);
             });
     });
+});
+
+const progressbar = computed(() => {
+    if (counter.characters > 0) {
+        const percent = (counter.counter / props.limit[1]) * 100;
+
+        return Math.round(percent) > 100 ? 100 : Math.round(percent);
+    }
+
+    return 0;
 });
 </script>
 <template>
@@ -208,6 +227,15 @@ onMounted(() => {
         <div class="mt-1 text-gray-800 ckeditor"
              style="--ck-border-radius: 0.40rem">
             <div id="editor"></div>
+            <div v-if="limit"
+                 class="w-full mt-2">
+                <div :class="{'bg-green-700': counter.counter >= limit[0] && counter.counter <= limit[1], 'bg-orange-600': counter.counter < limit[0], 'bg-red-600' : counter.counter > limit[1]}"
+                     :style="`width: ${progressbar}%`"
+                     class="h-1"></div>
+                <span v-if="limitLabel"
+                      class="text-xs">{{ progressbar }}% | {{ counter.counter }} / {{ limit[1] }} {{ limitByWords ? __('words') : __('characters') }}
+                        </span>
+            </div>
         </div>
         <div v-if="translation"
              class="flex justify-end mt-2">
@@ -215,7 +243,7 @@ onMounted(() => {
                       center
                       class="w-full">
                 <template #button="{open}">
-                    <button class="w-full py-2.5 px-4 bg-white dark:bg-gray-500 border border rounded-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
+                    <button class="w-full py-2.5 px-4 bg-white dark:bg-gray-500 border rounded-lg border-gray-300 dark:border-gray-700 uppercase text-sm"
                             type="button">
                         {{ selectedLocale }}
                     </button>

@@ -7,6 +7,9 @@ return [
     'can_register' => true,
     'google_api_key' => env('google_api_key', null),
     'max_filesize' => 8192, // KB
+    'file_manager' => [
+        'dir' => 'file-manager',
+    ],
     'theme' => [
         'frontend' => '',
         'backend' => '',

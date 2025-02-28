@@ -273,69 +273,29 @@ onBeforeMount(() => {
         }
     });
     Object.keys(seo.value).filter(key => key in values).forEach(key => values[key] = seo.value[key]);
-
-
 });
 
 onMounted(() => {
     watch(image, (value, oldValue) => {
-        if (form.autocomplete) {
-            let old = oldValue === null ? "" : oldValue;
+        let old = oldValue === null ? "" : oldValue;
 
-            if (!values.image_url || values.image_url === old) {
-                values.image = value;
-            }
+        if (form.image === null || form.image === old) {
+            form.image = value;
         }
     });
     watch(imageTitle, (value, oldValue) => {
-        if (form.autocomplete) {
+        let old = oldValue === null ? "" : oldValue;
+        if (!values.image_title || values.image_title === old) {
             values.image_title = value;
-            let old = oldValue === null ? "" : oldValue;
-
-            if (!values.facebook_image_title || values.facebook_image_title === old) {
-                values.facebook_image_title = value;
-            }
-
-            if (!values.twitter_image_title || values.twitter_image_title === old) {
-                values.twitter_image_title = value;
-            }
         }
     });
     watch(imageAlt, (value, oldValue) => {
-        if (form.autocomplete) {
-            values.image_alt = value;
-            let old = oldValue === null ? "" : oldValue;
-
-            if (!values.facebook_image_alt || values.facebook_image_alt === old) {
-                values.facebook_image_alt = value;
-            }
-
-            if (!values.twitter_image_alt || values.twitter_image_alt === old) {
-                values.twitter_image_alt = value;
-            }
-        }
-    });
-    watch(() => values.image, (value, oldValue) => {
-        form.image = value;
         let old = oldValue === null ? "" : oldValue;
-        //values.image_title = values.image.name;
-        //values.image_alt = values.image.alt_name;
-        //values.image_url = values.image.url;
-
-        if (!form.facebook_image_url || form.facebook_image_url === old) {
-            form.facebook_image = value;
-            values.facebook_image_title = values.image_title;
-            values.facebook_image_alt = values.image_alt;
-            values.facebook_image = value;
-        }
-
-        if (!form.twitter_image_url || form.twitter_image_url === old) {
-            form.twitter_image = value;
-            values.twitter_image_title = values.image_title;
-            values.twitter_image_alt = values.image_alt;
-            values.twitter_image = value;
+        if (!values.images_alt || values.images_alt === old) {
+            values.image_alt = value;
         }
     });
+
     watch(title, (value, oldValue) => {
         let old = oldValue === null ? "" : oldValue;
 
@@ -363,6 +323,44 @@ onMounted(() => {
             if ((values.description === null || values.description !== "") || old === values.description) {
                 values.description = value;
             }
+        }
+    });
+
+    watch(() => form.image, (value, oldValue) => {
+        let old = oldValue === null ? "" : oldValue;
+        if (!form.facebook_image || form.facebook_image === old) {
+            form.facebook_image = value;
+            values.facebook_image_title = values.image_title;
+            values.facebook_image_alt = values.image_alt;
+            values.facebook_image = value;
+        }
+        if (!form.twitter_image || form.twitter_image === old) {
+            form.twitter_image = value;
+            values.twitter_image_title = values.image_title;
+            values.twitter_image_alt = values.image_alt;
+            values.twitter_image = value;
+        }
+    });
+    watch(() => values.image_title, (value, oldValue) => {
+        let old = oldValue === null ? "" : oldValue;
+
+        if (!values.facebook_image_title || values.facebook_image_title === old) {
+            values.facebook_image_title = value;
+        }
+
+        if (!values.twitter_image_title || values.twitter_image_title === old) {
+            values.twitter_image_title = value;
+        }
+    });
+    watch(() => values.image_alt, (value, oldValue) => {
+        let old = oldValue === null ? "" : oldValue;
+
+        if (!values.facebook_image_alt || values.facebook_image_alt === old) {
+            values.facebook_image_alt = value;
+        }
+
+        if (!values.twitter_image_alt || values.twitter_image_alt === old) {
+            values.twitter_image_alt = value;
         }
     });
     watch(() => values.title, (value, oldValue) => {
@@ -579,7 +577,6 @@ onMounted(() => {
                                 <InputImage v-model="form.image"
                                             v-model:alt_name="values.image_alt"
                                             v-model:title="values.image_title"
-                                            v-model:url="values.image"
                                             :errors="errors"
                                             :label="__('cover_image')"
                                             name="image"/>

@@ -14,6 +14,7 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Wepa\Core\Commands\CoreInstallCommand;
 use Wepa\Core\Commands\CoreMakeInstallCommand;
+use Wepa\Core\Commands\CoreMigrateDigitalOceanToPublicCommand;
 use Wepa\Core\Commands\CoreSymlinkCommand;
 use Wepa\Core\Commands\CoreUninstallCommand;
 use Wepa\Core\Commands\CoreUpdateCommand;
@@ -197,6 +198,7 @@ class CoreServiceProvider extends PackageServiceProvider
                 CoreUninstallCommand::class,
                 CoreMakeInstallCommand::class,
                 SitemapGenerateCommand::class,
+                CoreMigrateDigitalOceanToPublicCommand::class
             ]);
 
         /**

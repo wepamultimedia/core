@@ -20,7 +20,6 @@ use Wepa\Core\Database\Factories\FileMangerFactory;
  * @property int $parent_id
  * @property int $type_id
  * @property string $name
- * @property string $url
  * @property string $file
  * @property string $alt_name
  * @property string $description
@@ -42,7 +41,6 @@ class File extends Model
         'parent_id',
         'type_id',
         'name',
-        'url',
         'file',
         'alt_name',
         'description',

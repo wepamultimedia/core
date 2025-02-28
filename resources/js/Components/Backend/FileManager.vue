@@ -1,14 +1,15 @@
 <script setup>
-import { onMounted, reactive, ref, watch } from "vue";
-import _ from "lodash";
-import { __ } from "@/Vendor/Core/Mixins/translations";
-import axios from "axios";
-import Pagination from "@/Vendor/Core/Components/Pagination.vue";
 import Flap from "@/Vendor/Core/Components/Flap.vue";
 import Input from "@/Vendor/Core/Components/Form/Input.vue";
-import ToggleButton from "@/Vendor/Core/Components/Form/ToggleButton.vue";
 import Textarea from "@/Vendor/Core/Components/Form/Textarea.vue";
-import { useStore } from "vuex";
+import ToggleButton from "@/Vendor/Core/Components/Form/ToggleButton.vue";
+import Pagination from "@/Vendor/Core/Components/Pagination.vue";
+import {__} from "@/Vendor/Core/Mixins/translations";
+import {usePage} from "@inertiajs/vue3";
+import axios from "axios";
+import _ from "lodash";
+import {onMounted, reactive, ref, watch} from "vue";
+import {useStore} from "vuex";
 
 const props = defineProps({
     errors: String,
@@ -18,9 +19,7 @@ const props = defineProps({
     modelValue: String,
     extensions: Array
 });
-
 const emit = defineEmits(["update:modelValue", "change"]);
-
 const errors = ref();
 const files = ref();
 const breadcrumb = ref();
@@ -151,7 +150,7 @@ const file = reactive({
     }
 });
 const selectFile = selectedFile => {
-    emit("update:modelValue", selectedFile.url);
+    emit("update:modelValue", selectedFile.file);
     emit("change", selectedFile);
 };
 const updateFile = selectedFile => {
@@ -266,7 +265,6 @@ const resetFolderFlap = () => {
     folder.confirmDeleteInput = "";
 };
 
-
 // Files
 const refresh = data => {
     files.value = data.files;
@@ -276,26 +274,23 @@ const refresh = data => {
         currentParentId.value = data.parentId;
     }
 };
-
 function getPrevPage(parentId) {
-    if(prevPage.hasOwnProperty(`parentId-${parentId}`)){
+    if (prevPage.hasOwnProperty(`parentId-${parentId}`)) {
         return prevPage[`parentId-${parentId}`];
     }
 
     return 1;
 }
-
 function setPrevPage() {
     prevPage[`parentId-${currentParentId.value}`] = currentPage.value;
 }
-
 const getFiles = (parentId = null, page = null, search = null) => {
     loading.value = true;
 
     page = page !== null ? page : getPrevPage(parentId);
 
     if (parentId !== currentParentId.value) {
-        setPrevPage()
+        setPrevPage();
     }
 
     axios.get(route("api.v1.filenamager.index", {
@@ -320,7 +315,6 @@ const getMimeTypes = () => {
         loading.value = false;
     });
 };
-
 const clicks = reactive({
     click: 0,
     timer: null
@@ -340,6 +334,7 @@ const onClick = (callbackClick, callbackDbClick) => {
         callbackDbClick();
     }
 };
+const fileMangerUrl = usePage().props.default.fileManagerUrl;
 
 watch(searchInput, value => {
     search(value);
@@ -433,10 +428,12 @@ onMounted(() => {
                     <div class="rounded-lg overflow-hidden"
                          @click="onClick(() => updateFile(file), () => selectFile(file))">
                         <img :alt="file.alt_name"
-                             :src="file.url"
+                             :src="fileMangerUrl + '/' + file.file"
                              class="object-cover aspect-square">
                     </div>
-                    <p class="text-sm font-bold mt-2 text-center break-words">{{ file.name }}.{{ file.type.extension }}</p>
+                    <p class="text-sm font-bold mt-2 text-center break-words">{{ file.name }}.{{
+                            file.type.extension
+                        }}</p>
                 </div>
                 <div v-else
                      class="w-full"
@@ -670,7 +667,7 @@ onMounted(() => {
             <div v-if="file.selected.type.icon === 'image'"
                  class="rounded-lg overflow-hidden">
                 <img :alt="file.selected.alt_name"
-                     :src="file.selected.url"
+                     :src="fileMangerUrl + '/' + file.selected.file"
                      @click="file.flapSizeToggle()">
             </div>
             <inline-svg v-else
