@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('core_seo', function (Blueprint $table) {
-            $table->string('redirect')->nullable()->change(); // Hacer la columna nullable
+            $table->string('redirect')->nullable()->default(null)->change(); // Hacer la columna nullable
         });
 
         \Wepa\Core\Models\Seo::all()->each(function (Seo $seo) {
@@ -27,7 +27,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('core_seo', function (Blueprint $table) {
-            $table->string('redirect')->nullable(false)->change(); // Revertir el cambio
+            $table->string('redirect')->nullable(false)->default(301)->change(); // Revertir el cambio
         });
     }
 };

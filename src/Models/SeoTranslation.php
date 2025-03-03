@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $keyword
  * @property string $title
  * @property string $slug
+ * @property string $slug_prefix
+ * @property string $slug_suffix
+ * @property string $slug_redirect
  * @property string $description
  * @property string $image_title
  * @property string $image_alt
