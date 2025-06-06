@@ -54,7 +54,7 @@ const emits = defineEmits([
 const attrs = useAttrs();
 
 const error = computed(() => {
-    for (const [errorKey, errorValue] of Object.entries(props.errors.value)) {
+    for (const [errorKey, errorValue] of Object.entries(props.errors)) {
         const re = new RegExp("[.]" + attrs.name + "$");
         const rex = new RegExp("^" + attrs.name + "$");
         if (re.test(errorKey) || rex.test(errorKey)) {
