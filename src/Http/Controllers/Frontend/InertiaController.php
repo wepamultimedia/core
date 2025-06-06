@@ -47,10 +47,12 @@ class InertiaController extends \Wepa\Core\Http\Controllers\InertiaController
                 abort(404);
             }
         } else {
-            $seoTranslation = SeoTranslation::whereNull('slug')->whereHas('seo', function ($query) {
+            $seoTranslation = SeoTranslation::where(function($query){
+                $query->whereNull('slug')
+                    ->orWhere('slug', '');
+            })->whereHas('seo', function ($query) {
                 $query->whereAlias('home');
             })->first();
-            $seoQuery->whereAlias('home');
         }
 
         if ($seoTranslation->locale !== app()->getLocale()) {
