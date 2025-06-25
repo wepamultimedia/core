@@ -69,6 +69,8 @@ class Menu extends Model implements TranslatableContract
         'position',
     ];
 
+    protected $casts = ['parent_id' => 'integer'];
+
     protected $table = 'core_menu';
     public static string $cacheTag = 'core_menu';
 
