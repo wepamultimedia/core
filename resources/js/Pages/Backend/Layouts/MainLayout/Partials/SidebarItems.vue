@@ -80,7 +80,7 @@ const show = computed(() => {
                     <div class="flex items-center justify-between w-full">
                         <Link :class="{'active': item.isActive}"
                               :disabled="loading"
-                              :href="route(item.route)"
+                              :href="item.route.includes('#') ? '#' : route(item.route)"
                               :preserve-scroll="true"
                               :preserve-state="true"
                               class="text-sm text-left"
@@ -129,7 +129,7 @@ const show = computed(() => {
                         <button class="flex items-center justify-between w-full">
                             <Link :class="[{'font-bold': subitem.isActive}]"
                                   :disabled="loading"
-                                  :href="route(subitem.route)"
+                                  :href="subitem.route.includes('#') ? '#' : route(subitem.route)"
                                   :preserve-scroll="true"
                                   :preserve-state="true"
                                   as="button"
