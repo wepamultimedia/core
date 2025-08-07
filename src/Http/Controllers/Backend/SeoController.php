@@ -26,14 +26,13 @@ class SeoController extends InertiaController
         if ($seo->alias !== 'home') {
             $this->seoDestroy($seo->id);
 
-            cache()->tags($this->cacheTag)->flush();
+            cache()->flush();
         }
     }
 
     public function edit(int $seo): Response
     {
         $seo = cache()
-            ->tags($this->cacheTag)
             ->remember($this->cacheTag . ":" . $seo, 60 * 60 * 24, function () use ($seo) {
                 return Seo::find($seo);
             });
@@ -54,7 +53,6 @@ class SeoController extends InertiaController
         }
 
         $routes = cache()
-            ->tags($this->cacheTag)
             ->remember($cacheName, 60 * 60 * 24, function () use ($request) {
                 return Seo::when($request->search, function ($query, $search) {
                     $query->where('alias', 'LIKE', '%' . $search . '%')
@@ -86,7 +84,7 @@ class SeoController extends InertiaController
 
         $this->updateSlugs($seo);
 
-        cache()->tags($this->cacheTag)->flush();
+        cache()->flush();
 
         return redirect(route('admin.seo.index'));
     }
@@ -126,7 +124,6 @@ class SeoController extends InertiaController
     public function update(SeoFormRequest $request, int $seo): Redirector|RedirectResponse|Application
     {
         $seo = cache()
-            ->tags($this->cacheTag)
             ->remember($this->cacheTag . ":" . $seo, 60 * 60 * 24, function () use ($seo) {
                 return Seo::find($seo);
             });
@@ -149,7 +146,7 @@ class SeoController extends InertiaController
 
         $this->updateSlugs($seo);
 
-        cache()->tags($this->cacheTag)->flush();
+        cache()->flush();
 
         if ($seo->alias === 'home') {
             return redirect()->back();

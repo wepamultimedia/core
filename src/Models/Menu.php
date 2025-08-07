@@ -88,7 +88,7 @@ class Menu extends Model implements TranslatableContract
             $package,
             'backend');
 
-        cache()->forget(self::$cacheTag);
+        cache()->flush();
     }
 
     public function addItems(array $items,
@@ -186,6 +186,6 @@ class Menu extends Model implements TranslatableContract
     {
         self::where(['package' => $package])->delete();
 
-        cache()->forget(self::$cacheTag);
+        cache()->flush();
     }
 }

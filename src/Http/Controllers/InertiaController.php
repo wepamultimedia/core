@@ -170,13 +170,11 @@ class InertiaController extends Controller
     {
         self::$seoLoaded = true;
         $mainSeo = cache()
-            ->tags('core_seo')
             ->remember('seo_home', config('core.cache_ttl', 3600), function () {
                 return Seo::where('alias', 'home')->first();
             });
 
         $seo = cache()
-            ->tags('core_seo')
             ->remember("core_seo.alias.{$alias}", config('core.cache_ttl', 3600), function () use ($alias) {
                 return Seo::where('alias', $alias)->first();
             });
@@ -219,7 +217,7 @@ class InertiaController extends Controller
             ]);
         }
 
-        $seo = cache()->tags('core_seo')->remember('core_seo_rrss', config('core.cache_ttl', 3600), function () use($seo, $mainSeo){
+        $seo = cache()->remember('core_seo_rrss', config('core.cache_ttl', 3600), function () use($seo, $mainSeo){
             $seo->image = $seo->image ?? $mainSeo->image;
             $seo->facebook_image = $seo->facebook_image ?? $seo->image ?? $mainSeo->image;
             $seo->twitter_image = $seo->twitter_image ?? $seo->image ?? $mainSeo->image;

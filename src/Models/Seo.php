@@ -149,15 +149,15 @@ class Seo extends Model implements TranslatableContract
         parent::boot();
 
         static::deleted(function (Model $model) {
-            cache()->tags('core_seo')->flush();
+            cache()->flush();
         });
 
         static::saving(function () {
-            cache()->tags('core_seo')->flush();
+            cache()->flush();
         });
 
         static::saved(function (Model $model) {
-            cache()->tags('core_seo')->flush();
+            cache()->flush();
         });
     }
 
